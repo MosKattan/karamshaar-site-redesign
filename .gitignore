@@ -1,0 +1,10 @@
+# Throwaway Chrome profiles left behind by tools/shoot.mjs
+tools/chrome-profile-*/
+
+# Generated screenshots (re-create with tools/shoot.mjs)
+tools/shots/
+
+# OS / editor noise
+Thumbs.db
+desktop.ini
+.DS_Store
