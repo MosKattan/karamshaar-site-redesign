@@ -114,7 +114,13 @@ p{text-wrap:pretty}
 .skip:focus-visible{transform:none}
 
 /* ---------- hero ---------- */
-.hero{position:relative;isolation:isolate;overflow:hidden;min-height:100dvh;display:grid;grid-template-rows:1fr auto;align-items:center;padding:128px 0 30px;background:linear-gradient(180deg,#0c1830 0%,#11213f 40%,#17305a 100%)}
+.hero{position:relative;isolation:isolate;overflow:hidden;min-height:100dvh;display:grid;grid-template-rows:1fr auto;align-items:center;padding:128px 0 30px;
+  /* bokashi: a woodblock-style sky in traditional Japanese tones. Fuji (wisteria) haze and ruri (lapis) at the top,
+     konjo (deep ultramarine) through the middle, settling into kachi (near-black indigo) where the next band begins */
+  background:
+    radial-gradient(90% 55% at 78% -6%,rgba(165,154,202,.30),rgba(165,154,202,0) 70%),
+    radial-gradient(70% 45% at 8% 0%,rgba(30,80,162,.30),rgba(30,80,162,0) 72%),
+    linear-gradient(180deg,#36487f 0%,#26396d 20%,#1b2d5c 44%,#142548 72%,#11203c 100%)}
 
 .hero-grid{position:relative;z-index:1;pointer-events:none}
 .hero-copy{display:flex;flex-direction:column;align-items:flex-start;max-width:470px;pointer-events:auto}
@@ -338,7 +344,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 .map-readout{display:flex;align-items:center;justify-content:flex-end;gap:24px;font-size:.8rem;line-height:1.5;letter-spacing:.03em;font-variant-numeric:tabular-nums;color:var(--muted);pointer-events:auto}
 .map-coord{display:inline-flex;align-items:center;gap:8px}
 .map-coord b{font-weight:500;color:var(--cream)}
-.map-note{text-align:right}
+.map-note{text-align:right;text-shadow:0 1px 14px rgba(6,12,28,.9),0 0 3px rgba(6,12,28,.7)}
 .map-note b{display:block;font-weight:500;color:var(--mist)}
 .seg-sm{grid-template-columns:repeat(var(--n,2),1fr);background:var(--n850)}
 .seg-sm button{height:36px;padding:0 17px;font-size:.84rem}
@@ -1117,14 +1123,16 @@ const measure = () => {
   ST = { x, y, w: Math.max(240, w - x - 12), h: Math.max(240, h - y - 36) };
 };
 new ResizeObserver(measure).observe(host); measure();
-const BLEED = .12;   // on the wide layout the model fills the stage height, and up to this share of its width (the north-east tip) may run off the right edge
+const BLEED = .12;
+const ZOOM = { wide: 1.14, contained: 1.3 };   // how far past the fitted size the model is drawn; the extra runs off the right and bottom edges   // on the wide layout the model fills the stage height, and up to this share of its width (the north-east tip) may run off the right edge
 const view = (w, h) => {   // s is column units per px
   if (!ST || !ST.w) measure();
   const span = bx1 - bx0 + .6, open = wide.matches ? 1 - BLEED : 1;
   const head = (MODE === 'hover' ? 46 : 84) * span / ST.w;   // room above the model for the callout
-  const s = Math.max(span * open / ST.w, (by1 - by0 + head + .3) / ST.h);
-  const left = wide.matches ? ST.x : ST.x + (ST.w - span / s) / 2;   // wide: the west coast starts where the copy ends. Contained: centred
-  return { s, cx: bx0 - .3 - (left - w / 2) * s, cy: (by0 + by1 + head) / 2 + (ST.y + ST.h / 2 - h / 2) * s };
+  const s = Math.max(span * open / ST.w, (by1 - by0 + head + .3) / ST.h) / (wide.matches ? ZOOM.wide : ZOOM.contained);
+  const left = wide.matches ? ST.x - w * .035 : ST.x + w * .03;   // the west coast stays in view (wide: tucked just under the end of the copy); the north-east runs off the right edge
+  const drop = h * (wide.matches ? .07 : .04);   // lower the model so its southern edge bleeds past the bottom
+  return { s, cx: bx0 - .3 - (left - w / 2) * s, cy: (by0 + by1 + head) / 2 + (ST.y + ST.h / 2 - h / 2 + drop) * s };
 };
 
 const setNote = () => { note.innerHTML = MODE === 'hover' ? `One column is about ${CELL} km` : `<b>${METRIC[metric].note}</b>${SOURCE}`; };
