@@ -1647,9 +1647,9 @@ const flat = () => {
     const face = (pts, fill) => { ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fillStyle = fill; ctx.fill(); };
     const day = document.documentElement.dataset.theme === 'light';   // cream: pale stone that deepens with height
     for (const c of cols) {
-      const H = baseOf(c), t = (H - H0) / (MODE === 'hover' ? RELIEF : SPAN), L = day ? Math.round(90 - t * 18) : Math.round(37 + t * 24);
-      face([P(c.x - HALF, H, c.z), P(c.x, H, c.z + HALF), P(c.x, 0, c.z + HALF), P(c.x - HALF, 0, c.z)], day ? '#bba982' : '#1b2f55');
-      face([P(c.x, H, c.z + HALF), P(c.x + HALF, H, c.z), P(c.x + HALF, 0, c.z), P(c.x, 0, c.z + HALF)], day ? '#a89670' : '#0f1c36');
+      const H = baseOf(c), t = (H - H0) / (MODE === 'hover' ? RELIEF : SPAN), L = day ? Math.round(94 - t * 12) : Math.round(37 + t * 24);
+      face([P(c.x - HALF, H, c.z), P(c.x, H, c.z + HALF), P(c.x, 0, c.z + HALF), P(c.x - HALF, 0, c.z)], day ? '#d6c8a6' : '#1b2f55');
+      face([P(c.x, H, c.z + HALF), P(c.x + HALF, H, c.z), P(c.x + HALF, 0, c.z), P(c.x, 0, c.z + HALF)], day ? '#c4b490' : '#0f1c36');
       face([P(c.x - HALF, H, c.z), P(c.x, H, c.z - HALF), P(c.x + HALF, H, c.z), P(c.x, H, c.z + HALF)], c.river && MODE === 'hover' ? '#d9b266' : (day ? `hsl(40 38% ${L}%)` : `hsl(218 30% ${L}%)`));
     }
   };
@@ -1680,19 +1680,19 @@ const scene3d = T => {
   const geo = new T.BoxGeometry(SIDE, 1, SIDE); geo.translate(0, .5, 0);
   const glow = new T.InstancedBufferAttribute(new Float32Array(N), 1); geo.setAttribute('aGlow', glow);
   const mat = new T.MeshStandardMaterial({ roughness: 1, metalness: 0 });
-  const floor = { value: .08 };   // how dark a side gets at its foot: deep on navy, kept light on cream (set by the palette)
+  const floor = { value: .08 }, hazeMin = { value: .72 };   // how dark a side gets at its foot: deep on navy, kept light on cream (set by the palette)
   mat.onBeforeCompile = sh => {
-    sh.uniforms.uFloor = floor;
+    sh.uniforms.uFloor = floor; sh.uniforms.uHaze = hazeMin;
     const vary = 'varying float vGlow;\nvarying float vSide;\nvarying float vDrop;\nvarying float vFar;\nvarying vec2 vFace;\n';
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', '#include <common>\nattribute float aGlow;\n' + vary)
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlow = aGlow;\nvSide = 1.0 - step(0.5, normal.y);\nvDrop = (1.0 - position.y) * length(instanceMatrix[1].xyz);\nvFace = position.xz;\nvFar = (modelMatrix * instanceMatrix * vec4(position, 1.0)).z;');
     sh.fragmentShader = sh.fragmentShader
-      .replace('#include <common>', '#include <common>\nuniform float uFloor;\n' + vary)
+      .replace('#include <common>', '#include <common>\nuniform float uFloor;\nuniform float uHaze;\n' + vary)
       .replace('#include <color_fragment>', `#include <color_fragment>
         float ao = mix(1.0, 0.85 * (uFloor + (1.0 - uFloor) * exp(-vDrop * 1.0)), vSide);
         float rim = (1.0 - vSide) * smoothstep(0.84, 0.985, max(abs(vFace.x), abs(vFace.y)) / ${(SIDE / 2).toFixed(3)});
-        float haze = mix(0.72, 1.0, smoothstep(-9.0, 4.0, vFar));   // blocks further north sit back into the navy
+        float haze = mix(uHaze, 1.0, smoothstep(-9.0, 4.0, vFar));   // blocks further north sit back into the navy
         diffuseColor.rgb *= ao * haze * (1.0 + rim * 0.12);`)
       .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += vGlow * diffuseColor.rgb;');
   };
@@ -1708,15 +1708,15 @@ const scene3d = T => {
   /* night: navy stone that pales with height. Cream: pale blue stone that deepens with height, so the
      tallest columns read darkest on the light field; the selection stays brass in both */
   const PAL = {
-    dark: { lo: '#2b4a84', hi: '#a9c2ec', brass: '#c2a063', lamp: 0xffc56e, lampK: 1, cream: '#f1ead7', sun: 0xf6f0e6, sunI: 3.7, fill: 0x6f8fc1, fillI: .4, sky: 0x8ea6d4, ground: 0x070d1c, hemiI: .9, floor: .08 },
-    light: { lo: '#f3ead6', hi: '#cfbb8f', brass: '#2f4d78', lamp: 0xfff1da, lampK: .2, cream: '#fbf6ec', sun: 0xfff3de, sunI: 2.7, fill: 0xf0e4cc, fillI: 1, sky: 0xfff8ee, ground: 0xefe4cc, hemiI: 1.9, floor: .8 }
+    dark: { lo: '#2b4a84', hi: '#a9c2ec', brass: '#c2a063', lamp: 0xffc56e, lampK: 1, cream: '#f1ead7', sun: 0xf6f0e6, sunI: 3.7, fill: 0x6f8fc1, fillI: .4, sky: 0x8ea6d4, ground: 0x070d1c, hemiI: .9, floor: .08, haze: .72 },
+    light: { lo: '#f8f2e4', hi: '#e3d5b4', brass: '#2f4d78', lamp: 0xfff1da, lampK: .2, cream: '#fbf6ec', sun: 0xfff3de, sunI: 2.3, fill: 0xf4ead6, fillI: 1, sky: 0xfffaf2, ground: 0xf0e6d0, hemiI: 2.4, floor: .66, haze: .93 }
   };
   let LO, HI, BRASS, CREAM, lampK = 1;
   const palette = () => {
     const p = PAL[document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'];
     LO = lin(p.lo); HI = lin(p.hi); BRASS = lin(p.brass); CREAM = lin(p.cream); lampK = p.lampK; lamp.color.set(p.lamp);
     sun.color.set(p.sun); sun.intensity = p.sunI; fill.color.set(p.fill); fill.intensity = p.fillI;
-    hemi.color.set(p.sky); hemi.groundColor.set(p.ground); hemi.intensity = p.hemiI; floor.value = p.floor;
+    hemi.color.set(p.sky); hemi.groundColor.set(p.ground); hemi.intensity = p.hemiI; floor.value = p.floor; hazeMin.value = p.haze;
   };
   palette();
 
