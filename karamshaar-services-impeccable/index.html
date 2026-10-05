@@ -898,13 +898,23 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   /* ---------- nav state ---------- */
   new IntersectionObserver(([en]) => $('#nav').classList.toggle('is-scrolled', !en.isIntersecting)).observe($('#top-sentinel'));
 
-  /* ---------- statement: paragraph in the middle of the viewport is lit ---------- */
+  /* ---------- statement: the paragraph being read is lit ----------
+     Measured from scroll position, not IntersectionObserver: inside a cross-origin
+     frame (an embedded preview) browsers ignore rootMargin, so every paragraph
+     counted as "in the middle" the moment it entered the screen. A paragraph takes
+     the light once its top has risen past the reading line, halfway down the screen. */
   const paras = $$('.statement p');
   if (!reduce) {
-    const fio = new IntersectionObserver(es => es.forEach(en => {
-      if (en.isIntersecting) paras.forEach(p => p.classList.toggle('is-focus', p === en.target));
-    }), { rootMargin: '-46% 0px -46% 0px' });
-    paras.forEach(p => fio.observe(p));
+    let queued = false;
+    const light = () => {
+      queued = false;
+      const line = innerHeight * .5;
+      let focus = paras[0];
+      for (const p of paras) if (p.getBoundingClientRect().top < line) focus = p;
+      paras.forEach(p => p.classList.toggle('is-focus', p === focus));
+    };
+    const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(light); } };
+    addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); light();
   }
 
   /* ---------- client logos (hotlinked from the live site for this dry run) ---------- */
