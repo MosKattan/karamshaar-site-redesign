@@ -935,28 +935,28 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   }), { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
   $$('.rv').forEach(el => rio.observe(el));
 
-  /* ---------- logo: on hover the four bars re-measure themselves like a chart rendering ----------
-     Each bar keeps its right edge fixed and eases its length toward a new random value
-     every few hundred ms; on leave they ease back to the true logo. */
+  /* ---------- logo: one quick ripple down the four bars on hover, then still ----------
+     Each bar keeps its right edge fixed, dips in length and settles back, top to bottom.
+     Plays once per hover and always finishes, so it never loops or snaps. */
   if (!reduce) $$('.brand').forEach(brand => {
     const svg = brand.querySelector('svg');
-    const cur = [1, 1, 1, 1], goal = [1, 1, 1, 1], next = [0, 0, 0, 0], gap = [380, 520, 440, 600];
-    let hot = false, raf = 0;
-    const pick = i => .3 + Math.random() * .75;
+    const DUR = 420, STEP = 50;
+    const order = [1, 0, 2, 3];            // lb2 is the top bar, then lb1, lb3, lb4
+    const depth = [.2, .3, .26, .34];
+    let start = 0, raf = 0;
     const tick = t => {
-      let moving = false;
+      if (!start) start = t;
+      const el = t - start;
       for (let i = 0; i < 4; i++) {
-        if (hot && t > next[i]) { goal[i] = Math.min(1, pick(i)); next[i] = t + gap[i] * (.7 + Math.random() * .6); }
-        cur[i] += (goal[i] - cur[i]) * .14;
-        if (Math.abs(goal[i] - cur[i]) > .002) moving = true; else cur[i] = goal[i];
-        svg.style.setProperty('--s' + (i + 1), cur[i].toFixed(4));
+        const p = Math.min(1, Math.max(0, (el - order[i] * STEP) / DUR));
+        const w = Math.sin(Math.PI * Math.pow(p, .6)) ** 2;   // fast in, soft settle
+        svg.style.setProperty('--s' + (i + 1), (1 - depth[i] * w).toFixed(4));
       }
-      raf = hot || moving ? requestAnimationFrame(tick) : 0;
+      raf = el < DUR + STEP * 3 ? requestAnimationFrame(tick) : 0;
     };
-    const go = on => { hot = on; if (!on) goal.fill(1); if (!raf) raf = requestAnimationFrame(tick); };
-    brand.addEventListener('pointerenter', () => go(true));
-    brand.addEventListener('pointerleave', () => go(false));
-    brand.addEventListener('focus', () => go(true)); brand.addEventListener('blur', () => go(false));
+    const play = () => { if (!raf) { start = 0; raf = requestAnimationFrame(tick); } };
+    brand.addEventListener('pointerenter', play);
+    brand.addEventListener('focus', play);
   });
 
   /* ---------- nav state ---------- */
