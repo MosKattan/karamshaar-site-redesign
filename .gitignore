@@ -4,6 +4,10 @@ tools/chrome-profile-*/
 # Generated screenshots (re-create with tools/shoot.mjs)
 tools/shots/
 
+# Claude Code: per-machine settings and session worktrees
+.claude/settings.local.json
+.claude/worktrees/
+
 # OS / editor noise
 Thumbs.db
 desktop.ini

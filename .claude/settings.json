@@ -1,0 +1,39 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tools/git-sync.mjs\" pull",
+            "timeout": 30,
+            "statusMessage": "Checking GitHub for changes"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tools/git-sync.mjs\" pull --throttle=120",
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tools/git-sync.mjs\" push",
+            "timeout": 120,
+            "statusMessage": "Mirroring to GitHub"
+          }
+        ]
+      }
+    ]
+  }
+}
