@@ -103,6 +103,10 @@ p{text-wrap:pretty}
   -webkit-mask-image:linear-gradient(180deg,#000 0,#000 38%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 38%,transparent 100%)}
 .nav::after{height:150px;background:linear-gradient(180deg,rgba(8,16,34,.62) 0,rgba(8,16,34,.34) 45%,rgba(8,16,34,0) 100%)}
 .nav.is-scrolled::after{background:linear-gradient(180deg,rgba(8,16,34,.78) 0,rgba(8,16,34,.46) 45%,rgba(8,16,34,0) 100%)}
+/* over the hero the veil is painted into the hero itself, so an iOS pull-down moves it with the page
+   instead of leaving the fixed veil's edge across the sky. The nav's own veil fades in once the page scrolls */
+.nav::before,.nav::after{transition:opacity .3s var(--ease)}
+.nav:not(.is-scrolled)::before,.nav:not(.is-scrolled)::after{opacity:0}
 .brand svg{height:30px;width:77px}
 .lb{transform-box:fill-box;transform-origin:100% 50%}
 .lb1{transform:scaleX(var(--s1,1))}.lb2{transform:scaleX(var(--s2,1))}.lb3{transform:scaleX(var(--s3,1))}.lb4{transform:scaleX(var(--s4,1))}
@@ -139,7 +143,7 @@ p{text-wrap:pretty}
 .hero{position:relative;isolation:isolate;overflow:hidden;min-height:100dvh;display:grid;grid-template-rows:1fr auto;align-items:center;padding:128px 0 30px;
   /* bokashi: a woodblock-style sky in traditional Japanese tones. Fuji (wisteria) haze and ruri (lapis) at the top,
      konjo (deep ultramarine) through the middle, settling into kachi (near-black indigo) where the next band begins */
-  background:var(--sky)}
+  background:linear-gradient(180deg,rgba(8,16,34,.62) 0,rgba(8,16,34,.34) 67.5px,rgba(8,16,34,0) 150px),var(--sky)}
 
 .hero-grid{position:relative;z-index:1;pointer-events:none}
 /* ambient field: the map's isometric lattice continued across the sky, with cells that light and fade like readings coming in */
