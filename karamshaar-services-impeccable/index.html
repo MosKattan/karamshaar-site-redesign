@@ -4,17 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Services | Karam Shaar Advisory</title>
-<!-- Standalone draft: the Services page after an Impeccable (pbakaus/impeccable v4.5) pass. Independent of ../karamshaar-services. -->
+<!-- Standalone draft: the Services page after an Impeccable (pbakaus/impeccable v4.5) pass. Independent of ../karamshaar-services.
+     One page, two languages: English is the markup, Arabic comes from the table in the "language" script near the end (html[dir=rtl]). -->
 <meta name="description" content="Research, due diligence, briefs and training on Syria's economy, business environment and investment landscape.">
 <meta name="theme-color" content="#0d1930">
 
 <!-- Dry run: fonts, icons, Lenis and Three.js come from CDNs. Bundle and self-host before production. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..800&family=Fira+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
 
-<script>document.documentElement.classList.add('js');try{const q=new URLSearchParams(location.search).get('theme'),k=q||localStorage.getItem('ks-theme');if(k==='light')document.documentElement.dataset.theme='light'}catch(e){}</script>
+<script>document.documentElement.classList.add('js');try{const q=new URLSearchParams(location.search).get('theme'),k=q||localStorage.getItem('ks-theme');if(k==='light')document.documentElement.dataset.theme='light'}catch(e){}try{if((new URLSearchParams(location.search).get('lang')||localStorage.getItem('ks-lang'))==='ar'){document.documentElement.lang='ar';document.documentElement.dir='rtl'}}catch(e){}</script>
 <style>
 /* =========================================================
    Karam Shaar Advisory - Services (redesign dry run)
@@ -528,6 +529,88 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 }
 
 /* =========================================================
+   Arabic (RTL) layer, on when the language switch sets html[dir=rtl]. Cairo for everything; the logo wordmark keeps its own face.
+   Arabic has no italics and joins letters, so tracking is zero and emphasis is
+   weight and colour. Physical left/right decoration is mirrored here.
+   ========================================================= */
+html[dir=rtl]{--serif:"Cairo",system-ui,-apple-system,"Segoe UI",sans-serif;--sans:"Cairo",system-ui,-apple-system,"Segoe UI",sans-serif}
+html[dir=rtl] *{letter-spacing:0!important}
+html[dir=rtl] body{line-height:1.85}
+html[dir=rtl] :is(h1,h2,h3){font-weight:600;line-height:1.35}
+html[dir=rtl] h1{line-height:1.3}
+html[dir=rtl] h2 .dim{font-weight:400}
+html[dir=rtl] em{font-style:normal;font-weight:600}
+html[dir=rtl] h2 em{color:var(--cream)}
+html[dir=rtl] .lede,html[dir=rtl] .sec-head p.sub,html[dir=rtl] .proof-foot p,html[dir=rtl] .panel-copy p{line-height:1.8}
+html[dir=rtl] .statement p{font-weight:500;line-height:1.7}
+html[dir=rtl] .signoff{font-weight:600;line-height:1.45;font-size:clamp(2rem,5.4vw,4.8rem)}
+html[dir=rtl] .signoff em{white-space:normal;font-weight:600}
+html[dir=rtl] .amt,html[dir=rtl] .rate-row .fig b,html[dir=rtl] .iso-call b{font-weight:600}
+html[dir=rtl] .amt{line-height:1}
+html[dir=rtl] .rate-row .fig b{line-height:1.2}
+html[dir=rtl] .iso-call b{line-height:1.3}
+html[dir=rtl] .pcard-list li{line-height:1.6}
+html[dir=rtl] .btn,html[dir=rtl] .chip,html[dir=rtl] .tags li,html[dir=rtl] .seg button{line-height:1.4}
+html[dir=rtl] input[type=email]{direction:ltr;text-align:right}
+
+/* direction-dependent motion and placement */
+html[dir=rtl] .btn:hover .ph,html[dir=rtl] .link-arrow:hover .ph{translate:-4px 0}
+html[dir=rtl] .skip{left:auto;right:12px}
+html[dir=rtl] .brand svg{direction:ltr}   /* the wordmark is Latin: its tagline is laid out from the left */
+html[dir=rtl] :is(.ph-arrow-right,.ph-arrow-up-right)::before{display:inline-block;scale:-1 1}
+html[dir=rtl] .marquee{direction:ltr}
+html[dir=rtl] .uline{left:.12em;right:0;transform-origin:right}
+html[dir=rtl] .statement-in{margin-left:0;margin-right:clamp(0px,8.5vw,112px);padding-left:0;padding-right:clamp(20px,2.6vw,36px)}
+html[dir=rtl] .statement p::before,html[dir=rtl] .statement p::after{left:auto;right:calc(-1 * clamp(20px,2.6vw,36px))}
+html[dir=rtl] .seg-thumb{left:auto;right:5px}
+html[dir=rtl] .rates[data-tier="nonprofit"] .seg-thumb{translate:-100% 0}
+html[dir=rtl] .seg-sm .seg-thumb{left:auto;right:3px;translate:calc(var(--i,0)*-100%) 0}
+html[dir=rtl] .rate-row .fig{text-align:left}
+html[dir=rtl] .iso-call p{text-align:right}
+html[dir=rtl] .map-note{text-align:left}
+
+/* hero sky and vignettes: the copy sits on the right now, so the open sky and the deep corner move to the left */
+html[dir=rtl] .hero-track{--sky:
+    radial-gradient(75% 62% at 0% 100%,rgba(4,9,24,.82),rgba(4,9,24,.4) 45%,rgba(4,9,24,0) 78%),
+    radial-gradient(90% 55% at 22% -6%,rgba(165,154,202,.30),rgba(165,154,202,0) 70%),
+    radial-gradient(70% 45% at 92% 0%,rgba(30,80,162,.30),rgba(30,80,162,0) 72%),
+    linear-gradient(180deg,#36487f 0%,#26396d 20%,#1b2d5c 44%,#142548 72%,#11203c 100%)}
+html[dir=rtl] .clients::before{background:radial-gradient(75% 100% at 0 0,rgba(4,9,24,.82),rgba(4,9,24,.4) 45%,rgba(4,9,24,0) 78%)}
+
+/* practice-card, bento and panel decoration, mirrored */
+html[dir=rtl] .g1::before{right:auto;left:-6%}
+html[dir=rtl] .g2::before{right:auto;left:12%}
+html[dir=rtl] .g2::after{right:auto;left:0;background:linear-gradient(270deg,transparent,color-mix(in srgb,var(--bar) 16%,transparent))}
+html[dir=rtl] .g3::before{right:auto;left:28px;-webkit-mask-image:linear-gradient(145deg,#000,transparent 70%);mask-image:linear-gradient(145deg,#000,transparent 70%)}
+html[dir=rtl] .g4::before{right:auto;left:0;clip-path:polygon(0 0,0 100%,100% 100%);background:linear-gradient(160deg,color-mix(in srgb,var(--bar) 24%,transparent),transparent 70%)}
+html[dir=rtl] .formats::before{right:auto;left:-8%}
+html[dir=rtl] .b-d::before{left:auto;right:16%}
+html[dir=rtl] .b-d::after{background:linear-gradient(270deg,rgba(201,173,219,.05),rgba(201,173,219,.24))}
+html[dir=rtl] .b-e::before{left:auto;right:0;clip-path:polygon(0 0,100% 0,100% 100%);background:linear-gradient(225deg,rgba(241,234,215,.16),transparent 70%)}
+html[dir=rtl] .b-e::after{right:auto;left:18px;-webkit-mask-image:linear-gradient(145deg,#000,transparent 66%);mask-image:linear-gradient(145deg,#000,transparent 66%)}
+html[dir=rtl] .b-b::before{right:auto;left:-14%}
+html[dir=rtl] .rate-feature::before{right:auto;left:-12%}
+html[dir=rtl] .rate-feature::after{right:auto;left:0}
+html[dir=rtl] .pg-v{left:auto;right:26%}
+html[dir=rtl] .pg-t{left:auto;right:3%}
+html[dir=rtl] .cover:nth-child(1){rotate:7deg;translate:-9% 6%}
+html[dir=rtl] .cover:nth-child(3){rotate:-7deg;translate:9% 6%}
+html[dir=rtl] .covers:hover .cover:nth-child(1){rotate:3deg;translate:4% 2%}
+html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
+
+@media (max-width:1100px){
+  html[dir=rtl] .nav-end{margin-right:0;margin-left:-8px}
+}
+@media (max-width:767px){
+  html[dir=rtl] .statement-in{margin-right:0}
+  html[dir=rtl] .rate-row .fig{text-align:right}
+  html[dir=rtl] .map-note{text-align:right}
+}
+@media (prefers-reduced-motion:reduce){
+  html[dir=rtl] .btn:hover .ph,html[dir=rtl] .link-arrow:hover .ph{translate:0 0}
+}
+
+/* =========================================================
    Light theme ("cream"): html[data-theme="light"], set by the toggle in the nav.
    Same world in daylight: a creamy beige field, deep blue as ink and action,
    the rose underline kept, brass as the warm second accent. Deep blue owns two
@@ -683,6 +766,11 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 [data-theme="light"] .foot{background:var(--c-deep)}
 [data-theme="light"] .signoff{color:rgba(22,38,75,.34)}
 [data-theme="light"] .signoff em{color:rgba(22,38,75,.78)}
+html[dir=rtl][data-theme="light"] .hero-track{--sky:
+    radial-gradient(90% 55% at 22% -6%,rgba(156,160,214,.26),rgba(156,160,214,0) 70%),
+    radial-gradient(70% 45% at 92% 0%,rgba(112,136,168,.12),rgba(112,136,168,0) 72%),
+    radial-gradient(75% 62% at 0% 100%,rgba(214,190,140,.34),rgba(214,190,140,0) 78%),
+    linear-gradient(180deg,#f8f1e3 0%,#f5ecdb 45%,#f1e6d1 100%)}
 </style>
 </head>
 
@@ -1094,12 +1182,257 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   </div>
 </footer>
 
+<script>
+/* =========================================================
+   Language. English is the markup; Arabic is the table below, keyed by the English string.
+   The switch (AR / EN in the nav, and in the small-screen menu) sets html[lang][dir], swaps every
+   text node and label it finds in the table, and fires "langchange" so the scripts that write
+   text or depend on direction (theme labels, the lattice, the map) can follow.
+   To change copy: edit the English in the markup and its key here together. A string with no entry stays English.
+   "text@class" overrides a translation inside an element with exactly that class.
+   Opens in Arabic with ?lang=ar or after the visitor chose it.
+   ========================================================= */
+(() => {
+  const AR = {
+    "Skip to content": "انتقل إلى المحتوى",
+    "Karam Shaar Advisory, home": "كرم شعار للاستشارات، الرئيسية",
+    "Primary": "التنقل الرئيسي",
+    "Our work": "أعمالنا",
+    "Syria in Figures": "سوريا بالأرقام",
+    "Publications": "المنشورات",
+    "Toolkit": "الأدوات",
+    "Services": "الخدمات",
+    "About": "من نحن",
+    "Switch to light theme": "التبديل إلى الوضع الفاتح",
+    "Arabic version": "النسخة الإنجليزية",
+    "AR": "EN",
+    "Start an inquiry": "ابدأ استفسارًا",
+    "Open menu": "فتح القائمة",
+    "العربية": "English",
+    "Light theme": "الوضع الفاتح",
+    "Block map of Syria. Column height shows a figure for each governorate. Use the arrow keys to step through the governorates.": "خريطة كتلية لسوريا. يمثّل ارتفاع العمود رقمًا لكل محافظة. استخدم مفاتيح الأسهم للتنقل بين المحافظات.",
+    "Clear answers on": "إجابات واضحة عن",
+    "Syria's economy.": "اقتصاد سوريا.",
+    "We pair rigorous data analysis with deep local context and field access inside and outside the country.": "نجمع بين التحليل الدقيق للبيانات والمعرفة العميقة بالسياق المحلي والوصول الميداني داخل البلاد وخارجها.",
+    "Work email": "البريد الإلكتروني للعمل",
+    "Enter a valid email address to continue.": "أدخل بريدًا إلكترونيًا صالحًا للمتابعة.",
+    "Column height shows": "ارتفاع العمود يمثّل",
+    "Move across the map": "حرّك المؤشر فوق الخريطة",
+    "Clients and donors": "العملاء والجهات المانحة",
+    "Clients and donors we have worked with": "العملاء والجهات المانحة التي عملنا معها",
+    "We help clients make informed decisions about Syria's economy, business environment, and investment landscape.": "نساعد عملاءنا على اتخاذ قرارات مستنيرة بشأن اقتصاد سوريا وبيئة الأعمال والمشهد الاستثماري فيها.",
+    "What sets us apart is a combination that is hard to find in one place: thoughtful data-driven analysis, deep knowledge of the local context, and access to sources and field data inside and outside the country.": "ما يميّزنا هو مزيج يصعب أن تجده في مكان واحد: تحليل مدروس قائم على البيانات، ومعرفة عميقة بالسياق المحلي، ووصول إلى مصادر وبيانات ميدانية داخل البلاد وخارجها.",
+    "Every engagement is tailored to the client, whether an international organisation, a government, a business, a donor, or an NGO.": "نُعدّ كل مهمة وفق حاجة العميل، سواء كان منظمة دولية أو حكومة أو شركة أو جهة مانحة أو منظمة غير حكومية.",
+    "Four practice areas.": "أربعة مجالات عمل.",
+    "One view of the economy.": "رؤية واحدة للاقتصاد.",
+    "Market and sector assessments": "تقييمات الأسواق والقطاعات",
+    "Where the economy stands, how a sector works, and whether an opportunity holds up. Built on primary and secondary data.": "أين يقف الاقتصاد، وكيف يعمل القطاع، وهل تصمد الفرصة أمام الاختبار. بالاعتماد على بيانات أولية وثانوية.",
+    "Macroeconomics": "الاقتصاد الكلي",
+    "Feasibility studies": "دراسات الجدوى",
+    "Investment-opportunity studies": "دراسات الفرص الاستثمارية",
+    "Due diligence, compliance and sanctions": "العناية الواجبة والامتثال والعقوبات",
+    "Background checks on individuals and entities inside and outside Syria, drawing on open sources, field interviews, and a wide local network.": "فحص خلفيات الأفراد والكيانات داخل سوريا وخارجها، بالاعتماد على المصادر المفتوحة والمقابلات الميدانية وشبكة علاقات محلية واسعة.",
+    "Know Your Customer procedures": "إجراءات «اعرف عميلك»",
+    "Sanctions and compliance risk": "العقوبات ومخاطر الامتثال",
+    "Commercial partner and supplier checks": "فحص الشركاء التجاريين والموردين",
+    "Legal and regulatory advisory": "الاستشارات القانونية والتنظيمية",
+    "Financial and banking advisory": "الاستشارات المالية والمصرفية",
+    "Analysis of financial and banking activity in Syria, supported by our exchange rate trackers and in-house data work.": "تحليل النشاط المالي والمصرفي في سوريا، مدعومًا بمتتبعات أسعار الصرف وأعمالنا التحليلية الداخلية.",
+    "Financial and banking activities": "الأنشطة المالية والمصرفية",
+    "Official and black market exchange rates": "أسعار الصرف الرسمية وفي السوق السوداء",
+    "Data analysis": "تحليل البيانات",
+    "Energy, reconstruction and development": "الطاقة وإعادة الإعمار والتنمية",
+    "Energy studies, aid and development work, and reconstruction, including real estate advisory and project development.": "دراسات الطاقة، وأعمال المساعدات والتنمية، وإعادة الإعمار، بما في ذلك الاستشارات العقارية وتطوير المشاريع.",
+    "Energy studies": "دراسات الطاقة",
+    "Aid and development": "المساعدات والتنمية",
+    "Reconstruction": "إعادة الإعمار",
+    "Real estate advisory and project development": "الاستشارات العقارية وتطوير المشاريع",
+    "Six ways to work with us.": "ست طرق للعمل معنا.",
+    "From one hour of advice to full field research.": "من ساعة استشارة واحدة إلى بحث ميداني كامل.",
+    "Research and studies": "البحوث والدراسات",
+    "Market assessments, sector analysis, feasibility studies, risk assessments, and studies of Syria's economic and institutional transformations.": "تقييمات الأسواق، وتحليل القطاعات، ودراسات الجدوى، وتقييمات المخاطر، ودراسات التحولات الاقتصادية والمؤسسية في سوريا.",
+    "Cost and timeline follow scope, depth, and data collection": "التكلفة والجدول الزمني يتبعان النطاق والعمق وجمع البيانات",
+    "Analytical briefs in 72 hours or less.": "موجزات تحليلية خلال 72 ساعة أو أقل.",
+    "Up to 1,000 words of practical findings and actionable recommendations. Turnaround depends on topic and data availability.": "حتى 1000 كلمة من النتائج العملية والتوصيات القابلة للتنفيذ. تعتمد مدة التسليم على الموضوع وتوفر البيانات.",
+    "Oral consultations": "الاستشارات الشفهية",
+    "Most useful early on. Booked by the hour or shaped around your needs.": "الأنفع في المراحل المبكرة. تُحجز بالساعة أو تُصمَّم وفق احتياجاتك.",
+    "Understanding the market": "فهم السوق",
+    "Assessing an opportunity": "تقييم فرصة",
+    "Designing a project": "تصميم مشروع",
+    "Due diligence and compliance": "العناية الواجبة والامتثال",
+    "Checks on individuals and entities, built from open-source research, field interviews, and our local network.": "فحوص للأفراد والكيانات، مبنية على أبحاث المصادر المفتوحة والمقابلات الميدانية وشبكتنا المحلية.",
+    "Know Your Customer": "اعرف عميلك",
+    "Sanctions risk": "مخاطر العقوبات",
+    "Supplier checks": "فحص الموردين",
+    "Investment decisions": "القرارات الاستثمارية",
+    "Operational research, monitoring and evaluation": "البحوث التشغيلية والرصد والتقييم",
+    "Monitoring, evaluation, accountability and learning (MEAL), capacity assessments, and field data collection. Discussed and priced case by case.": "الرصد والتقييم والمساءلة والتعلّم (MEAL)، وتقييمات القدرات، وجمع البيانات الميدانية. تُناقَش وتُسعَّر لكل حالة على حدة.",
+    "Training and preparation": "التدريب والتحضير",
+    "Sessions for diplomats, organisation staff, and companies working on Syria.": "جلسات للدبلوماسيين وموظفي المنظمات والشركات العاملة على الشأن السوري.",
+    "Hourly or daily": "بالساعة أو باليوم",
+    "Rates, stated up front.": "الأسعار معلنة مسبقًا.",
+    "Flat unless otherwise indicated.": "ثابتة ما لم يُذكر خلاف ذلك.",
+    "Client type": "نوع العميل",
+    "Standard": "قياسي",
+    "Non-profit": "غير ربحي",
+    "Advisory by the hour": "الاستشارة بالساعة",
+    "USD": "دولار",
+    "per hour": "للساعة",
+    "Oral updates and consulting": "التحديثات والاستشارات الشفهية",
+    "Hourly coaching sessions": "جلسات التوجيه بالساعة",
+    "Peer review of unpublished policy and academic publications": "مراجعة الأقران للدراسات السياسية والأكاديمية غير المنشورة",
+    "Typical visualizations": "التمثيلات البصرية المعتادة",
+    "Free of charge for students.": "مجانًا للطلاب.",
+    "Policy brief": "موجز سياساتي",
+    "24-hour turnaround": "تسليم خلال 24 ساعة",
+    "Full-day coaching or training": "تدريب أو توجيه ليوم كامل",
+    "For individuals and groups": "للأفراد والمجموعات",
+    "Bespoke visualization": "تصوّر بصري مخصص",
+    "Custom-built for your data and audience": "يُنفَّذ خصيصًا لبياناتك وجمهورك",
+    "from": "من",
+    "Operational research, policy research, due diligence": "البحوث التشغيلية والسياساتية والعناية الواجبة",
+    "Scoped and priced case by case": "نطاق وسعر لكل حالة على حدة",
+    "Judge the work": "احكم على العمل",
+    "before you commission it.": "قبل أن تكلّفنا به.",
+    "Cover of a thematic brief on investor protection in Syria, June 2026": "غلاف موجز موضوعي عن حماية المستثمرين في سوريا، حزيران 2026",
+    "Cover of Syria in Figures, July 2026, showing a relief map of Syria": "غلاف «سوريا بالأرقام»، تموز 2026، يُظهر خريطة تضاريسية لسوريا",
+    "Syria in Figures cover with a map of Syrian cities": "غلاف «سوريا بالأرقام» مع خريطة للمدن السورية",
+    "Syria in Figures and our thematic briefs show how we handle data, context, and argument.": "تُظهر «سوريا بالأرقام» وموجزاتنا الموضوعية كيف نتعامل مع البيانات والسياق والحجة.",
+    "Browse publications": "تصفّح المنشورات",
+    "Tell us what you need to": "أخبرنا بما تحتاج إلى",
+    "know.": "معرفته.",
+    "Describe the decision in front of you. We will come back with a scope, a timeline, and a cost.": "صِف القرار الذي أمامك. سنعود إليك بنطاق عمل وجدول زمني وتكلفة.",
+    "Service": "الخدمة",
+    "Market and economic research": "أبحاث السوق والاقتصاد",
+    "Enhanced due diligence": "العناية الواجبة المعزّزة",
+    "Basic due diligence": "العناية الواجبة الأساسية",
+    "Analytical briefs": "الموجزات التحليلية",
+    "Real estate advisory": "الاستشارات العقارية",
+    "Operational research and MEAL": "البحوث التشغيلية والرصد والتقييم",
+    "Training": "التدريب",
+    "Other": "أخرى",
+    "Your email": "بريدك الإلكتروني",
+    "Enter a valid email address so we can reply.": "أدخل بريدًا إلكترونيًا صالحًا لنتمكن من الرد.",
+    "Your inquiry": "استفسارك",
+    "What are you trying to decide, and by when?": "ما القرار الذي تحاول اتخاذه، ومتى؟",
+    "A few lines are enough to get started.": "بضعة أسطر تكفي للبدء.",
+    "Send inquiry": "إرسال الاستفسار",
+    "Inquiry captured": "تم تسجيل الاستفسار",
+    "This is a design preview, so nothing was sent. On the live site this message confirms receipt and when to expect a reply.": "هذه نسخة تصميمية تجريبية، لذا لم يُرسَل شيء. في الموقع الفعلي تؤكد هذه الرسالة الاستلام وموعد الرد المتوقع.",
+    "Write another": "اكتب استفسارًا آخر",
+    "Making sense of": "نساعدك على فهم",
+    "Karam Shaar Advisory": "كرم شعار للاستشارات",
+    "Karam Shaar Advisory Ltd. is a limited-liability consulting company registered in New Zealand under business number 9429048957441 and in the Syrian Commercial Register under number 03110162706.": "كرم شعار للاستشارات المحدودة شركة استشارات محدودة المسؤولية، مسجّلة في نيوزيلندا برقم الأعمال 9429048957441 وفي السجل التجاري السوري برقم 03110162706.",
+    "Blog": "المدونة",
+    "Events": "الفعاليات",
+    "Analytical toolkit": "الأدوات التحليلية",
+    "Sanctions program": "برنامج العقوبات",
+    "Exchange rates tracker": "متتبع أسعار الصرف",
+    "UN exchange rate gap": "فجوة سعر الصرف لدى الأمم المتحدة",
+    "Official documents": "الوثائق الرسمية",
+    "Company": "الشركة",
+    "About us": "من نحن",
+    "Media contributions": "المساهمات الإعلامية",
+    "© 2026 Karam Shaar Advisory Ltd.": "© 2026 كرم شعار للاستشارات المحدودة.",
+    "USD@cur": "دولار أمريكي",
+    "Services | Karam Shaar Advisory": "الخدمات | كرم شعار للاستشارات",
+    "Research, due diligence, briefs and training on Syria's economy, business environment and investment landscape.": "أبحاث وعناية واجبة وموجزات وتدريب حول اقتصاد سوريا وبيئة الأعمال والمشهد الاستثماري فيها.",
+    "Switch to dark theme": "التبديل إلى الوضع الداكن",
+    "Dark theme": "الوضع الداكن",
+    "Close menu": "إغلاق القائمة",
+    "Sending": "جارٍ الإرسال",
+    "World Bank": "البنك الدولي",
+    "United Nations": "الأمم المتحدة",
+    "European Union": "الاتحاد الأوروبي",
+    "German Federal Foreign Office": "وزارة الخارجية الألمانية الاتحادية",
+    "United States Department of State": "وزارة الخارجية الأمريكية",
+    "Foreign, Commonwealth and Development Office": "وزارة الخارجية والكومنولث والتنمية البريطانية",
+    "French Ministry of Foreign Affairs": "وزارة أوروبا والخارجية الفرنسية",
+    "Dutch Ministry of Foreign Affairs": "وزارة الخارجية الهولندية",
+    "European Endowment for Democracy": "الصندوق الأوروبي للديمقراطية",
+    "Rockefeller Brothers Fund": "صندوق الأخوين روكفلر",
+    "Atlantic Council": "المجلس الأطلسي",
+    "Friedrich Ebert Stiftung": "مؤسسة فريدريش إيبرت",
+    "Konrad Adenauer Stiftung": "مؤسسة كونراد أديناور",
+    "Asfari Foundation": "مؤسسة عصفوري",
+    "Syrian Forum": "المنتدى السوري",
+    "Aleppo": "حلب",
+    "Rif Dimashq": "ريف دمشق",
+    "Homs": "حمص",
+    "Damascus": "دمشق",
+    "Hama": "حماة",
+    "Hasakah": "الحسكة",
+    "Idlib": "إدلب",
+    "Deir ez-Zor": "دير الزور",
+    "Daraa": "درعا",
+    "Latakia": "اللاذقية",
+    "Raqqa": "الرقة",
+    "Tartus": "طرطوس",
+    "Suwayda": "السويداء",
+    "Quneitra": "القنيطرة",
+    "Qamishli": "القامشلي",
+    "Palmyra": "تدمر",
+    "Al-Bukamal": "البوكمال",
+    "Kobani": "كوباني",
+    "Manbij": "منبج",
+    "Central Bureau of Statistics estimate, 2011": "تقديرات المكتب المركزي للإحصاء، 2011",
+    "Population": "السكان",
+    "Density": "الكثافة",
+    "million people": "مليون نسمة",
+    "people": "نسمة",
+    "people per km²": "نسمة لكل كم²",
+    "Height shows population by governorate": "الارتفاع يمثّل عدد السكان في كل محافظة",
+    "Height shows people per km², log scale": "الارتفاع يمثّل عدد الأشخاص لكل كم²، بمقياس لوغاريتمي",
+    "One column is about": "العمود الواحد يساوي نحو",
+    "km": "كم",
+    "Block map of Syria with its terrain. Columns rise under the pointer.": "خريطة كتلية لسوريا بتضاريسها. ترتفع الأعمدة تحت المؤشر.",
+    "Block map of Syria with its terrain.": "خريطة كتلية لسوريا بتضاريسها.",
+    "Block map of Syria. Column height shows population by governorate.": "خريطة كتلية لسوريا. يمثّل ارتفاع العمود عدد السكان في كل محافظة."
+  };
+  const root = document.documentElement, rtl = () => root.dir === 'rtl';
+  const tr = s => (rtl() && AR[s]) || s;
+  const ATTRS = ['aria-label', 'alt', 'placeholder', 'content'];
+  const texts = new WeakMap(), attrs = new WeakMap();   // the English each node or element started with
+  const turn = (en, ctx) => { const k = en.trim(), ar = AR[k + '@' + ctx] || AR[k]; return ar ? en.replace(k, () => ar) : null; };
+  const apply = (scope = document) => {
+    const on = rtl(), walk = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT);
+    for (let n; (n = walk.nextNode());) {
+      const p = n.parentElement; if (!p || p.closest('script,style')) continue;
+      let en = texts.get(n);
+      if (en == null) { if (!on || !turn(n.data, p.className)) continue; en = n.data; texts.set(n, en); }
+      n.data = on ? turn(en, p.className) : en;
+    }
+    for (const el of scope.querySelectorAll('[aria-label],[alt],[placeholder],meta[name="description"]')) for (const a of ATTRS) {
+      const now = el.getAttribute(a); if (!now) continue;
+      const kept = attrs.get(el) || {};
+      if (kept[a] == null) { if (!on || !AR[now]) continue; kept[a] = now; attrs.set(el, kept); }
+      el.setAttribute(a, on ? AR[kept[a]] : kept[a]);
+    }
+    /* the switch names the other language; the practice sketches hug the card's inline end */
+    for (const a of document.querySelectorAll('.lang, .mnav a[lang]')) a.lang = on ? 'en' : 'ar';
+    for (const s of document.querySelectorAll('.pcard-art svg')) s.setAttribute('preserveAspectRatio', on ? 'xMaxYMid meet' : 'xMinYMid meet');
+  };
+  const set = lang => {
+    const go = () => {
+      root.lang = lang; if (lang === 'ar') root.dir = 'rtl'; else root.removeAttribute('dir');
+      apply(); document.dispatchEvent(new Event('langchange'));
+    };
+    if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.startViewTransition(go); else go();
+    try { localStorage.setItem('ks-lang', lang); } catch {}
+  };
+  for (const a of document.querySelectorAll('.lang, .mnav a[lang]')) a.addEventListener('click', e => { e.preventDefault(); set(rtl() ? 'en' : 'ar'); });
+  window.KS = { tr, rtl, apply, set };
+  apply();
+})();
+</script>
+
 <script src="https://unpkg.com/lenis@1/dist/lenis.min.js"></script>
 <script>
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const { tr } = window.KS;   // the string in the page's current language
 
   /* ---------- smooth scroll (Lenis, as on fora.so) ---------- */
   let lenis = null;
@@ -1145,8 +1478,8 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     const root = document.documentElement, meta = $('meta[name="theme-color"]'), btn = $('.theme'), row = $('.mnav-theme');
     const paint = () => {
       const day = root.dataset.theme === 'light';
-      if (btn) btn.setAttribute('aria-label', day ? 'Switch to dark theme' : 'Switch to light theme');
-      if (row) row.querySelector('span').textContent = day ? 'Dark theme' : 'Light theme';
+      if (btn) btn.setAttribute('aria-label', tr(day ? 'Switch to dark theme' : 'Switch to light theme'));
+      if (row) row.querySelector('span').textContent = tr(day ? 'Dark theme' : 'Light theme');
       if (meta) meta.content = day ? '#f4ecdc' : '#0d1930';
     };
     const flip = () => {
@@ -1156,6 +1489,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
       try { localStorage.setItem('ks-theme', day ? 'light' : 'dark'); } catch {}
     };
     [btn, row].forEach(b => b && b.addEventListener('click', flip));
+    document.addEventListener('langchange', paint);
     paint();
   }
 
@@ -1163,11 +1497,12 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   const menuBtn = $('.menu'), mnav = $('#mnav');
   const setMenu = open => {
     mnav.hidden = !open; menuBtn.setAttribute('aria-expanded', String(open));
-    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menuBtn.setAttribute('aria-label', tr(open ? 'Close menu' : 'Open menu'));
     const icon = menuBtn.querySelector('.ph'); if (icon) icon.className = 'ph ' + (open ? 'ph-x' : 'ph-list');
     if (open) mnav.querySelector('a').focus();
   };
   menuBtn.addEventListener('click', () => setMenu(mnav.hidden));
+  document.addEventListener('langchange', () => menuBtn.setAttribute('aria-label', tr(mnav.hidden ? 'Open menu' : 'Close menu')));
   mnav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !mnav.hidden) { setMenu(false); menuBtn.focus(); } });
   document.addEventListener('pointerdown', e => { if (!mnav.hidden && !mnav.contains(e.target) && !menuBtn.contains(e.target)) setMenu(false); });
@@ -1270,6 +1605,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     img.src = U + path;
     li.append(img); ul.append(li);
   }));
+  window.KS.apply(ul);   // the names above are the alt text
 
   /* ---------- rates toggle ---------- */
   const rates = $('#rates');
@@ -1305,8 +1641,8 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     e.preventDefault();
     if (!valid()) { err.hidden = false; email.setAttribute('aria-invalid', 'true'); email.focus(); return; }
     const send = form.querySelector('button[type=submit]'), label = send.firstChild;
-    send.disabled = true; send.setAttribute('aria-busy', 'true'); label.textContent = 'Sending ';
-    setTimeout(() => { send.disabled = false; send.removeAttribute('aria-busy'); label.textContent = 'Send inquiry '; form.hidden = true; done.hidden = false; done.focus(); }, 700);
+    send.disabled = true; send.setAttribute('aria-busy', 'true'); label.textContent = tr('Sending') + ' ';
+    setTimeout(() => { send.disabled = false; send.removeAttribute('aria-busy'); label.textContent = tr('Send inquiry') + ' '; form.hidden = true; done.hidden = false; done.focus(); }, 700);
   });
   $('#again').addEventListener('click', () => { form.reset(); resetChips(); done.hidden = true; form.hidden = false; email.focus(); });
   /* ---------- hero: the inquiry starts here, then continues in the form below ---------- */
@@ -1341,6 +1677,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   const TINTS = ['201,173,219', '142,171,234', '165,199,144', '211,193,152', '142,171,234', '241,234,215'];
   const TINTS_DAY = ['122,88,156', '74,102,142', '78,120,60', '150,116,52', '74,102,142', '33,58,95'];   // the same four practice tints, deepened to read on cream
   const day = () => document.documentElement.dataset.theme === 'light';
+  const rtl = () => document.documentElement.dir === 'rtl';   // Arabic: the copy sits on the right, so both fields mirror
   const T30 = Math.tan(Math.PI / 6);
   const unit = v => Math.min(1, Math.max(0, v));
 
@@ -1436,6 +1773,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
       host.addEventListener('pointerleave', () => { px = py = -1e4; });
     }
     document.addEventListener('themechange', kick);
+    document.addEventListener('langchange', kick);
     cv.classList.add('on'); kick();
   };
 
@@ -1443,10 +1781,10 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   const sky = document.querySelector('.hero-bg');
   field(sky, sky && sky.closest('.hero'), {
     speed: 7, rate: .07, max: 40, still: 14,
-    reach: (x, y, W, H) => unit((x / W - .22) / .45) * unit(1 - (y / H - .32) / .6),   // full in the upper right, thin over the copy and near the bottom
-    spot: (W, H) => [W * (.25 + Math.random() * .75), H * Math.random() * Math.random() * .9],   // y squared: most cells land in the open sky near the top
+    reach: (x, y, W, H) => unit(((rtl() ? 1 - x / W : x / W) - .22) / .45) * unit(1 - (y / H - .32) / .6),   // full in the upper corner away from the copy, thin over the copy and near the bottom
+    spot: (W, H) => { const u = .25 + Math.random() * .75; return [W * (rtl() ? 1 - u : u), H * Math.random() * Math.random() * .9]; },   // y squared: most cells land in the open sky near the top
     lines: (ctx, W, H) => {
-      const g = ctx.createLinearGradient(W * .2, H, W, 0);   // the lines fade out toward the copy and the bottom-left
+      const g = rtl() ? ctx.createLinearGradient(W * .8, H, 0, 0) : ctx.createLinearGradient(W * .2, H, W, 0);   // the lines fade out toward the copy and the bottom corner under it
       const c = day() ? '33,58,95' : '197,210,232', k = day() ? 1.25 : 1;
       g.addColorStop(0, `rgba(${c},0)`); g.addColorStop(.45, `rgba(${c},${.045 * k})`); g.addColorStop(1, `rgba(${c},${.08 * k})`);
       return g;
@@ -1461,20 +1799,20 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     speed: 4, rate: .06, max: 26, still: 8,
     tick: (W, H, run) => {
       const s = sec.getBoundingClientRect(), p = !reduce && sec.querySelector('p.is-focus');
-      edge = col.getBoundingClientRect().right - s.left;
+      edge = (rtl() ? col.getBoundingClientRect().left : col.getBoundingClientRect().right) - s.left;
       if (!p) return;
       const q = p.getBoundingClientRect(), to = q.top - s.top + q.height / 2;
       band = band == null ? to : band + (to - band) * .09;
-      if (lit && p !== lit) run([edge + (W - edge) * (.2 + Math.random() * .5), to]);   // the light moved on: plot a short run beside the new paragraph
+      if (lit && p !== lit) run([rtl() ? edge * (.2 + Math.random() * .5) : edge + (W - edge) * (.2 + Math.random() * .5), to]);   // the light moved on: plot a short run beside the new paragraph
       lit = p;
     },
-    /* quiet behind the text column, full in the open margin to its right, and gathered around the lit paragraph */
-    reach: (x, y, W, H) => (.3 + .7 * unit((x - edge + 50) / 100))
+    /* quiet behind the text column, full in the open margin beside it, and gathered around the lit paragraph */
+    reach: (x, y, W, H) => (.3 + .7 * unit(((rtl() ? edge - x : x - edge) + 50) / 100))
       * (band == null ? 1 : .12 + .88 * Math.exp(-((y - band) ** 2) / (2 * SPAN * SPAN)))
       * unit((H - y) / FOOT),
-    spot: (W, H) => [W * Math.sqrt(Math.random()), band == null ? H * Math.random() : band + (Math.random() - .5) * SPAN * 3],   // root: more cells toward the right
+    spot: (W, H) => { const u = Math.sqrt(Math.random()); return [W * (rtl() ? 1 - u : u), band == null ? H * Math.random() : band + (Math.random() - .5) * SPAN * 3]; },   // root: more cells toward the open margin
     lines: (ctx, W) => {
-      const g = ctx.createLinearGradient(0, 0, W, 0);
+      const g = rtl() ? ctx.createLinearGradient(W, 0, 0, 0) : ctx.createLinearGradient(0, 0, W, 0);
       const c = day() ? '33,58,95' : '197,210,232';
       g.addColorStop(0, `rgba(${c},.04)`); g.addColorStop(1, `rgba(${c},.09)`);
       return g;
@@ -1511,6 +1849,7 @@ const query = new URLSearchParams(location.search);
 const MODE = query.get('map') === 'hover' ? 'hover' : 'data';
 const SCROLL = 'none';   // the travelling camera of the main page is switched off in this draft: it needs the close framing that crops the country
 const $ = (s, r = document) => r.querySelector(s);
+const { tr, rtl } = window.KS;   // names and labels below are English; tr() gives the page's current language, rtl() says the copy sits on the right
 const host = $('#map'), track = $('.hero-track'), call = $('.iso-call'), note = $('#mapnote'), live = $('#maplive'), seg = $('#metric'), coord = $('#readout');
 const wide = matchMedia('(min-width:1101px)'), tall = matchMedia('(min-height:620px)');   // same breakpoints as the stage and pin rules in the stylesheet
 const INSET = 0;     // nothing fades: the canvas spans the whole hero and the model is framed clear of the copy
@@ -1544,14 +1883,14 @@ const SOURCE = 'Central Bureau of Statistics estimate, 2011';
 const people = v => v.toLocaleString('en');
 const maxOf = f => Math.max(...Object.values(GOV).map(f));
 const METRIC = {
-  pop: { label: 'Population', v: g => g.pop, t: v => v / maxOf(g => g.pop), say: v => v >= 1e6 ? (v / 1e6).toFixed(2) + ' million people' : people(v) + ' people', note: 'Height shows population by governorate' },
+  pop: { label: 'Population', v: g => g.pop, t: v => v / maxOf(g => g.pop), say: v => v >= 1e6 ? (v / 1e6).toFixed(2) + ' ' + tr('million people') : people(v) + ' ' + tr('people'), note: 'Height shows population by governorate' },
   // density spans 37 to 16,700 people per km2, so it is drawn on a log scale
-  den: { label: 'Density', v: g => g.pop / g.area, t: v => Math.log(v / 20) / Math.log(maxOf(g => g.pop / g.area) / 20), say: v => people(v >= 1000 ? Math.round(v / 10) * 10 : Math.round(v)) + ' people per km²', note: 'Height shows people per km², log scale' }
+  den: { label: 'Density', v: g => g.pop / g.area, t: v => Math.log(v / 20) / Math.log(maxOf(g => g.pop / g.area) / 20), say: v => people(v >= 1000 ? Math.round(v / 10) * 10 : Math.round(v)) + ' ' + tr('people per km²'), note: 'Height shows people per km², log scale' }
 };
 let metric = 'den';
 const metricKeys = Object.keys(METRIC);
 seg.style.setProperty('--n', metricKeys.length);
-for (const k of metricKeys) { const b = document.createElement('button'); b.type = 'button'; b.dataset.metric = k; b.textContent = METRIC[k].label; b.setAttribute('aria-pressed', String(k === metric)); seg.append(b); }
+for (const k of metricKeys) { const b = document.createElement('button'); b.type = 'button'; b.dataset.metric = k; b.textContent = tr(METRIC[k].label); b.setAttribute('aria-pressed', String(k === metric)); seg.append(b); }
 seg.style.setProperty('--i', metricKeys.indexOf(metric));   // opens on density; the thumb follows
 
 /* Terrain view only: a rough relief model, the Euphrates with the Khabur, and towns for the readout. */
@@ -1626,37 +1965,48 @@ for (const c of cols) { bx0 = Math.min(bx0, c.x - HALF); bx1 = Math.max(bx1, c.x
 let ST = null;
 const measure = () => {
   const w = host.clientWidth, h = host.clientHeight;
-  if (!wide.matches) { ST = { x: 0, y: 0, w, h }; return; }
-  const hb = host.getBoundingClientRect(), cb = $('.hero-copy').getBoundingClientRect();
-  const x = Math.max(0, cb.right - hb.left + 12), y = 92;   // right of the copy, below the nav
+  if (!wide.matches) { ST = { x: 0, y: 0, w, h, u: 0 }; return; }
+  const hb = host.getBoundingClientRect(), cb = $('.hero-copy').getBoundingClientRect(), y = 92;   // below the nav
   /* Zoomed out, the viewport gains CSS pixels while the copy and the page frame stay fixed, so a stage
      that follows the viewport would keep the map as big as ever while everything else shrinks. Past
-     OUT0 the stage lets go of the viewport edges (u runs 0 to 1): its right edge comes back to the page
+     OUT0 the stage lets go of the viewport edges (u runs 0 to 1): its outer edge comes back to the page
      margin and its height stops growing, so the map shrinks with the rest of the page. */
   const u = Math.min(1, Math.max(0, (w - OUT0) / (OUT1 - OUT0)));
-  const frameR = $('.hero-grid').getBoundingClientRect().right - hb.left;   // the page margin the copy and every other section follow
+  const frame = $('.hero-grid').getBoundingClientRect();   // the page margin the copy and every other section follow
   const nat = Math.max(240, h - y - 36), sh = nat > STAGE_H ? nat + (STAGE_H - nat) * u : nat;
-  ST = { x, y: y + (nat - sh) / 2, w: Math.max(240, (w - 12) + (frameR - (w - 12)) * u - x), h: sh, u };
+  if (rtl()) {   // the copy is on the right: the stage is everything to its left
+    const x = 12 + (frame.left - hb.left - 12) * u;
+    ST = { x, y: y + (nat - sh) / 2, w: Math.max(240, cb.left - hb.left - 12 - x), h: sh, u };
+  } else {       // the stage is everything to the right of the copy
+    const x = Math.max(0, cb.right - hb.left + 12), frameR = frame.right - hb.left;
+    ST = { x, y: y + (nat - sh) / 2, w: Math.max(240, (w - 12) + (frameR - (w - 12)) * u - x), h: sh, u };
+  }
 };
 const OUT0 = 1920, OUT1 = 2560, STAGE_H = 860;   // viewport widths (CSS px) between which the bleed is let go, and the tallest stage a zoomed-out page keeps
 new ResizeObserver(measure).observe(host); measure();
 const BLEED = .12;
-const ZOOM = { wide: 1.14, fit: .96, contained: .94 };   // how far past the fitted size the model is drawn. Wide at normal zoom: the extra runs off the right and bottom edges; zoomed out (fit): it sits inside the stage
+const ZOOM = { wide: 1.14, rtl: 1, fit: .96, contained: .94 };   // how far past the fitted size the model is drawn. Wide at normal zoom: the extra runs off the right and bottom edges; zoomed out (fit): it sits inside the stage. In Arabic (rtl) the map is on the left, where the page ends at the coast, so it fits whole
 const view = (w, h) => {   // s is column units per px
   if (!ST || !ST.w) measure();
-  const u = wide.matches ? ST.u : 0, mix = (a, b) => a + (b - a) * u;
-  const span = bx1 - bx0 + .6, open = wide.matches ? 1 - BLEED * (1 - u) : 1;   // wide: up to this share of the width (the north-east tip) may run off the right edge
+  const u = wide.matches ? ST.u : 0, mix = (a, b) => a + (b - a) * u, R = rtl();
+  const span = bx1 - bx0 + .6, open = wide.matches && !R ? 1 - BLEED * (1 - u) : 1;   // wide: up to this share of the width (the north-east tip) may run off the right edge
   const head = (MODE === 'hover' ? 46 : 84) * span / ST.w;   // room above the model for the callout
-  const s = Math.max(span * open / ST.w, (by1 - by0 + head + .3) / ST.h) / (wide.matches ? mix(ZOOM.wide, ZOOM.fit) : ZOOM.contained);
+  const s = Math.max(span * open / ST.w, (by1 - by0 + head + .3) / ST.h) / (wide.matches ? mix(R ? ZOOM.rtl : ZOOM.wide, ZOOM.fit) : ZOOM.contained);
   // the west coast stays in view (wide: tucked just under the end of the copy); the north-east runs off the right edge, or, zoomed out, ends on the page margin
-  const left = wide.matches ? mix(ST.x - w * .035, ST.x + ST.w - span / s) : (w - span / s) / 2;
+  const left = !wide.matches ? (w - span / s) / 2 : R ? ST.x : mix(ST.x - w * .035, ST.x + ST.w - span / s);
   const drop = wide.matches ? mix(h * -.035, 0) : 0;   // wide: lifted so the tallest blocks rise toward the nav; the south still runs off the bottom at this size
   return { s, cx: bx0 - .3 - (left - w / 2) * s, cy: (by0 + by1 + head) / 2 + (ST.y + ST.h / 2 - h / 2 + drop) * s };
 };
 
-const setNote = () => { note.innerHTML = MODE === 'hover' ? `One column is about ${CELL} km` : `<b>${METRIC[metric].note}</b>${SOURCE}`; };
+const setNote = () => { note.innerHTML = MODE === 'hover' ? `${tr('One column is about')} ${CELL} ${tr('km')}` : `<b>${tr(METRIC[metric].note)}</b>${tr(SOURCE)}`; };
 setNote();
-if (MODE === 'hover') { seg.hidden = true; coord.hidden = false; host.setAttribute('role', 'img'); host.removeAttribute('tabindex'); host.setAttribute('aria-label', 'Block map of Syria with its terrain. Columns rise under the pointer.'); }
+let hostLabel = MODE === 'hover' ? 'Block map of Syria with its terrain. Columns rise under the pointer.' : '';   // set when the script replaces the label in the markup
+const setLabel = () => { if (hostLabel) host.setAttribute('aria-label', tr(hostLabel)); };
+if (MODE === 'hover') { seg.hidden = true; coord.hidden = false; host.setAttribute('role', 'img'); host.removeAttribute('tabindex'); setLabel(); }
+document.addEventListener('langchange', () => {   // registered first, so the stage is re-measured before the scene redraws
+  seg.querySelectorAll('button').forEach(b => { b.textContent = tr(METRIC[b.dataset.metric].label); });
+  setNote(); setLabel(); measure();
+});
 
 /* ---------- flat fallback: same blocks painted once on a 2D canvas when WebGL is unavailable ---------- */
 const flat = () => {
@@ -1664,7 +2014,7 @@ const flat = () => {
   seg.hidden = true; track.classList.remove('is-pinned');   // nothing to travel through without the camera
   /* the painted map is a picture: no tab stop, and no promise of arrow-key stepping it cannot keep */
   host.removeAttribute('tabindex'); host.setAttribute('role', 'img');
-  host.setAttribute('aria-label', MODE === 'hover' ? 'Block map of Syria with its terrain.' : 'Block map of Syria. Column height shows population by governorate.');
+  hostLabel = MODE === 'hover' ? 'Block map of Syria with its terrain.' : 'Block map of Syria. Column height shows population by governorate.'; setLabel();
   const paint = () => {
     const w = host.clientWidth, h = host.clientHeight, d = Math.min(devicePixelRatio || 1, 2), ctx = cv.getContext('2d');
     if (!w || !ctx) return;
@@ -1679,7 +2029,7 @@ const flat = () => {
       face([P(c.x - HALF, H, c.z), P(c.x, H, c.z - HALF), P(c.x + HALF, H, c.z), P(c.x, H, c.z + HALF)], c.river && MODE === 'hover' ? '#d9b266' : (day ? `hsl(40 38% ${L}%)` : `hsl(218 30% ${L}%)`));
     }
   };
-  paint(); new ResizeObserver(paint).observe(host); document.addEventListener('themechange', paint); host.classList.add('ready');
+  paint(); new ResizeObserver(paint).observe(host); document.addEventListener('themechange', paint); document.addEventListener('langchange', paint); host.classList.add('ready');
 };
 
 /* ---------- WebGL scene ---------- */
@@ -1833,7 +2183,7 @@ const scene3d = T => {
   const place = () => {
     if (anchor < 0) return;
     const [x, y] = screen(anchor, h[anchor]);
-    call.dataset.side = x > W * .66 ? 'l' : 'r';
+    call.dataset.side = x > W * (rtl() && wide.matches ? .42 : .66) ? 'l' : 'r';   // Arabic: the copy starts sooner on the right, so the label turns left earlier
     const navBottom = $('#nav').getBoundingClientRect().bottom - host.getBoundingClientRect().top;
     call.toggleAttribute('data-low', y - 150 < navBottom);   // the label would reach the nav: hang it below the block instead
     call.classList.toggle('away', travels() && (x < INSET * .7 || x > W - 8 || y < 96 || y > Hh * .86));   // the camera has carried it off the stage
@@ -1895,6 +2245,8 @@ const scene3d = T => {
   if (MODE === 'data') {
     /* a governorate steps up as one block, rippling out from the column under the pointer */
     let cur = '';
+    const tell = () => { const g = GOV[cur], m = METRIC[metric]; say(tr(g.n), m.say(m.v(g))); live.textContent = `${tr(g.n)}: ${m.say(m.v(g))}`; };
+    document.addEventListener('langchange', () => { if (cur) tell(); });
     const select = (code, from = -1) => {
       if (code === cur) return; cur = code;
       const o = from >= 0 ? cols[from] : code ? cols[GOV[code].anchor] : null, now = performance.now();
@@ -1908,7 +2260,7 @@ const scene3d = T => {
         // on the close framing a hovered block may run off the stage, so its callout stands on the northernmost column still in view above the pointer
         const near = from >= 0 && travels() ? g.cols.filter(k => Math.abs(cols[k].x - cols[from].x) < 1.7 && onStage(k)) : [];
         anchor = near.length ? near.reduce((a, k) => cols[k].z < cols[a].z ? k : a) : g.anchor;
-        say(g.n, m.say(m.v(g))); live.textContent = `${g.n}: ${m.say(m.v(g))}`;
+        tell();
         lampX = g.cx; lampZ = g.cz; lampY = baseOf(cols[g.anchor]) + LIFT + 1.7;
       } else call.classList.remove('on');
       wake();
@@ -1932,7 +2284,7 @@ const scene3d = T => {
       introEnd = 0; metric = b.dataset.metric; seg.style.setProperty('--i', metricKeys.indexOf(metric));
       seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       setNote(); sweep();
-      if (cur) { const g = GOV[cur], m = METRIC[metric]; say(g.n, m.say(m.v(g))); live.textContent = `${g.n}: ${m.say(m.v(g))}`; }
+      if (cur) tell();
       wake();
     });
     host.addEventListener('keydown', e => {
@@ -1963,8 +2315,9 @@ const scene3d = T => {
       const lon = LONC + c.X / KX, lat = LATC + c.Y / KY;
       let nearCity = cities[0], nd = 1e9;
       for (const ct of cities) { const d = Math.hypot((ct.lon - lon) * KX, (ct.lat - lat) * KY); if (d < nd) { nd = d; nearCity = ct; } }
-      text.innerHTML = `${lat.toFixed(2)}°N ${lon.toFixed(2)}°E <b>${nd < CELL * .75 ? '' : 'near '}${nearCity.n}</b>`;
-      if (nd < CELL * .75) { if (anchor !== nearCity.k) { anchor = nearCity.k; say(nearCity.n, ''); } }
+      const [N_, E_, near] = rtl() ? ['ش', 'ق', 'قرب '] : ['N', 'E', 'near '];
+      text.innerHTML = `${lat.toFixed(2)}°${N_} ${lon.toFixed(2)}°${E_} <b>${nd < CELL * .75 ? '' : near}${tr(nearCity.n)}</b>`;
+      if (nd < CELL * .75) { if (anchor !== nearCity.k) { anchor = nearCity.k; say(tr(nearCity.n), ''); } }
       else if (anchor >= 0) { anchor = -1; call.classList.remove('on'); }
       wake();
     };
@@ -1978,6 +2331,7 @@ const scene3d = T => {
     }
   }
   document.addEventListener('themechange', () => { palette(); wake(); });
+  document.addEventListener('langchange', wake);   // the stage moved to the other side of the copy
   fit();
 };
 
