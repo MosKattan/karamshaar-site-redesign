@@ -124,8 +124,8 @@ p{text-wrap:pretty}
 
 .hero-grid{position:relative;z-index:1;pointer-events:none}
 /* ambient field: the map's isometric lattice continued across the sky, with cells that light and fade like readings coming in */
-.hero-bg{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 2s var(--ease) .4s}
-.hero-bg.on{opacity:1}
+.hero-bg,.statement-bg{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 2s var(--ease) .4s}
+.hero-bg.on,.statement-bg.on{opacity:1}
 .hero-copy{display:flex;flex-direction:column;align-items:flex-start;max-width:470px;pointer-events:auto}
 .hero-copy h1{font-size:clamp(2.6rem,4.3vw,4rem)}
 .uline{position:absolute;left:0;right:.12em;bottom:.02em;height:.055em;min-height:3px;background:var(--rose);border-radius:2px;transform-origin:left;transform:scaleX(0);transition:transform 1.1s var(--spring) .75s}
@@ -150,7 +150,7 @@ p{text-wrap:pretty}
 .marquee li:hover img{opacity:1}
 
 /* ---------- statement ---------- */
-.statement{padding:clamp(110px,15vw,210px) 0}
+.statement{position:relative;isolation:isolate;padding:clamp(110px,15vw,210px) 0}
 .statement-in{max-width:960px;margin-left:clamp(0px,8.5vw,112px)}
 .statement p{font-family:var(--serif);font-size:clamp(1.55rem,2.85vw,2.5rem);line-height:1.24;letter-spacing:-.012em;color:rgba(243,239,227,.42);transition:color .9s var(--ease)}
 .statement p+p{margin-top:1.15em}
@@ -558,6 +558,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 
 <!-- ================= STATEMENT ================= -->
 <section class="statement">
+  <canvas class="statement-bg" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="statement-in">
       <p class="is-focus">We help clients make informed decisions about Syria's economy, business environment, and investment landscape.</p>
@@ -1006,111 +1007,165 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 
 <script>
 /* =========================================================
-   Hero field. An isometric lattice on the map's own 30 degree grid drifts
+   Ambient field. An isometric lattice on the map's own 30 degree grid drifts
    slowly up the north-east axis. Single cells light in the brochure tints
    (lilac, periwinkle, sage, ochre, sometimes cream), hold, and fade, and a
    few light in short runs along a lattice line, like a series being plotted.
-   The pointer warms the cells near it. The field is strongest top-right and
-   thins toward the copy and the bottom so it never sits behind text.
+   The pointer warms the cells near it.
+   Two canvases share the drawing. In the hero the field is strongest top-right
+   and thins toward the copy and the bottom so it never sits behind text. In the
+   statement it gathers beside the paragraph being read and follows the light.
    ========================================================= */
 (() => {
-  const cv = document.querySelector('.hero-bg'), hero = cv && cv.closest('.hero');
-  if (!cv || !cv.getContext) return;
-  const ctx = cv.getContext('2d'), reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const TINTS = ['201,173,219', '142,171,234', '165,199,144', '211,193,152', '142,171,234', '241,234,215'];
   const T30 = Math.tan(Math.PI / 6);
-  let W = 0, H = 0, D = 1, cell = 44, cells = [], t0 = performance.now(), raf = 0, visible = true, px = -1e4, py = -1e4, last = 0;
+  const unit = v => Math.min(1, Math.max(0, v));
 
-  const size = () => {
-    const r = hero.getBoundingClientRect();
-    W = r.width; H = r.height; D = Math.min(devicePixelRatio || 1, 2);
-    cv.width = Math.round(W * D); cv.height = Math.round(H * D);
-    cell = W < 700 ? 30 : W < 1100 ? 38 : 46;
-  };
-  /* a lattice cell (i, j) is the diamond between two pairs of 30 degree lines */
-  const centre = (i, j, ox, oy) => [ox + (i - j) * cell, oy + (i + j) * cell * T30];
-  const diamond = (x, y, k) => { const w = cell * k, v = cell * T30 * k; ctx.beginPath(); ctx.moveTo(x, y - v); ctx.lineTo(x + w, y); ctx.lineTo(x, y + v); ctx.lineTo(x - w, y); ctx.closePath(); };
-  /* how strongly the field shows at a point: full in the upper right, thin over the copy and near the bottom */
-  const reach = (x, y) => {
-    const fx = Math.min(1, Math.max(0, (x / W - .22) / .45)), fy = Math.min(1, Math.max(0, 1 - (y / H - .32) / .6));
-    return fx * fy;
-  };
-  let ox = 0, oy = 0;
-  const cellAt = (x, y) => { const a = (x - ox) / cell, b = (y - oy) / (cell * T30); return [Math.round((a + b) / 2), Math.round((b - a) / 2)]; };
-  const spawn = now => {
-    /* pick a visible spot where the field is strong (rejection sampling on reach), then the lattice cell under it */
-    let x, y, tries = 0;
-    do { x = W * (.25 + Math.random() * .75); y = H * Math.random() * Math.random() * .9; } while (Math.random() > reach(x, y) && ++tries < 12);   // y squared: most cells land in the open sky near the top
-    const run = Math.random() < .28, len = run ? 3 + (Math.random() * 3 | 0) : 1;
-    const [i, j] = cellAt(x, y), axis = Math.random() < .5;
-    const tint = TINTS[Math.random() * TINTS.length | 0], life = 4200 + Math.random() * 3800;
-    for (let n = 0; n < len; n++) cells.push({ i: i + (axis ? n : 0), j: j + (axis ? 0 : n), tint, born: now + n * 260, life });
-  };
+  /* o.reach: how strongly the field shows at a point. o.spot: where a cell might light. o.lines: the stroke for the lattice.
+     o.veil (optional): masks the lines once drawn. o.tick (optional): runs before each frame and may start a run at a point. */
+  const field = (cv, host, o) => {
+    if (!cv || !cv.getContext) return;
+    const ctx = cv.getContext('2d');
+    let W = 0, H = 0, D = 1, cell = 44, cells = [], t0 = performance.now(), raf = 0, visible = true, px = -1e4, py = -1e4, last = 0, ox = 0, oy = 0;
 
-  const draw = now => {
-    raf = 0;
-    if (!visible) return;
-    const t = (now - t0) / 1000;
-    if (!reduce && now - last < 30) { raf = requestAnimationFrame(draw); return; }   // about 30 fps is plenty for a drift this slow
-    last = now;
-    ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, W, H);
-    /* drift along the north-east lattice axis, wrapping every two cells so the pattern never runs out */
-    const drift = reduce ? 0 : (t * 7) % (cell * 2);
-    ox = W * .5 + drift; oy = H * .3 - drift * T30;
+    const size = () => {
+      const r = host.getBoundingClientRect();
+      W = r.width; H = r.height; D = Math.min(devicePixelRatio || 1, 2);
+      cv.width = Math.round(W * D); cv.height = Math.round(H * D);
+      cell = W < 700 ? 30 : W < 1100 ? 38 : 46;
+      ox = W * .5; oy = H * .3;
+    };
+    /* a lattice cell (i, j) is the diamond between two pairs of 30 degree lines */
+    const centre = (i, j) => [ox + (i - j) * cell, oy + (i + j) * cell * T30];
+    const diamond = (x, y, k) => { const w = cell * k, v = cell * T30 * k; ctx.beginPath(); ctx.moveTo(x, y - v); ctx.lineTo(x + w, y); ctx.lineTo(x, y + v); ctx.lineTo(x - w, y); ctx.closePath(); };
+    const cellAt = (x, y) => { const a = (x - ox) / cell, b = (y - oy) / (cell * T30); return [Math.round((a + b) / 2), Math.round((b - a) / 2)]; };
+    const spawn = (now, at) => {
+      /* pick a visible spot where the field is strong (rejection sampling on reach), then the lattice cell under it */
+      let [x, y] = at || o.spot(W, H), tries = 0;
+      while (!at && Math.random() > o.reach(x, y, W, H) && ++tries < 12) [x, y] = o.spot(W, H);
+      const run = !!at || Math.random() < .28, len = run ? 3 + (Math.random() * 3 | 0) : 1;
+      const [i, j] = cellAt(x, y), axis = Math.random() < .5;
+      const tint = TINTS[Math.random() * TINTS.length | 0], life = 4200 + Math.random() * 3800;
+      for (let n = 0; n < len; n++) cells.push({ i: i + (axis ? n : 0), j: j + (axis ? 0 : n), tint, born: now + n * 260, life });
+    };
 
-    /* lattice lines: two families at +30 and -30 degrees */
-    ctx.lineWidth = 1;
-    const step = cell * 2 * T30, n = Math.ceil((W * T30 + H + Math.abs(ox) * T30 + Math.abs(oy)) / step) + 2;
-    const g = ctx.createLinearGradient(W * .2, H, W, 0);   // the lines fade out toward the copy and the bottom-left
-    g.addColorStop(0, 'rgba(197,210,232,0)'); g.addColorStop(.45, 'rgba(197,210,232,.045)'); g.addColorStop(1, 'rgba(197,210,232,.08)');
-    ctx.strokeStyle = g; ctx.beginPath();
-    for (const dir of [1, -1]) {
-      for (let k = -n; k <= n; k++) {
-        const y0 = oy - dir * ox * T30 + (k + .5) * step;   // lines run through the diamonds' edges, half a step off their centres
-        ctx.moveTo(0, y0); ctx.lineTo(W, y0 + dir * W * T30);
+    const draw = now => {
+      raf = 0;
+      if (!visible) return;
+      const t = (now - t0) / 1000;
+      if (!reduce && now - last < 30) { raf = requestAnimationFrame(draw); return; }   // about 30 fps is plenty for a drift this slow
+      last = now;
+      ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, W, H);
+      /* drift along the north-east lattice axis, wrapping every two cells so the pattern never runs out */
+      const drift = reduce ? 0 : (t * o.speed) % (cell * 2);
+      ox = W * .5 + drift; oy = H * .3 - drift * T30;
+      if (o.tick) o.tick(W, H, at => spawn(now, at));
+
+      /* lattice lines: two families at +30 and -30 degrees */
+      ctx.lineWidth = 1;
+      const step = cell * 2 * T30, n = Math.ceil((W * T30 + H + Math.abs(ox) * T30 + Math.abs(oy)) / step) + 2;
+      ctx.strokeStyle = o.lines(ctx, W, H); ctx.beginPath();
+      for (const dir of [1, -1]) {
+        for (let k = -n; k <= n; k++) {
+          const y0 = oy - dir * ox * T30 + (k + .5) * step;   // lines run through the diamonds' edges, half a step off their centres
+          ctx.moveTo(0, y0); ctx.lineTo(W, y0 + dir * W * T30);
+        }
       }
-    }
-    ctx.stroke();
+      ctx.stroke();
+      if (o.veil) { ctx.globalCompositeOperation = 'destination-in'; o.veil(ctx, W, H); ctx.globalCompositeOperation = 'source-over'; }
 
-    /* lit cells */
-    if (!reduce && Math.random() < .07 && cells.length < 40) spawn(now);
-    cells = cells.filter(c => now - c.born < c.life);
-    for (const c of cells) {
-      const age = (now - c.born) / c.life; if (age < 0) continue;
-      const k = age < .25 ? age / .25 : age > .7 ? (1 - age) / .3 : 1;   // rise, hold, fade
-      const e = k * k * (3 - 2 * k);
-      const [x, y] = centre(c.i, c.j, ox, oy);
-      if (x < -cell || x > W + cell || y < -cell || y > H + cell) continue;
-      const near = Math.exp(-((x - px) ** 2 + (y - py) ** 2) / (cell * cell * 30));
-      const a = e * reach(x, y) * (1 + near * .8);
-      if (a < .01) continue;
-      diamond(x, y, .92);
-      ctx.fillStyle = `rgba(${c.tint},${(.16 * a).toFixed(3)})`; ctx.fill();
-      ctx.strokeStyle = `rgba(${c.tint},${(.55 * a).toFixed(3)})`; ctx.stroke();
-    }
-    /* the pointer's own glow: the cell under it and its neighbours, faintly */
-    if (px > -1e3) {
-      const [ci, cj] = cellAt(px, py);
-      for (let di = -1; di <= 1; di++) for (let dj = -1; dj <= 1; dj++) {
-        const [x, y] = centre(ci + di, cj + dj, ox, oy), a = reach(x, y) * (di || dj ? .35 : 1);
-        if (a < .02) continue;
-        diamond(x, y, .92); ctx.strokeStyle = `rgba(241,234,215,${(.22 * a).toFixed(3)})`; ctx.stroke();
+      /* lit cells */
+      if (!reduce && Math.random() < o.rate && cells.length < o.max) spawn(now);
+      cells = cells.filter(c => now - c.born < c.life);
+      for (const c of cells) {
+        const age = (now - c.born) / c.life; if (age < 0) continue;
+        const k = reduce ? 1 : age < .25 ? age / .25 : age > .7 ? (1 - age) / .3 : 1;   // rise, hold, fade
+        const e = k * k * (3 - 2 * k);
+        const [x, y] = centre(c.i, c.j);
+        if (x < -cell || x > W + cell || y < -cell || y > H + cell) continue;
+        const near = Math.exp(-((x - px) ** 2 + (y - py) ** 2) / (cell * cell * 30));
+        const a = e * o.reach(x, y, W, H) * (1 + near * .8);
+        if (a < .01) continue;
+        diamond(x, y, .92);
+        ctx.fillStyle = `rgba(${c.tint},${(.16 * a).toFixed(3)})`; ctx.fill();
+        ctx.strokeStyle = `rgba(${c.tint},${(.55 * a).toFixed(3)})`; ctx.stroke();
       }
-    }
-    if (!reduce) raf = requestAnimationFrame(draw);
-  };
-  const kick = () => { if (!raf && visible) raf = requestAnimationFrame(draw); };
+      /* the pointer's own glow: the cell under it and its neighbours, faintly */
+      if (px > -1e3) {
+        const [ci, cj] = cellAt(px, py);
+        for (let di = -1; di <= 1; di++) for (let dj = -1; dj <= 1; dj++) {
+          const [x, y] = centre(ci + di, cj + dj), a = o.reach(x, y, W, H) * (di || dj ? .35 : 1);
+          if (a < .02) continue;
+          diamond(x, y, .92); ctx.strokeStyle = `rgba(241,234,215,${(.22 * a).toFixed(3)})`; ctx.stroke();
+        }
+      }
+      if (!reduce) raf = requestAnimationFrame(draw);
+    };
+    const kick = () => { if (!raf && visible) raf = requestAnimationFrame(draw); };
 
-  size();
-  if (reduce) for (let n = 0; n < 14; n++) { spawn(performance.now() - 2000); cells[cells.length - 1].life = 1e12; }
-  new ResizeObserver(() => { size(); kick(); }).observe(hero);
-  new IntersectionObserver(([en]) => { visible = en.isIntersecting; kick(); }).observe(hero);
-  document.addEventListener('visibilitychange', () => { visible = !document.hidden; kick(); });
-  if (matchMedia('(hover: hover)').matches) {
-    hero.addEventListener('pointermove', e => { const r = hero.getBoundingClientRect(); px = e.clientX - r.left; py = e.clientY - r.top; });
-    hero.addEventListener('pointerleave', () => { px = py = -1e4; });
-  }
-  cv.classList.add('on'); kick();
+    size();
+    if (reduce) { for (let n = 0; n < o.still; n++) spawn(performance.now() - 2000); cells.forEach(c => { c.life = 1e12; }); }   // a still field: the cells stay lit
+    new ResizeObserver(() => { size(); kick(); }).observe(host);
+    new IntersectionObserver(([en]) => { visible = en.isIntersecting; kick(); }).observe(host);
+    document.addEventListener('visibilitychange', () => { visible = !document.hidden; kick(); });
+    if (matchMedia('(hover: hover)').matches) {
+      host.addEventListener('pointermove', e => { const r = host.getBoundingClientRect(); px = e.clientX - r.left; py = e.clientY - r.top; });
+      host.addEventListener('pointerleave', () => { px = py = -1e4; });
+    }
+    cv.classList.add('on'); kick();
+  };
+
+  /* ---------- hero sky ---------- */
+  const sky = document.querySelector('.hero-bg');
+  field(sky, sky && sky.closest('.hero'), {
+    speed: 7, rate: .07, max: 40, still: 14,
+    reach: (x, y, W, H) => unit((x / W - .22) / .45) * unit(1 - (y / H - .32) / .6),   // full in the upper right, thin over the copy and near the bottom
+    spot: (W, H) => [W * (.25 + Math.random() * .75), H * Math.random() * Math.random() * .9],   // y squared: most cells land in the open sky near the top
+    lines: (ctx, W, H) => {
+      const g = ctx.createLinearGradient(W * .2, H, W, 0);   // the lines fade out toward the copy and the bottom-left
+      g.addColorStop(0, 'rgba(197,210,232,0)'); g.addColorStop(.45, 'rgba(197,210,232,.045)'); g.addColorStop(1, 'rgba(197,210,232,.08)');
+      return g;
+    }
+  });
+
+  /* ---------- statement ---------- */
+  const page = document.querySelector('.statement-bg'), sec = page && page.closest('.statement'), col = sec && sec.querySelector('.statement-in');
+  const SPAN = 200, FOOT = 220;   // px: how far the gathering spreads above and below the lit paragraph, and the stretch at the bottom where the lattice runs out
+  let band = null, lit = null, edge = 0;   // band: the middle of the lit paragraph, measured down the section and eased. null when every paragraph is lit (reduced motion). edge: where the text column ends
+  field(page, sec, {
+    speed: 4, rate: .06, max: 26, still: 8,
+    tick: (W, H, run) => {
+      const s = sec.getBoundingClientRect(), p = !reduce && sec.querySelector('p.is-focus');
+      edge = col.getBoundingClientRect().right - s.left;
+      if (!p) return;
+      const q = p.getBoundingClientRect(), to = q.top - s.top + q.height / 2;
+      band = band == null ? to : band + (to - band) * .09;
+      if (lit && p !== lit) run([edge + (W - edge) * (.2 + Math.random() * .5), to]);   // the light moved on: plot a short run beside the new paragraph
+      lit = p;
+    },
+    /* quiet behind the text column, full in the open margin to its right, and gathered around the lit paragraph */
+    reach: (x, y, W, H) => (.3 + .7 * unit((x - edge + 50) / 100))
+      * (band == null ? 1 : .12 + .88 * Math.exp(-((y - band) ** 2) / (2 * SPAN * SPAN)))
+      * unit((H - y) / FOOT),
+    spot: (W, H) => [W * Math.sqrt(Math.random()), band == null ? H * Math.random() : band + (Math.random() - .5) * SPAN * 3],   // root: more cells toward the right
+    lines: (ctx, W) => {
+      const g = ctx.createLinearGradient(0, 0, W, 0);
+      g.addColorStop(0, 'rgba(197,210,232,.04)'); g.addColorStop(1, 'rgba(197,210,232,.09)');
+      return g;
+    },
+    veil: (ctx, W, H) => {
+      /* the lines are clearest level with the lit paragraph, and run out before the next section begins */
+      if (band != null) {
+        const g = ctx.createLinearGradient(0, band - SPAN * 2.4, 0, band + SPAN * 2.4);
+        g.addColorStop(0, 'rgba(0,0,0,.5)'); g.addColorStop(.5, '#000'); g.addColorStop(1, 'rgba(0,0,0,.5)');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      }
+      const f = ctx.createLinearGradient(0, H - FOOT, 0, H);
+      f.addColorStop(0, '#000'); f.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = f; ctx.fillRect(0, 0, W, H);
+    }
+  });
 })();
 </script>
 
