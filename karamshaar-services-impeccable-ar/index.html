@@ -1856,6 +1856,9 @@ const scene3d = T => {
     else { lamp.position.x += (lampX - lamp.position.x) * slow; lamp.position.z += (lampZ - lamp.position.z) * slow; lamp.position.y += (lampY - lamp.position.y) * ease; }
     lamp.intensity = (MODE === 'hover' ? amp * 2 : focus * 9) * lampK;
     if (waves.length) { waves = waves.filter(w => now - w.t < 1900); busy = true; }
+    /* the opening flash of bright stone is short: the resting light (everything but the selection steps back) eases in from about a second after load, without waiting for the first selection */
+    const sraw = reduce ? 1 : Math.min(1, Math.max(0, (now - now0 - 900) / 1100)), settle = sraw * sraw * (3 - 2 * sraw);
+    if (sraw < 1) busy = true;
     for (let k = 0; k < N; k++) {
       const c = cols[k];
       if (baseAt[k]) { if (now >= baseAt[k]) { base[k] = baseNext[k]; baseAt[k] = 0; if (now < introEnd && MODE !== 'hover') kick[k] = (base[k] - H0) * KICK + KICK0; } busy = true; }
@@ -1876,7 +1879,7 @@ const scene3d = T => {
       M[k * 16 + 5] = Math.max(.02, h[k]);
       // colour: stone lightens with height, the selection turns brass, everything else steps back
       const t = Math.min(1, Math.max(0, (h[k] - H0) / span)) * (MODE === 'hover' ? .8 : 1), l = lit[k], brass = MODE === 'hover' ? (c.river ? 1 : 0) : l, cream = MODE === 'hover' && !c.river ? l * .45 : 0;
-      const dim = (1 - .36 * focus * (1 - l)) * c.jit;
+      const dim = (1 - .36 * Math.max(focus, settle) * (1 - l)) * c.jit;
       for (let q = 0; q < 3; q++) { let v = LO[q] + (HI[q] - LO[q]) * t; v += (CREAM[q] - v) * cream; v += (BRASS[q] - v) * brass; C[k * 3 + q] = v * dim; }
       glow.array[k] = MODE === 'hover' ? (c.river ? .4 + l * .35 : l * .12) : l * .45;
     }
