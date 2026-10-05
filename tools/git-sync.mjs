@@ -1,8 +1,9 @@
 // Keeps this checkout and GitHub in step, so local sessions and cloud (phone) sessions see the same repo. Usage:
 //   node git-sync.mjs push     commit everything and push the current branch           (Stop hook)
-//   node git-sync.mjs pull     fetch, fast-forward, fold in work pushed from elsewhere  (SessionStart / UserPromptSubmit hooks)
+//   node git-sync.mjs pull     fetch, fast-forward, report work pushed from elsewhere   (SessionStart / UserPromptSubmit hooks)
 //   node git-sync.mjs status   print where this checkout and GitHub stand
-// pull takes --throttle=<seconds> to skip the fetch when one ran that recently.
+// pull takes --throttle=<seconds> to skip the fetch when one ran that recently, and --merge to fold branches pushed
+// by other sessions into the default branch instead of only reporting them.
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -13,6 +14,7 @@ if (process.env.CLAUDE_CODE_REMOTE === 'true') process.exit(0);
 
 const [mode = 'status', ...flags] = process.argv.slice(2);
 const throttle = +(flags.find(f => f.startsWith('--throttle='))?.split('=')[1] ?? 0);
+const autoMerge = flags.includes('--merge');
 const MAX_BYTES = 50 * 1024 * 1024; // GitHub warns at 50 MB and rejects at 100 MB
 const SECRET = /(^|\/)(\.env(\.[^/]*)?|id_(rsa|ed25519|ecdsa)|[^/]*\.(pem|key|pfx|p12)|credentials[^/]*\.json)$/i;
 const SECRET_OK = /\.env\.(example|sample|template)$/i;
@@ -108,11 +110,11 @@ function pull() {
     } else if (behind && ahead) forClaude.push(`${branch} and ${up} have diverged (${ahead} local, ${behind} remote). The next mirror will rebase; if that conflicts, use the sync-resolver subagent.`);
   }
 
-  // Cloud sessions push to their own branches. On the default branch, fold in the ones that moved since we last
-  // looked, so every session's work ends up in the one copy that new sessions start from.
+  // Cloud sessions push to their own branches. Report the ones that moved since we last looked; with --merge, on the
+  // default branch, fold them in so every session's work ends up in the one copy that new sessions start from.
   const onDefault = up && up === (git(['symbolic-ref', '--quiet', '--short', 'refs/remotes/origin/HEAD']).out || 'origin/main');
-  // 'seen' tracks what was folded in (or found to clash); elsewhere branches are only 'noted', so they still merge later.
-  const refs = remoteBranches(up), key = onDefault && !busy ? 'seen' : 'noted', prior = state[key] ?? {}, next = Object.fromEntries(refs);
+  // 'seen' tracks what was folded in (or found to clash); otherwise branches are only 'noted', so they can still merge later.
+  const refs = remoteBranches(up), key = autoMerge && onDefault && !busy ? 'seen' : 'noted', prior = state[key] ?? {}, next = Object.fromEntries(refs);
   const landed = [], changed = [], clashing = [], waiting = [];
   for (const [name, sha] of refs) {
     const n = prior[name] === sha ? 0 : count(`HEAD..${name}`);

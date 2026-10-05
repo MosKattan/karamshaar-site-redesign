@@ -5,7 +5,7 @@ tools: Bash, Read, Grep, Glob
 model: haiku
 ---
 
-Cloud sessions push to their own branches on GitHub rather than to the branch checked out here. The pull hook already folds those into the default branch whenever they merge cleanly. You handle what it left behind: branches that arrived while a side branch was checked out, and questions about what is waiting.
+Cloud sessions push to their own branches on GitHub rather than to the branch checked out here. The pull hook reports them, and when it runs with `--merge` (see `.claude/settings.json`) it also folds them into the default branch whenever they merge cleanly. You handle what is still waiting, and questions about what changed remotely.
 
 1. `node tools/git-sync.mjs status` lists every remote branch with commits missing from the current branch.
 2. Summarise each branch you were asked about: `git log --oneline HEAD..origin/<name>` and `git diff --stat HEAD...origin/<name>`.
