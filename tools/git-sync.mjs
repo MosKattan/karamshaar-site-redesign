@@ -1,6 +1,6 @@
 // Keeps this checkout and GitHub in step, so local sessions and cloud (phone) sessions see the same repo. Usage:
 //   node git-sync.mjs push     commit everything and push the current branch           (Stop hook)
-//   node git-sync.mjs pull     fetch, fast-forward, report work pushed from elsewhere   (SessionStart / UserPromptSubmit hooks)
+//   node git-sync.mjs pull     fetch, fast-forward, fold in work pushed from elsewhere  (SessionStart / UserPromptSubmit hooks)
 //   node git-sync.mjs status   print where this checkout and GitHub stand
 // pull takes --throttle=<seconds> to skip the fetch when one ran that recently.
 import { spawnSync } from 'node:child_process';
@@ -42,6 +42,7 @@ const count = range => +git(['rev-list', '--count', range]).out || 0;
 const size = f => { try { return statSync(join(root, f)).size; } catch { return 0; } };
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 const firstLine = s => s.split('\n').find(l => /fatal|error|rejected/i.test(l)) ?? s.split('\n')[0];
+const brief = files => files.length > 12 ? `${files.slice(0, 12).join(', ')} (+${files.length - 12} more)` : files.join(', ');
 // Every branch on GitHub other than the one this checkout tracks, as [name, sha].
 const remoteBranches = up => git(['for-each-ref', 'refs/remotes/origin', '--format=%(refname:short) %(objectname)']).out
   .split('\n').map(l => l.split(' ')).filter(([name]) => name.includes('/') && !name.endsWith('/HEAD') && name !== up);
@@ -99,7 +100,7 @@ function pull() {
   if (branch && up && !busy) {
     const behind = count(`HEAD..${up}`), ahead = count(`${up}..HEAD`);
     if (behind && !ahead) {
-      const files = git(['diff', '--name-only', `HEAD..${up}`]).out.split('\n').join(', ');
+      const files = brief(git(['diff', '--name-only', `HEAD..${up}`]).out.split('\n'));
       if (git(['merge', '--ff-only', up]).ok) {
         forUser.push(`Pulled ${plural(behind, 'commit')} from GitHub into ${branch}.`);
         forClaude.push(`${plural(behind, 'commit')} from another session just landed in ${branch}. Files changed on disk: ${files}. Re-read any of them before editing.`);
@@ -107,15 +108,36 @@ function pull() {
     } else if (behind && ahead) forClaude.push(`${branch} and ${up} have diverged (${ahead} local, ${behind} remote). The next mirror will rebase; if that conflicts, use the sync-resolver subagent.`);
   }
 
-  // Cloud sessions push to their own branches; surface the ones that moved since we last looked.
-  const refs = remoteBranches(up);
-  const fresh = refs.filter(([name, sha]) => state.seen?.[name] !== sha).map(([name]) => [name, count(`HEAD..${name}`)]).filter(([, n]) => n);
-  state.seen = Object.fromEntries(refs);
+  // Cloud sessions push to their own branches. On the default branch, fold in the ones that moved since we last
+  // looked, so every session's work ends up in the one copy that new sessions start from.
+  const onDefault = up && up === (git(['symbolic-ref', '--quiet', '--short', 'refs/remotes/origin/HEAD']).out || 'origin/main');
+  // 'seen' tracks what was folded in (or found to clash); elsewhere branches are only 'noted', so they still merge later.
+  const refs = remoteBranches(up), key = onDefault && !busy ? 'seen' : 'noted', prior = state[key] ?? {}, next = Object.fromEntries(refs);
+  const landed = [], changed = [], clashing = [], waiting = [];
+  for (const [name, sha] of refs) {
+    const n = prior[name] === sha ? 0 : count(`HEAD..${name}`);
+    if (!n) continue;
+    const short = name.replace('origin/', ''), label = `${short} (${plural(n, 'commit')})`;
+    if (key === 'noted') { waiting.push(label); continue; }
+    const files = git(['diff', '--name-only', `HEAD...${name}`]).out.split('\n');
+    if (git(['merge', '--no-edit', '-m', `sync: merge ${short} from another session`, name], 60000).ok) { landed.push(label); changed.push(...files); }
+    else if (existsSync(join(gitDir, 'MERGE_HEAD'))) { git(['merge', '--abort']); clashing.push(label); }
+    else delete next[name]; // uncommitted edits were in the way: retry on the next pull
+  }
+  state[key] = next;
   writeFileSync(stateFile, JSON.stringify(state));
-  if (fresh.length) {
-    const list = fresh.map(([name, n]) => `${name} (+${n})`).join(', ');
-    forUser.push(`New on GitHub, not in ${branch || 'this checkout'}: ${list}`);
-    forClaude.push(`Branches pushed from other sessions have commits this checkout lacks: ${list}. Mention it to the user; if they want one merged, use the git-inbound subagent.`);
+  if (landed.length) {
+    git(['push', '-u', 'origin', 'HEAD'], 30000); // if this fails, the Stop hook pushes and reports
+    forUser.push(`Brought in from other sessions: ${landed.join(', ')}.`);
+    forClaude.push(`Work from other sessions was just merged into ${branch}: ${landed.join(', ')}. Files changed on disk: ${brief([...new Set(changed)])}. Re-read any of them before editing, and tell the user in plain language what arrived.`);
+  }
+  if (clashing.length) {
+    forUser.push(`Could not combine automatically: ${clashing.join(', ')} overlaps with work already in ${branch}. Nothing was changed.`);
+    forClaude.push(`Work from another session conflicts with ${branch}: ${clashing.join(', ')}. The merge was aborted and nothing changed. Tell the user in plain language, and offer to combine the two with the sync-resolver subagent.`);
+  }
+  if (waiting.length) {
+    forUser.push(`New on GitHub, not in ${branch || 'this checkout'}: ${waiting.join(', ')}`);
+    forClaude.push(`Branches pushed from other sessions have commits this checkout lacks: ${waiting.join(', ')}. Mention it to the user; if they want one merged here, use the git-inbound subagent.`);
   }
 }
 

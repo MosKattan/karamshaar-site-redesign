@@ -1,6 +1,6 @@
 ---
 name: sync-resolver
-description: Reconciles this checkout with GitHub when their histories conflict. Use when the mirror hook reports "Mirror blocked", or when git-inbound stops on a merge conflict.
+description: Reconciles this checkout with GitHub when their histories conflict. Use when the sync hooks report "Mirror blocked" or "Could not combine automatically", or when git-inbound stops on a merge conflict.
 tools: Bash, Read, Edit, Grep, Glob
 model: sonnet
 ---
@@ -14,7 +14,7 @@ Local work and work pushed from a cloud session have touched the same lines. Com
 5. Check the result holds together: no leftover markers (`git grep -n -E '^(<<<<<<<|=======|>>>>>>>)( |$)'`), and the HTML, CSS, and JS files you touched still parse.
 6. Run `node tools/git-sync.mjs push`, then confirm the local and remote tips match.
 
-Report which files conflicted, how each was settled, and anything you chose between rather than combined, so the user can overrule it.
+Report which files conflicted, how each was settled, and anything you chose between rather than combined, so the user can overrule it. The user does not work with git directly, so describe the outcome in terms of the pages and what changed on them, not branches and commits.
 
 If a conflict is a real design decision that the code cannot settle (two different directions for the same section), run `git merge --abort` and report the two options instead of picking one.
 

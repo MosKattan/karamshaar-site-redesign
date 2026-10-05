@@ -6,7 +6,7 @@
           {
             "type": "command",
             "command": "node \"$CLAUDE_PROJECT_DIR/tools/git-sync.mjs\" pull",
-            "timeout": 30,
+            "timeout": 60,
             "statusMessage": "Checking GitHub for changes"
           }
         ]
@@ -18,7 +18,7 @@
           {
             "type": "command",
             "command": "node \"$CLAUDE_PROJECT_DIR/tools/git-sync.mjs\" pull --throttle=120",
-            "timeout": 20
+            "timeout": 60
           }
         ]
       }
