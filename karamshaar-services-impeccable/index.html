@@ -1533,10 +1533,11 @@ const METRIC = {
   // density spans 37 to 16,700 people per km2, so it is drawn on a log scale
   den: { label: 'Density', v: g => g.pop / g.area, t: v => Math.log(v / 20) / Math.log(maxOf(g => g.pop / g.area) / 20), say: v => people(v >= 1000 ? Math.round(v / 10) * 10 : Math.round(v)) + ' people per km²', note: 'Height shows people per km², log scale' }
 };
-let metric = 'pop';
+let metric = 'den';
 const metricKeys = Object.keys(METRIC);
 seg.style.setProperty('--n', metricKeys.length);
 for (const k of metricKeys) { const b = document.createElement('button'); b.type = 'button'; b.dataset.metric = k; b.textContent = METRIC[k].label; b.setAttribute('aria-pressed', String(k === metric)); seg.append(b); }
+seg.style.setProperty('--i', metricKeys.indexOf(metric));   // opens on density; the thumb follows
 
 /* Terrain view only: a rough relief model, the Euphrates with the Khabur, and towns for the readout. */
 const RIDGES = [[36.16,35.80,36.26,34.78,.80,.17],[35.88,33.32,36.58,34.18,.95,.19],[36.65,33.78,38.45,34.78,.52,.22],[36.72,32.70,36.72,32.70,.78,.30],[39.15,35.35,39.85,35.50,.36,.30],[40.00,36.42,40.60,36.42,.34,.14],[36.78,36.60,36.78,36.60,.45,.24],[36.55,35.72,36.55,35.72,.36,.20]];
@@ -1723,7 +1724,9 @@ const scene3d = T => {
   /* state: every column is a damped spring toward base + lift */
   const now0 = performance.now();
   const h = new Float32Array(N), vel = new Float32Array(N), base = new Float32Array(N), baseNext = new Float32Array(N), baseAt = new Float64Array(N);
-  const sel = new Float32Array(N), selNext = new Float32Array(N), selAt = new Float64Array(N), lit = new Float32Array(N), extra = new Float32Array(N);
+  const sel = new Float32Array(N), selNext = new Float32Array(N), selAt = new Float64Array(N), lit = new Float32Array(N), extra = new Float32Array(N), kick = new Float32Array(N);
+  /* density columns are shorter than population ones, so the opening rise overshoots and settles to give it the same weight; it only plays for the first sweep */
+  let introEnd = now0 + 4500; const KICK = .4, KICK0 = .25;
   const minX = Math.min(...cols.map(c => c.x)), span = MODE === 'hover' ? RELIEF + SWELL : SPAN;
   const sweep = (delay = 0) => cols.forEach((c, k) => { baseNext[k] = baseOf(c); baseAt[k] = performance.now() + delay + (c.x - minX) * 27 + (c.jit - .93) * 900; });
   if (reduce) cols.forEach((c, k) => { h[k] = base[k] = baseOf(c); }); else { h.fill(.02); base.fill(.02); sweep(320); }
@@ -1771,19 +1774,20 @@ const scene3d = T => {
     if (waves.length) { waves = waves.filter(w => now - w.t < 1900); busy = true; }
     for (let k = 0; k < N; k++) {
       const c = cols[k];
-      if (baseAt[k]) { if (now >= baseAt[k]) { base[k] = baseNext[k]; baseAt[k] = 0; } busy = true; }
+      if (baseAt[k]) { if (now >= baseAt[k]) { base[k] = baseNext[k]; baseAt[k] = 0; if (now < introEnd && MODE !== 'hover') kick[k] = (base[k] - H0) * KICK + KICK0; } busy = true; }
       if (selAt[k]) { if (now >= selAt[k]) { sel[k] = selNext[k]; selAt[k] = 0; } busy = true; }
       if (MODE === 'hover') {
         let e = amp > .003 ? amp * SWELL * Math.exp(-((c.x - sx) ** 2 + (c.z - sz) ** 2) / 4.4) : 0;
         for (const w of waves) { const age = (now - w.t) / 1000, d = Math.hypot(c.x - w.x, c.z - w.z) - age * 8.5; e += w.a * (1 - age / 1.9) * Math.exp(-d * d / 1.4); }
         extra[k] = e;
       } else extra[k] = sel[k] * LIFT;
-      const target = base[k] + extra[k], want = MODE === 'hover' ? Math.min(1, extra[k] / SWELL) : sel[k];
+      kick[k] *= Math.exp(-dt * 2.6);
+      const target = base[k] + extra[k] + kick[k], want = MODE === 'hover' ? Math.min(1, extra[k] / SWELL) : sel[k];
       if (reduce) { h[k] = target; lit[k] = want; }
       else {
         vel[k] += ((target - h[k]) * 120 - vel[k] * 19) * dt; h[k] += vel[k] * dt;
         lit[k] += (want - lit[k]) * ease;
-        if (Math.abs(vel[k]) > .004 || Math.abs(target - h[k]) > .004 || Math.abs(want - lit[k]) > .004) busy = true;
+        if (Math.abs(vel[k]) > .004 || Math.abs(target - h[k]) > .004 || Math.abs(want - lit[k]) > .004 || kick[k] > .004) busy = true;
       }
       M[k * 16 + 5] = Math.max(.02, h[k]);
       // colour: stone lightens with height, the selection turns brass, everything else steps back
@@ -1897,7 +1901,7 @@ const scene3d = T => {
 
     seg.addEventListener('click', e => {
       const b = e.target.closest('[data-metric]'); if (!b || b.dataset.metric === metric) return;
-      metric = b.dataset.metric; seg.style.setProperty('--i', metricKeys.indexOf(metric));
+      introEnd = 0; metric = b.dataset.metric; seg.style.setProperty('--i', metricKeys.indexOf(metric));
       seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
       setNote(); sweep();
       if (cur) { const g = GOV[cur], m = METRIC[metric]; say(g.n, m.say(m.v(g))); live.textContent = `${g.n}: ${m.say(m.v(g))}`; }
