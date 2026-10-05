@@ -158,7 +158,9 @@ p{text-wrap:pretty}
 .seg.seg-sm button[aria-pressed="true"]{color:var(--cream)}
 
 /* ---------- clients ---------- */
-.clients{background:var(--n900);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0}
+.clients{position:relative;background:var(--n900);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0}
+/* the hero's corner vignette carries on over the band and the section below, fading out, so the hero has no hard lower edge */
+.clients::before{content:"";position:absolute;z-index:3;left:0;right:0;top:-1px;height:340px;pointer-events:none;background:radial-gradient(75% 100% at 100% 0,rgba(4,9,24,.82),rgba(4,9,24,.4) 45%,rgba(4,9,24,0) 78%)}
 .clients-row{display:grid;grid-template-columns:200px minmax(0,1fr);align-items:center;gap:32px}
 .clients h2{font-family:var(--sans);font-size:.95rem;font-weight:400;letter-spacing:0;line-height:1.4;color:var(--muted)}
 .marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
