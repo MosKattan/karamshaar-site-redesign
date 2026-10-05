@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
 
-<script>document.documentElement.classList.add('js')</script>
+<script>document.documentElement.classList.add('js');try{const q=new URLSearchParams(location.search).get('theme'),k=q||localStorage.getItem('ks-theme');if(k==='light')document.documentElement.dataset.theme='light'}catch(e){}</script>
 <style>
 /* =========================================================
    Karam Shaar Advisory - Services (redesign dry run)
@@ -519,6 +519,159 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .nav .btn-sm{height:38px;padding:0 16px;font-size:.88rem}
   .menu{flex:none;color:#fff;font-size:1.5rem}
 }
+
+/* =========================================================
+   Light theme ("cream"): html[data-theme="light"], set by the toggle in the nav.
+   Same world in daylight: a creamy beige field, deep blue as ink and action,
+   the rose underline kept, brass as the warm second accent. Deep blue owns two
+   regions outright (the featured rate and the inquiry band), so the page keeps
+   one strong colour moment instead of scattering it. Fewer veils and glows than
+   the dark theme: the sky is a plain warm wash with one haze in each corner.
+   ========================================================= */
+.theme{width:42px;height:42px;display:grid;place-items:center;flex:none;border:0;border-radius:999px;background:transparent;color:rgba(226,233,246,.72);cursor:pointer;transition:color .2s var(--ease),background-color .2s var(--ease)}
+.theme:hover{color:#fff;background:rgba(255,255,255,.07)}
+.theme svg{width:19px;height:19px}
+.theme .i-moon,[data-theme="light"] .theme .i-sun{display:none}
+[data-theme="light"] .theme .i-moon{display:block}
+.mnav-theme{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:0 16px;border:0;border-radius:12px;background:transparent;color:var(--muted);font-size:.95rem;text-align:start;cursor:pointer}
+.mnav-theme:hover{background:rgba(160,186,228,.1);color:var(--text)}
+.mnav-theme svg{width:18px;height:18px}
+.mnav-theme .i-moon,[data-theme="light"] .mnav-theme .i-sun{display:none}
+[data-theme="light"] .mnav-theme .i-moon{display:block}
+@media (max-width:767px){.nav .theme{display:none}}
+@media (min-width:768px){.mnav-theme{display:none}}
+/* the switch itself: one soft cross-fade of the whole page where the browser offers it */
+::view-transition-old(root),::view-transition-new(root){animation-duration:.45s;animation-timing-function:cubic-bezier(.22,.8,.26,1)}
+
+[data-theme="light"]{
+  --c-bg:#f4ecdc; --c-raise:#fbf6ec; --c-deep:#ece1cb; --c-sand:#e4d5b6;
+  --c-blue:#1f3a76; --c-blue-2:#2b4c8f; --c-blue-ink:#14254d;
+  --text:#16264b; --muted:rgba(22,38,75,.72); --faint:rgba(22,38,75,.68); --lit:rgba(22,38,75,.86);
+  --line:rgba(22,38,75,.13);
+  --steel-2:#3e5a8e; --mist:#3a5182;
+  --lilac:#8a66a6; --peri:#4a6fbf; --sage:#5b8748; --ochre:#a6833f;
+  --rose:#b5394d;
+  --logo-bar:#5f83c4; --logo-ink:#1f3a76; --logo-tag:#5a6f98;
+  color-scheme:light; background:var(--c-deep); scrollbar-color:#b9a985 var(--c-bg); accent-color:var(--c-blue);
+}
+[data-theme="light"] body{background:var(--c-bg)}
+[data-theme="light"] ::selection{background:var(--c-blue);color:var(--c-raise)}
+[data-theme="light"] :focus-visible{outline-color:var(--c-blue)}
+[data-theme="light"] .grain{opacity:.05}
+
+/* buttons and links */
+[data-theme="light"] .btn-cream{background:var(--c-blue);color:var(--c-raise)}
+[data-theme="light"] .btn-cream:hover{background:var(--c-blue-2)}
+[data-theme="light"] .btn-ghost{box-shadow:inset 0 0 0 1px rgba(22,38,75,.3)}
+[data-theme="light"] .btn-ghost:hover{box-shadow:inset 0 0 0 1px rgba(22,38,75,.7);background:rgba(22,38,75,.04)}
+[data-theme="light"] .link-arrow{color:var(--c-blue)}
+
+/* nav: a cream veil instead of a dark one */
+[data-theme="light"] .nav::after{background:linear-gradient(180deg,rgba(244,236,220,.9) 0,rgba(244,236,220,.55) 45%,rgba(244,236,220,0) 100%)}
+[data-theme="light"] .nav.is-scrolled::after{background:linear-gradient(180deg,rgba(244,236,220,.96) 0,rgba(244,236,220,.66) 45%,rgba(244,236,220,0) 100%)}
+[data-theme="light"] .nav-links a,[data-theme="light"] .nav .lang,[data-theme="light"] .theme{color:var(--muted)}
+[data-theme="light"] .nav-links a:hover,[data-theme="light"] .lang:hover,[data-theme="light"] .theme:hover{color:var(--text);background:rgba(22,38,75,.06)}
+[data-theme="light"] .nav-links a[aria-current]{color:var(--text)}
+[data-theme="light"] .nav .btn-cream{background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px rgba(22,38,75,.3)}
+[data-theme="light"] .nav .btn-cream:hover{background:rgba(22,38,75,.05);box-shadow:inset 0 0 0 1px rgba(22,38,75,.55)}
+[data-theme="light"] .menu{color:var(--text)}
+[data-theme="light"] .menu:hover,[data-theme="light"] .menu[aria-expanded="true"]{background:rgba(22,38,75,.06)}
+[data-theme="light"] .mnav{background:var(--c-raise);box-shadow:0 24px 48px -24px rgba(70,52,20,.28)}
+[data-theme="light"] .mnav a:hover,[data-theme="light"] .mnav a[aria-current],[data-theme="light"] .mnav-theme:hover{background:rgba(22,38,75,.06)}
+[data-theme="light"] .skip{background:var(--c-blue);color:var(--c-raise)}
+[data-theme="light"] .ptr{background:var(--c-raise);color:var(--c-blue);box-shadow:0 10px 24px -10px rgba(70,52,20,.35)}
+[data-theme="light"] .ptr.ready{background:var(--c-blue);color:var(--c-raise)}
+
+/* hero: a warm wash, wisteria haze top right, a breath of lapis top left */
+[data-theme="light"] .hero-track{--sky:
+    radial-gradient(90% 55% at 78% -6%,rgba(156,160,214,.26),rgba(156,160,214,0) 70%),
+    radial-gradient(70% 45% at 8% 0%,rgba(96,132,204,.16),rgba(96,132,204,0) 72%),
+    radial-gradient(75% 62% at 100% 100%,rgba(214,190,140,.34),rgba(214,190,140,0) 78%),
+    linear-gradient(180deg,#f8f1e3 0%,#f5ecdb 45%,#f1e6d1 100%)}
+[data-theme="light"] .hero{background:linear-gradient(180deg,rgba(248,241,227,.7) 0,rgba(248,241,227,0) 150px),var(--sky)}
+[data-theme="light"] .hero-track::before{background:linear-gradient(rgba(248,241,227,.7),rgba(248,241,227,.7)),var(--sky)}
+[data-theme="light"] .starter-row{background:rgba(255,252,245,.7);box-shadow:inset 0 0 0 1px rgba(22,38,75,.22)}
+[data-theme="light"] .starter-row:focus-within{box-shadow:inset 0 0 0 1.5px var(--c-blue)}
+[data-theme="light"] .starter input{caret-color:var(--c-blue)}
+[data-theme="light"] .starter input::placeholder{color:rgba(22,38,75,.68)}
+[data-theme="light"] .starter-err{color:#9c2a3d}
+/* map callouts and key: navy on cream, a cream halo instead of a dark one */
+[data-theme="light"] .iso-call i{background:linear-gradient(180deg,var(--c-blue),rgba(31,58,118,.15))}
+[data-theme="light"] .iso-call[data-low] i{background:linear-gradient(0deg,var(--c-blue),rgba(31,58,118,.15))}
+[data-theme="light"] .iso-call p{padding:7px 12px 8px;border-radius:12px;background:rgba(251,246,236,.92);box-shadow:0 10px 26px -14px rgba(70,52,20,.45);text-shadow:none}
+[data-theme="light"] .iso-call[data-low] p{background:rgba(251,246,236,.92);text-shadow:none}
+[data-theme="light"] .iso-call b,[data-theme="light"] .map-coord b{color:var(--c-blue-ink)}
+[data-theme="light"] .iso-call span,[data-theme="light"] .map-note b{color:var(--steel-2)}
+[data-theme="light"] .map-note{text-shadow:none}
+[data-theme="light"] .seg-sm{background:var(--c-raise)}
+[data-theme="light"] .seg.seg-sm button[aria-pressed="true"]{color:var(--c-raise)}
+[data-theme="light"] .seg-sm .seg-thumb{background:var(--c-blue);box-shadow:none}
+@media (max-width:1100px){[data-theme="light"] .iso::before{background:radial-gradient(closest-side,rgba(120,96,48,.16),rgba(120,96,48,0))}}
+
+/* clients: a lighter band, logos as single-colour ink marks */
+[data-theme="light"] .clients{background:var(--c-raise)}
+[data-theme="light"] .clients::before{display:none}
+[data-theme="light"] .marquee li{background:var(--c-raise)}
+[data-theme="light"] .marquee img{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.15) brightness(.82);opacity:.72}
+[data-theme="light"] .marquee img.keep{filter:grayscale(1) invert(1) contrast(4)}
+
+/* statement: unread paragraphs recede into the cream, the rail fills with blue */
+[data-theme="light"] .statement p{color:rgba(22,38,75,.3)}
+[data-theme="light"] .statement p.is-focus{color:var(--text)}
+[data-theme="light"] .statement p::after{background:var(--c-blue)}
+
+/* practice cards: four creams stepping warmer as they stack */
+[data-theme="light"] .pcard{border-color:rgba(22,38,75,.1);box-shadow:0 -22px 48px -30px rgba(80,60,24,.3)}
+[data-theme="light"] .pcard:nth-child(1){--bg:#fbf6ec!important}
+[data-theme="light"] .pcard:nth-child(2){--bg:#f8f1e3!important}
+[data-theme="light"] .pcard:nth-child(3){--bg:#f5ecda!important}
+[data-theme="light"] .pcard:nth-child(4){--bg:#f1e6d1!important}
+[data-theme="light"] .pcard-list li{border-top-color:rgba(22,38,75,.14)}
+[data-theme="light"] .pcard-geo{opacity:.42}
+[data-theme="light"] .b-d::before,[data-theme="light"] .b-d::after{opacity:.45}
+
+/* formats */
+[data-theme="light"] .formats{background:var(--c-deep)}
+[data-theme="light"] .formats::before{background:linear-gradient(180deg,rgba(31,58,118,.07),transparent 80%)}
+[data-theme="light"] .bcard{background:var(--c-raise)}
+[data-theme="light"] .bcard:hover{border-color:rgba(22,38,75,.26)}
+[data-theme="light"] .b-a .bimg::after{background:linear-gradient(180deg,transparent 55%,var(--c-raise))}
+[data-theme="light"] .b-b{background:linear-gradient(160deg,var(--c-blue-2),var(--c-blue));border-color:transparent;--text:#f3efe3;--muted:rgba(232,238,248,.8);--steel-2:#bcd0f0;color:var(--text)}
+[data-theme="light"] .b-c{background:#f7f0e2}
+[data-theme="light"] .tags li{box-shadow:inset 0 0 0 1px rgba(22,38,75,.22)}
+[data-theme="light"] .b-e{background:linear-gradient(200deg,#eadcbd,#dfcca6 70%);border-color:transparent}
+[data-theme="light"] .b-e::before{background:linear-gradient(135deg,rgba(255,252,245,.55),transparent 70%)}
+[data-theme="light"] .b-e::after{background:radial-gradient(circle,rgba(31,58,118,.32) 1.6px,transparent 2.1px) 0 0/15px 15px}
+[data-theme="light"] .b-e p{color:rgba(22,38,75,.78)}
+[data-theme="light"] .b-f{background:#fffaf0;border-color:rgba(22,38,75,.1)}
+
+/* rates: the featured rate becomes the deep blue card */
+[data-theme="light"] .seg{background:var(--c-raise)}
+[data-theme="light"] .seg button[aria-pressed="true"]{color:var(--c-raise)}
+[data-theme="light"] .seg-thumb{background:var(--c-blue)}
+[data-theme="light"] .rate-feature{background:linear-gradient(160deg,var(--c-blue-2),var(--c-blue) 70%);color:#f3efe3}
+[data-theme="light"] .rate-feature::before{background:linear-gradient(180deg,rgba(241,234,215,.14),rgba(241,234,215,.01))}
+[data-theme="light"] .rate-feature::after{background:linear-gradient(180deg,rgba(205,189,148,.22),rgba(205,189,148,0))}
+[data-theme="light"] .rate-feature li{color:rgba(243,239,227,.88)}
+[data-theme="light"] .cur,[data-theme="light"] .rate-feature li .ph,[data-theme="light"] .note{color:#c5d6f2}
+[data-theme="light"] .rate-feature h3{color:#f3efe3}
+[data-theme="light"] .rate-rows{background:var(--c-raise)}
+[data-theme="light"] .rate-row:hover{background:rgba(22,38,75,.03)}
+[data-theme="light"] .rate-case{background:#f7f0e2}
+
+/* proof */
+[data-theme="light"] .proof{background:linear-gradient(180deg,var(--c-bg),var(--c-deep))}
+[data-theme="light"] .proof::before{background:linear-gradient(180deg,rgba(176,146,84,.24),rgba(176,146,84,.02) 75%)}
+[data-theme="light"] .cover{box-shadow:0 34px 70px -30px rgba(70,50,16,.45),0 0 0 1px rgba(22,38,75,.08)}
+
+/* inquiry: the one deep blue band. Its tokens go back to the night values so copy and links stay cream on blue */
+[data-theme="light"] .inquiry{--text:#f3efe3;--muted:rgba(214,224,242,.84);--line:rgba(197,210,232,.2);color:var(--text);background:linear-gradient(150deg,var(--c-blue-2),#172e60 62%);border-top-color:transparent}
+[data-theme="light"] .inquiry .link-arrow{color:#f1ead7}
+
+/* footer: deepest beige, ink type */
+[data-theme="light"] .foot{background:var(--c-deep)}
+[data-theme="light"] .signoff{color:rgba(22,38,75,.34)}
+[data-theme="light"] .signoff em{color:rgba(22,38,75,.78)}
 </style>
 </head>
 
@@ -529,11 +682,11 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 <!-- Brand mark: bars and wordmark paths taken from the live site's logo, recoloured for a dark field -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="ks-logo" viewBox="0 0 1430 558">
-    <path class="lb lb1" fill="#7f9dd0" d="M438.1 246.4H23.7c-10-.1-18.1-8.3-18-18.3v-60.6c0-10 8-18.2 18-18.3h414.4c10 .1 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
-    <path class="lb lb2" fill="#f1ead7" d="M435.8 107.5H86.1c-10-.1-18.1-8.3-18-18.3V28.6c0-10 8-18.2 18-18.3h349.7c10 0 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
-    <path class="lb lb3" fill="#f1ead7" d="M436.7 383.3H187.3c-10-.1-18-8.3-17.9-18.3v-60.6c0-10 7.9-18.2 17.9-18.3h249.4c10 .1 18 8.3 17.9 18.3V365c0 10-7.9 18.2-17.9 18.3"/>
-    <path class="lb lb4" fill="#7f9dd0" d="M435.8 515.8H137.9c-10 0-18.1-8.3-18-18.3v-60.6c0-10 8-18.2 18-18.3h297.9c10 0 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
-    <g fill="#f1ead7">
+    <path class="lb lb1" style="fill:var(--logo-bar,#7f9dd0)" d="M438.1 246.4H23.7c-10-.1-18.1-8.3-18-18.3v-60.6c0-10 8-18.2 18-18.3h414.4c10 .1 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
+    <path class="lb lb2" style="fill:var(--logo-ink,#f1ead7)" d="M435.8 107.5H86.1c-10-.1-18.1-8.3-18-18.3V28.6c0-10 8-18.2 18-18.3h349.7c10 0 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
+    <path class="lb lb3" style="fill:var(--logo-ink,#f1ead7)" d="M436.7 383.3H187.3c-10-.1-18-8.3-17.9-18.3v-60.6c0-10 7.9-18.2 17.9-18.3h249.4c10 .1 18 8.3 17.9 18.3V365c0 10-7.9 18.2-17.9 18.3"/>
+    <path class="lb lb4" style="fill:var(--logo-bar,#7f9dd0)" d="M435.8 515.8H137.9c-10 0-18.1-8.3-18-18.3v-60.6c0-10 8-18.2 18-18.3h297.9c10 0 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
+    <g style="fill:var(--logo-ink,#f1ead7)">
       <path d="m605.2 92.5 67.2-82.9h-43.9L574 77.8h-12.2V9.5h-36V183h36v-73.7h12.4l54.3 73.7h46z"/>
       <path d="M816.3 183h36.9L789.3 9.5h-44L681.4 183h36.9l12.6-35.7h72.9l12.6 35.7Zm-74.9-65.9 25.9-73.6 25.8 73.6z"/>
       <path d="M970.8 183h42.6l-46.2-67.3c3.8-1.1 7.5-2.6 11-4.4 17.5-9.2 24.6-26.5 24.6-48.3s-7-37.1-23.9-46.1c-9-4.6-20.7-7.3-42.8-7.3h-57v173.5h36v-64h15.2l40.4 64ZM915.3 39.6h16c13.9 0 21.7.8 27.2 5 5.2 4.1 8.2 10.8 8.2 20.5s-3 17-8.9 21.1c-5.3 3.7-12.8 4.3-26.5 4.3h-16v-51Z"/>
@@ -545,7 +698,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
       <path d="M1213.5 381.5h36.9L1186.5 208h-44.1l-63.9 173.5h36.8l12.6-35.8h72.9l12.6 35.8Zm-74.9-66 25.9-73.6 25.8 73.6h-51.8Z"/>
       <path d="M1379.7 381.5h42.6l-46.2-67.3c3.8-1.1 7.5-2.6 11-4.4 17.5-9.2 24.6-26.5 24.6-48.3s-7-37.1-23.9-46.1c-9-4.6-20.7-7.3-42.8-7.3h-57v173.5h36v-64h15.2l40.4 64Zm-55.5-143.3h16c13.9 0 21.7.8 27.2 5 5.2 4.1 8.2 10.8 8.2 20.5s-3 17-8.9 21.1c-5.3 3.7-12.8 4.3-26.5 4.3h-16v-51Z"/>
     </g>
-    <g fill="#93acd4" font-family="Fira Sans, sans-serif" font-weight="500" font-size="66">
+    <g style="fill:var(--logo-tag,#93acd4)" font-family="Fira Sans, sans-serif" font-weight="500" font-size="66">
       <text x="527" y="477" textLength="894" lengthAdjust="spacing">MAKING SENSE OF</text>
       <text x="527" y="549" textLength="894" lengthAdjust="spacing">SYRIA'S ECONOMY</text>
     </g>
@@ -566,6 +719,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     <a href="#">About</a>
   </nav>
   <div class="nav-end">
+    <button class="theme" type="button" aria-label="Switch to light theme"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg></button>
     <a class="lang" href="#" lang="ar" aria-label="Arabic version">AR</a>
     <a class="btn btn-cream btn-sm" href="#inquiry">Start an inquiry</a>
     <button class="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><i class="ph ph-list" aria-hidden="true"></i></button>
@@ -579,6 +733,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   <a href="#top" aria-current="page">Services</a>
   <a href="#">About</a>
   <a href="#" lang="ar">العربية</a>
+  <button class="mnav-theme" type="button"><svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg><svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6Z"/></svg><span>Light theme</span></button>
 </nav>
 
 <main id="main" tabindex="-1">
@@ -968,6 +1123,27 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     addEventListener('touchcancel', () => { pull = 0; end(); }, { passive: true });
   }
 
+  /* ---------- theme ----------
+     Dark is the default; the light ("cream") theme is html[data-theme="light"], applied before first paint
+     from ?theme= or the visitor's last choice. Canvases and the map listen for "themechange". */
+  {
+    const root = document.documentElement, meta = $('meta[name="theme-color"]'), btn = $('.theme'), row = $('.mnav-theme');
+    const paint = () => {
+      const day = root.dataset.theme === 'light';
+      if (btn) btn.setAttribute('aria-label', day ? 'Switch to dark theme' : 'Switch to light theme');
+      if (row) row.querySelector('span').textContent = day ? 'Dark theme' : 'Light theme';
+      if (meta) meta.content = day ? '#f4ecdc' : '#0d1930';
+    };
+    const flip = () => {
+      const day = root.dataset.theme !== 'light';
+      const go = () => { if (day) root.dataset.theme = 'light'; else delete root.dataset.theme; paint(); document.dispatchEvent(new Event('themechange')); };
+      if (document.startViewTransition && !reduce) document.startViewTransition(go); else go();
+      try { localStorage.setItem('ks-theme', day ? 'light' : 'dark'); } catch {}
+    };
+    [btn, row].forEach(b => b && b.addEventListener('click', flip));
+    paint();
+  }
+
   /* ---------- small-screen menu ---------- */
   const menuBtn = $('.menu'), mnav = $('#mnav');
   const setMenu = open => {
@@ -1148,6 +1324,8 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const TINTS = ['201,173,219', '142,171,234', '165,199,144', '211,193,152', '142,171,234', '241,234,215'];
+  const TINTS_DAY = ['122,88,156', '58,92,170', '78,120,60', '150,116,52', '58,92,170', '31,58,118'];   // the same four practice tints, deepened to read on cream
+  const day = () => document.documentElement.dataset.theme === 'light';
   const T30 = Math.tan(Math.PI / 6);
   const unit = v => Math.min(1, Math.max(0, v));
 
@@ -1175,7 +1353,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
       while (!at && Math.random() > o.reach(x, y, W, H) && ++tries < 12) [x, y] = o.spot(W, H);
       const run = !!at || Math.random() < .28, len = run ? 3 + (Math.random() * 3 | 0) : 1;
       const [i, j] = cellAt(x, y), axis = Math.random() < .5;
-      const tint = TINTS[Math.random() * TINTS.length | 0], life = 4200 + Math.random() * 3800;
+      const tints = day() ? TINTS_DAY : TINTS, tint = tints[Math.random() * tints.length | 0], life = 4200 + Math.random() * 3800;
       for (let n = 0; n < len; n++) cells.push({ i: i + (axis ? n : 0), j: j + (axis ? 0 : n), tint, born: now + n * 260, life });
     };
 
@@ -1226,7 +1404,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
         for (let di = -1; di <= 1; di++) for (let dj = -1; dj <= 1; dj++) {
           const [x, y] = centre(ci + di, cj + dj), a = o.reach(x, y, W, H) * (di || dj ? .35 : 1);
           if (a < .02) continue;
-          diamond(x, y, .92); ctx.strokeStyle = `rgba(241,234,215,${(.22 * a).toFixed(3)})`; ctx.stroke();
+          diamond(x, y, .92); ctx.strokeStyle = `rgba(${day() ? '31,58,118' : '241,234,215'},${(.22 * a).toFixed(3)})`; ctx.stroke();
         }
       }
       if (!reduce) raf = requestAnimationFrame(draw);
@@ -1242,6 +1420,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
       host.addEventListener('pointermove', e => { const r = host.getBoundingClientRect(); px = e.clientX - r.left; py = e.clientY - r.top; });
       host.addEventListener('pointerleave', () => { px = py = -1e4; });
     }
+    document.addEventListener('themechange', kick);
     cv.classList.add('on'); kick();
   };
 
@@ -1253,7 +1432,8 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     spot: (W, H) => [W * (.25 + Math.random() * .75), H * Math.random() * Math.random() * .9],   // y squared: most cells land in the open sky near the top
     lines: (ctx, W, H) => {
       const g = ctx.createLinearGradient(W * .2, H, W, 0);   // the lines fade out toward the copy and the bottom-left
-      g.addColorStop(0, 'rgba(197,210,232,0)'); g.addColorStop(.45, 'rgba(197,210,232,.045)'); g.addColorStop(1, 'rgba(197,210,232,.08)');
+      const c = day() ? '31,58,118' : '197,210,232', k = day() ? 1.25 : 1;
+      g.addColorStop(0, `rgba(${c},0)`); g.addColorStop(.45, `rgba(${c},${.045 * k})`); g.addColorStop(1, `rgba(${c},${.08 * k})`);
       return g;
     }
   });
@@ -1280,7 +1460,8 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     spot: (W, H) => [W * Math.sqrt(Math.random()), band == null ? H * Math.random() : band + (Math.random() - .5) * SPAN * 3],   // root: more cells toward the right
     lines: (ctx, W) => {
       const g = ctx.createLinearGradient(0, 0, W, 0);
-      g.addColorStop(0, 'rgba(197,210,232,.04)'); g.addColorStop(1, 'rgba(197,210,232,.09)');
+      const c = day() ? '31,58,118' : '197,210,232';
+      g.addColorStop(0, `rgba(${c},.04)`); g.addColorStop(1, `rgba(${c},.09)`);
       return g;
     },
     veil: (ctx, W, H) => {
@@ -1464,14 +1645,15 @@ const flat = () => {
     cv.width = w * d; cv.height = h * d;
     const { s, cx, cy } = view(w, h), P = (x, y, z) => [(w / 2 + (x - cx) / s) * d, (h / 2 - (y * CE - z * SE - cy) / s) * d];
     const face = (pts, fill) => { ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fillStyle = fill; ctx.fill(); };
+    const day = document.documentElement.dataset.theme === 'light';   // cream: pale stone that deepens with height
     for (const c of cols) {
-      const H = baseOf(c), t = (H - H0) / (MODE === 'hover' ? RELIEF : SPAN), L = Math.round(37 + t * 24);
-      face([P(c.x - HALF, H, c.z), P(c.x, H, c.z + HALF), P(c.x, 0, c.z + HALF), P(c.x - HALF, 0, c.z)], '#1b2f55');
-      face([P(c.x, H, c.z + HALF), P(c.x + HALF, H, c.z), P(c.x + HALF, 0, c.z), P(c.x, 0, c.z + HALF)], '#0f1c36');
-      face([P(c.x - HALF, H, c.z), P(c.x, H, c.z - HALF), P(c.x + HALF, H, c.z), P(c.x, H, c.z + HALF)], c.river && MODE === 'hover' ? '#d9b266' : `hsl(218 30% ${L}%)`);
+      const H = baseOf(c), t = (H - H0) / (MODE === 'hover' ? RELIEF : SPAN), L = day ? Math.round(82 - t * 42) : Math.round(37 + t * 24);
+      face([P(c.x - HALF, H, c.z), P(c.x, H, c.z + HALF), P(c.x, 0, c.z + HALF), P(c.x - HALF, 0, c.z)], day ? '#c3b28c' : '#1b2f55');
+      face([P(c.x, H, c.z + HALF), P(c.x + HALF, H, c.z), P(c.x + HALF, 0, c.z), P(c.x, 0, c.z + HALF)], day ? '#ad9b74' : '#0f1c36');
+      face([P(c.x - HALF, H, c.z), P(c.x, H, c.z - HALF), P(c.x + HALF, H, c.z), P(c.x, H, c.z + HALF)], c.river && MODE === 'hover' ? '#d9b266' : `hsl(218 ${day ? 36 : 30}% ${L}%)`);
     }
   };
-  paint(); new ResizeObserver(paint).observe(host); host.classList.add('ready');
+  paint(); new ResizeObserver(paint).observe(host); document.addEventListener('themechange', paint); host.classList.add('ready');
 };
 
 /* ---------- WebGL scene ---------- */
@@ -1488,7 +1670,8 @@ const scene3d = T => {
   sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -.0006; sun.shadow.normalBias = .025;
   Object.assign(sun.shadow.camera, { left: -17, right: 17, top: 17, bottom: -17, near: 1, far: 70 });
   const fill = new T.DirectionalLight(0x6f8fc1, .4); fill.position.set(9, 5, 14);
-  scene.add(sun, fill, new T.HemisphereLight(0x8ea6d4, 0x070d1c, .9));
+  const hemi = new T.HemisphereLight(0x8ea6d4, 0x070d1c, .9);
+  scene.add(sun, fill, hemi);
   // a warm lamp rides over whatever is lit, so the glow spills onto the neighbouring stone
   const lamp = new T.PointLight(MODE === 'hover' ? 0xffe6b0 : 0xffc56e, 0, 8, 1.5); rig.add(lamp);
   let lampX = 0, lampY = 3, lampZ = 0;
@@ -1497,15 +1680,17 @@ const scene3d = T => {
   const geo = new T.BoxGeometry(SIDE, 1, SIDE); geo.translate(0, .5, 0);
   const glow = new T.InstancedBufferAttribute(new Float32Array(N), 1); geo.setAttribute('aGlow', glow);
   const mat = new T.MeshStandardMaterial({ roughness: 1, metalness: 0 });
+  const floor = { value: .08 };   // how dark a side gets at its foot: deep on navy, kept light on cream (set by the palette)
   mat.onBeforeCompile = sh => {
+    sh.uniforms.uFloor = floor;
     const vary = 'varying float vGlow;\nvarying float vSide;\nvarying float vDrop;\nvarying float vFar;\nvarying vec2 vFace;\n';
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', '#include <common>\nattribute float aGlow;\n' + vary)
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlow = aGlow;\nvSide = 1.0 - step(0.5, normal.y);\nvDrop = (1.0 - position.y) * length(instanceMatrix[1].xyz);\nvFace = position.xz;\nvFar = (modelMatrix * instanceMatrix * vec4(position, 1.0)).z;');
     sh.fragmentShader = sh.fragmentShader
-      .replace('#include <common>', '#include <common>\n' + vary)
+      .replace('#include <common>', '#include <common>\nuniform float uFloor;\n' + vary)
       .replace('#include <color_fragment>', `#include <color_fragment>
-        float ao = mix(1.0, 0.85 * (0.08 + 0.92 * exp(-vDrop * 1.0)), vSide);
+        float ao = mix(1.0, 0.85 * (uFloor + (1.0 - uFloor) * exp(-vDrop * 1.0)), vSide);
         float rim = (1.0 - vSide) * smoothstep(0.84, 0.985, max(abs(vFace.x), abs(vFace.y)) / ${(SIDE / 2).toFixed(3)});
         float haze = mix(0.72, 1.0, smoothstep(-9.0, 4.0, vFar));   // blocks further north sit back into the navy
         diffuseColor.rgb *= ao * haze * (1.0 + rim * 0.12);`)
@@ -1520,7 +1705,20 @@ const scene3d = T => {
   const M = mesh.instanceMatrix.array, C = mesh.instanceColor.array;
   cols.forEach((c, k) => M.set([R2, 0, -R2, 0, 0, .02, 0, 0, R2, 0, R2, 0, c.x, 0, c.z, 1], k * 16));
   const lin = hex => { const c = new T.Color(hex); return [c.r, c.g, c.b]; };
-  const LO = lin('#2b4a84'), HI = lin('#a9c2ec'), BRASS = lin('#c2a063'), CREAM = lin('#f1ead7');
+  /* night: navy stone that pales with height. Cream: pale blue stone that deepens with height, so the
+     tallest columns read darkest on the light field; the selection stays brass in both */
+  const PAL = {
+    dark: { lo: '#2b4a84', hi: '#a9c2ec', brass: '#c2a063', cream: '#f1ead7', sun: 0xf6f0e6, sunI: 3.7, fill: 0x6f8fc1, fillI: .4, sky: 0x8ea6d4, ground: 0x070d1c, hemiI: .9, floor: .08 },
+    light: { lo: '#d3dcec', hi: '#41639f', brass: '#c48d3c', cream: '#fbf6ec', sun: 0xfff3de, sunI: 2.7, fill: 0xd2ddf0, fillI: 1, sky: 0xfff8ee, ground: 0xe4d8bf, hemiI: 1.8, floor: .5 }
+  };
+  let LO, HI, BRASS, CREAM;
+  const palette = () => {
+    const p = PAL[document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'];
+    LO = lin(p.lo); HI = lin(p.hi); BRASS = lin(p.brass); CREAM = lin(p.cream);
+    sun.color.set(p.sun); sun.intensity = p.sunI; fill.color.set(p.fill); fill.intensity = p.fillI;
+    hemi.color.set(p.sky); hemi.groundColor.set(p.ground); hemi.intensity = p.hemiI; floor.value = p.floor;
+  };
+  palette();
 
   /* state: every column is a damped spring toward base + lift */
   const now0 = performance.now();
@@ -1747,6 +1945,7 @@ const scene3d = T => {
       }, 2600);
     }
   }
+  document.addEventListener('themechange', () => { palette(); wake(); });
   fit();
 };
 
