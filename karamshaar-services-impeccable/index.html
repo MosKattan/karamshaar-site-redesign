@@ -614,7 +614,11 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 [data-theme="light"] .clients{background:var(--c-raise)}
 [data-theme="light"] .clients::before{display:none}
 [data-theme="light"] .marquee li{background:var(--c-raise)}
-[data-theme="light"] .marquee img{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.15) brightness(.82);opacity:.72}
+/* dark marks on white: lift near-white to pure white so the multiply drops the square out entirely */
+[data-theme="light"] .marquee img{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.4) brightness(1.14);opacity:.8}
+[data-theme="light"] .marquee img.soft{opacity:.46}
+[data-theme="light"] .marquee img.dense{filter:grayscale(1) brightness(.8) contrast(4)}   /* pale colour marks (the UN blue) need the grey pushed down before the white is lifted */
+[data-theme="light"] .marquee li:hover img{opacity:1}
 [data-theme="light"] .marquee img.keep{filter:grayscale(1) invert(1) contrast(4)}
 
 /* statement: unread paragraphs recede into the cream, the rail fills with blue */
@@ -1229,12 +1233,12 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   const U = 'https://karamshaar.com/wp-content/uploads/';
   const LOGOS = [
     ['World Bank', '2024/11/World-Bank.webp'],
-    ['United Nations', '2025/06/UN.avif'],
+    ['United Nations', '2025/06/UN.avif', 'dense'],
     ['European Union', '2026/08/Flag_of_Europe-1.svg', 'keep'],
     ['German Federal Foreign Office', '2024/11/German-Federal-Foreign-Office.webp'],
     ['United States Department of State', '2026/01/d86ba934-55dc-412e-8740-83c04d3e3264-removebg-preview.webp'],
     ['Foreign, Commonwealth and Development Office', '2024/11/FCDO.webp'],
-    ['French Ministry of Foreign Affairs', '2024/11/French-MFA.webp'],
+    ['French Ministry of Foreign Affairs', '2024/11/French-MFA.webp', 'soft'],   // a full-colour panel: lighter in the cream theme so it does not outweigh the line marks
     ['Dutch Ministry of Foreign Affairs', '2024/11/Ducht-MFA.webp', 'keep crop'],   // crop: trims the white margins beside its dark panel
     ['European Endowment for Democracy', '2024/11/European-Endowment-for-Democracy_edited_edited.webp'],
     ['GIZ', '2024/11/GIZ_edited.webp'],

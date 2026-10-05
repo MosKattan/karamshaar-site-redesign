@@ -694,7 +694,11 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 [data-theme="light"] .clients{background:var(--c-raise)}
 [data-theme="light"] .clients::before{display:none}
 [data-theme="light"] .marquee li{background:var(--c-raise)}
-[data-theme="light"] .marquee img{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.15) brightness(.82);opacity:.72}
+/* dark marks on white: lift near-white to pure white so the multiply drops the square out entirely */
+[data-theme="light"] .marquee img{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.4) brightness(1.14);opacity:.8}
+[data-theme="light"] .marquee img.soft{opacity:.46}
+[data-theme="light"] .marquee img.dense{filter:grayscale(1) brightness(.8) contrast(4)}   /* pale colour marks (the UN blue) need the grey pushed down before the white is lifted */
+[data-theme="light"] .marquee li:hover img{opacity:1}
 [data-theme="light"] .marquee img.keep{filter:grayscale(1) invert(1) contrast(4)}
 
 /* statement: unread paragraphs recede into the cream, the rail fills with blue */
@@ -1313,12 +1317,12 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
   const U = 'https://karamshaar.com/wp-content/uploads/';
   const LOGOS = [
     ['البنك الدولي', '2024/11/World-Bank.webp'],
-    ['الأمم المتحدة', '2025/06/UN.avif'],
+    ['الأمم المتحدة', '2025/06/UN.avif', 'dense'],
     ['الاتحاد الأوروبي', '2026/08/Flag_of_Europe-1.svg', 'keep'],
     ['وزارة الخارجية الألمانية الاتحادية', '2024/11/German-Federal-Foreign-Office.webp'],
     ['وزارة الخارجية الأمريكية', '2026/01/d86ba934-55dc-412e-8740-83c04d3e3264-removebg-preview.webp'],
     ['وزارة الخارجية والكومنولث والتنمية البريطانية', '2024/11/FCDO.webp'],
-    ['وزارة أوروبا والخارجية الفرنسية', '2024/11/French-MFA.webp'],
+    ['وزارة أوروبا والخارجية الفرنسية', '2024/11/French-MFA.webp', 'soft'],
     ['وزارة الخارجية الهولندية', '2024/11/Ducht-MFA.webp', 'keep crop'],   // crop: trims the white margins beside its dark panel
     ['الصندوق الأوروبي للديمقراطية', '2024/11/European-Endowment-for-Democracy_edited_edited.webp'],
     ['GIZ', '2024/11/GIZ_edited.webp'],
