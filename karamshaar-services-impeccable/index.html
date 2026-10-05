@@ -102,7 +102,16 @@ p{text-wrap:pretty}
 .nav-end{display:flex;align-items:center;gap:8px;flex:none}
 .lang{width:42px;height:42px;display:grid;place-items:center;border-radius:999px;font-size:.82rem;font-weight:500;letter-spacing:.06em;color:var(--muted);text-decoration:none;transition:color .2s,background-color .2s}
 .lang:hover{color:var(--text);background:rgba(160,186,228,.1)}
-.menu{display:none;width:42px;height:42px;border:0;border-radius:999px;background:transparent;font-size:1.35rem;cursor:pointer}
+.menu{display:none;width:44px;height:44px;border:0;border-radius:999px;background:transparent;color:var(--text);font-size:1.35rem;cursor:pointer;transition:background-color .2s var(--ease)}
+.menu:hover,.menu[aria-expanded="true"]{background:rgba(160,186,228,.1)}
+/* small-screen menu: drops from the nav bar as one panel of the same material */
+.mnav{position:fixed;z-index:49;top:90px;left:0;right:0;margin-inline:auto;width:min(1280px,100% - 32px);padding:8px;border-radius:var(--r-card);background:var(--n900);border:1px solid var(--line);box-shadow:0 24px 48px -24px rgba(4,9,22,.7);transform-origin:top;animation:mnavIn .45s var(--spring) both}
+.mnav a{display:flex;align-items:center;min-height:48px;padding:0 16px;border-radius:12px;color:var(--lit);text-decoration:none;font-size:1.02rem}
+.mnav a:hover,.mnav a[aria-current]{background:rgba(160,186,228,.1);color:var(--text)}
+.mnav a[lang]{color:var(--muted);font-size:.9rem;letter-spacing:.06em}
+@keyframes mnavIn{from{opacity:0;transform:translateY(-10px) scaleY(.97)}}
+.skip{position:fixed;z-index:60;top:12px;left:12px;padding:12px 18px;border-radius:999px;background:var(--cream);color:var(--ink);font-weight:500;text-decoration:none;transform:translateY(-160%);transition:transform .25s var(--ease)}
+.skip:focus-visible{transform:none}
 
 /* ---------- hero ---------- */
 .hero{position:relative;isolation:isolate;overflow:hidden;min-height:100dvh;display:grid;grid-template-rows:1fr auto;align-items:center;padding:128px 0 30px;background:linear-gradient(180deg,#0c1830 0%,#11213f 40%,#17305a 100%)}
@@ -150,8 +159,6 @@ p{text-wrap:pretty}
 .pcard-main p{max-width:30em;color:var(--lit);font-size:1.06rem}
 .pcard-list{align-self:end}
 .pcard-list li{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:19px 0;border-top:1px solid rgba(200,215,240,.18);font-size:1.1rem}
-.pcard-list .ph{color:var(--bar);font-size:1.15rem;transition:translate .25s var(--ease)}
-.pcard-list li:hover .ph{translate:3px -3px}
 .pcard-geo{position:absolute;z-index:-1;inset:0;pointer-events:none}
 .pcard-geo::before,.pcard-geo::after{content:"";position:absolute}
 .g1::before{right:-6%;top:-10%;width:52%;height:130%;clip-path:polygon(50% 0,100% 100%,0 100%);background:linear-gradient(180deg,color-mix(in srgb,var(--bar) 26%,transparent),transparent 85%)}
@@ -261,7 +268,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 .chip{padding:9px 14px;border:0;border-radius:999px;background:transparent;box-shadow:inset 0 0 0 1px rgba(13,25,48,.3);font-size:.88rem;line-height:1.2;color:#1c2f52;cursor:pointer;transition:background-color .2s var(--ease),color .2s var(--ease),box-shadow .2s var(--ease),scale .2s}
 .chip:hover{box-shadow:inset 0 0 0 1px rgba(13,25,48,.7)}
 .chip:active{scale:.97}
-.chip[aria-pressed="true"]{background:var(--n900);color:var(--cream);box-shadow:none}
+.chip[aria-checked="true"]{background:var(--n900);color:var(--cream);box-shadow:none}
 .field input,.field textarea{width:100%;padding:14px 16px;border:1px solid rgba(13,25,48,.3);border-radius:var(--r-in);background:#fbf7ea;color:var(--n950);caret-color:var(--n700);transition:border-color .3s,box-shadow .3s}
 .field textarea{resize:vertical;min-height:112px}
 .field input::placeholder,.field textarea::placeholder{color:rgba(13,25,48,.66)}
@@ -298,7 +305,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 .starter-row{display:flex;gap:8px;padding:6px;border-radius:999px;background:rgba(160,186,228,.1);box-shadow:inset 0 0 0 1px rgba(160,186,228,.3);transition:box-shadow .2s var(--ease)}
 .starter-row:focus-within{box-shadow:inset 0 0 0 1.5px var(--cream)}
 .starter input{flex:1;min-width:0;height:48px;padding:0 18px;border:0;border-radius:999px;background:transparent;color:var(--text);caret-color:var(--cream);outline:0}
-.starter input::placeholder{color:rgba(214,224,242,.62)}
+.starter input::placeholder{color:rgba(214,224,242,.74)}
 .starter .btn{height:48px;padding:0 22px}
 .starter-err{margin-top:10px;font-size:.88rem;font-weight:500;color:#ffa3b0}
 .btn:disabled{opacity:.62;cursor:progress}
@@ -374,7 +381,12 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .rate-row{flex-direction:column;align-items:flex-start;gap:12px}
   .rate-row .fig{text-align:left}
   .foot-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chip{min-height:44px}
+  .foot li a{padding:12px 0}
+  .foot-base a,.rate-case .link-arrow{display:inline-flex;align-items:center;min-height:44px}
+  .mnav{top:78px;width:calc(100% - 20px)}
 }
+@media (min-width:1101px){.mnav{display:none}}
 @media (max-width:420px){
   .nav .btn{padding:0 15px;font-size:.86rem}
 }
@@ -411,7 +423,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 /* ---------- reduced motion: fewer and gentler, state changes stay legible ---------- */
 @media (prefers-reduced-motion:reduce){
   .js .rv{transform:none;transition:opacity .4s ease var(--d,0s)}
-  .nav{animation:none}
+  .nav,.mnav{animation:none}
   .marquee{overflow-x:auto}
   .marquee ul{animation:none}
   .iso{transition:none}
@@ -454,6 +466,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   </symbol>
 </svg>
 
+<a class="skip" href="#main">Skip to content</a>
 <header class="nav" id="nav">
   <a class="brand" href="#top" aria-label="Karam Shaar Advisory, home">
     <svg role="img" aria-hidden="true"><use href="#ks-logo"/></svg>
@@ -469,11 +482,20 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   <div class="nav-end">
     <a class="lang" href="#" lang="ar" aria-label="Arabic version">AR</a>
     <a class="btn btn-cream btn-sm" href="#inquiry">Start an inquiry</a>
-    <button class="menu" type="button" aria-label="Open menu"><i class="ph ph-list" aria-hidden="true"></i></button>
+    <button class="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><i class="ph ph-list" aria-hidden="true"></i></button>
   </div>
 </header>
+<nav class="mnav" id="mnav" aria-label="Primary" hidden>
+  <a href="#">Our work</a>
+  <a href="#">Syria in Figures</a>
+  <a href="#">Publications</a>
+  <a href="#">Toolkit</a>
+  <a href="#top" aria-current="page">Services</a>
+  <a href="#">About</a>
+  <a href="#" lang="ar">العربية</a>
+</nav>
 
-<main>
+<main id="main" tabindex="-1">
 
 <!-- ================= HERO ================= -->
 <!-- .hero-track wraps the hero because the block-map script expects it -->
@@ -546,10 +568,10 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
           <p>Where the economy stands, how a sector works, and whether an opportunity holds up. Built on primary and secondary data.</p>
         </div>
         <ul class="pcard-list">
-          <li>Macroeconomics <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Market and sector assessments <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Feasibility studies <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Investment-opportunity studies <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
+          <li>Macroeconomics</li>
+          <li>Market and sector assessments</li>
+          <li>Feasibility studies</li>
+          <li>Investment-opportunity studies</li>
         </ul>
       </article>
 
@@ -560,10 +582,10 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
           <p>Background checks on individuals and entities inside and outside Syria, drawing on open sources, field interviews, and a wide local network.</p>
         </div>
         <ul class="pcard-list">
-          <li>Know Your Customer procedures <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Sanctions and compliance risk <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Commercial partner and supplier checks <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Legal and regulatory advisory <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
+          <li>Know Your Customer procedures</li>
+          <li>Sanctions and compliance risk</li>
+          <li>Commercial partner and supplier checks</li>
+          <li>Legal and regulatory advisory</li>
         </ul>
       </article>
 
@@ -574,9 +596,9 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
           <p>Analysis of financial and banking activity in Syria, supported by our exchange rate trackers and in-house data work.</p>
         </div>
         <ul class="pcard-list">
-          <li>Financial and banking activities <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Official and black market exchange rates <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Data analysis <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
+          <li>Financial and banking activities</li>
+          <li>Official and black market exchange rates</li>
+          <li>Data analysis</li>
         </ul>
       </article>
 
@@ -587,10 +609,10 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
           <p>Energy studies, aid and development work, and reconstruction, including real estate advisory and project development.</p>
         </div>
         <ul class="pcard-list">
-          <li>Energy studies <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Aid and development <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Reconstruction <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
-          <li>Real estate advisory and project development <i class="ph ph-arrow-up-right" aria-hidden="true"></i></li>
+          <li>Energy studies</li>
+          <li>Aid and development</li>
+          <li>Reconstruction</li>
+          <li>Real estate advisory and project development</li>
         </ul>
       </article>
     </div>
@@ -649,7 +671,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
       <article class="bcard b-e rv">
         <div class="bbody">
           <h3>Operational research, monitoring and evaluation</h3>
-          <p>MEAL, capacity assessments, and field data collection. Discussed and priced case by case.</p>
+          <p>Monitoring, evaluation, accountability and learning (MEAL), capacity assessments, and field data collection. Discussed and priced case by case.</p>
         </div>
       </article>
 
@@ -747,18 +769,18 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 
       <form class="form" id="form" novalidate>
         <fieldset>
-          <legend>Service</legend>
-          <div class="chips" id="chips">
-            <button type="button" class="chip" aria-pressed="true">Market and economic research</button>
-            <button type="button" class="chip" aria-pressed="false">Enhanced due diligence</button>
-            <button type="button" class="chip" aria-pressed="false">Basic due diligence</button>
-            <button type="button" class="chip" aria-pressed="false">Analytical briefs</button>
-            <button type="button" class="chip" aria-pressed="false">Legal and regulatory advisory</button>
-            <button type="button" class="chip" aria-pressed="false">Real estate advisory</button>
-            <button type="button" class="chip" aria-pressed="false">Operational research and MEAL</button>
-            <button type="button" class="chip" aria-pressed="false">Oral consultations</button>
-            <button type="button" class="chip" aria-pressed="false">Training</button>
-            <button type="button" class="chip" aria-pressed="false">Other</button>
+          <legend id="svc-legend">Service</legend>
+          <div class="chips" id="chips" role="radiogroup" aria-labelledby="svc-legend">
+            <button type="button" class="chip" role="radio" aria-checked="false">Market and economic research</button>
+            <button type="button" class="chip" role="radio" aria-checked="false">Enhanced due diligence</button>
+            <button type="button" class="chip" role="radio" aria-checked="false">Basic due diligence</button>
+            <button type="button" class="chip" role="radio" aria-checked="false">Analytical briefs</button>
+            <button type="button" class="chip" role="radio" aria-checked="false">Legal and regulatory advisory</button>
+            <button type="button" class="chip" role="radio" aria-checked="false">Real estate advisory</button>
+            <button type="button" class="chip" role="radio" aria-checked="false">Operational research and MEAL</button>
+            <button type="button" class="chip" role="radio" aria-checked="false">Oral consultations</button>
+            <button type="button" class="chip" role="radio" aria-checked="false">Training</button>
+            <button type="button" class="chip" role="radio" aria-checked="false">Other</button>
           </div>
         </fieldset>
         <div class="field">
@@ -828,6 +850,20 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
   }
+  /* ---------- small-screen menu ---------- */
+  const menuBtn = $('.menu'), mnav = $('#mnav');
+  const setMenu = open => {
+    mnav.hidden = !open; menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    const icon = menuBtn.querySelector('.ph'); if (icon) icon.className = 'ph ' + (open ? 'ph-x' : 'ph-list');
+    if (open) mnav.querySelector('a').focus();
+  };
+  menuBtn.addEventListener('click', () => setMenu(mnav.hidden));
+  mnav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !mnav.hidden) { setMenu(false); menuBtn.focus(); } });
+  document.addEventListener('pointerdown', e => { if (!mnav.hidden && !mnav.contains(e.target) && !menuBtn.contains(e.target)) setMenu(false); });
+  matchMedia('(min-width:1101px)').addEventListener('change', e => { if (e.matches) setMenu(false); });
+
   $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
     const id = a.getAttribute('href');
     if (id.length < 2) { e.preventDefault(); return; }
@@ -835,6 +871,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     e.preventDefault();
     if (lenis) lenis.scrollTo(t, { offset: id === '#top' ? 0 : -96 });
     else t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+    if (id === '#main') t.focus({ preventScroll: true });   // skip link: move keyboard focus past the nav
   }));
 
   /* ---------- reveal on enter ---------- */
@@ -904,8 +941,18 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   }));
 
   /* ---------- inquiry form (preview only) ---------- */
+  /* service choice: a radio group with no default, so a skipped choice is not filed under the first service */
   const chips = $$('#chips .chip');
-  chips.forEach(c => c.addEventListener('click', () => chips.forEach(x => x.setAttribute('aria-pressed', String(x === c)))));
+  const pick = (c, focus) => { chips.forEach(x => { x.setAttribute('aria-checked', String(x === c)); x.tabIndex = x === c ? 0 : -1; }); if (focus) c.focus(); };
+  const resetChips = () => chips.forEach((x, i) => { x.setAttribute('aria-checked', 'false'); x.tabIndex = i ? -1 : 0; });
+  resetChips();
+  chips.forEach((c, i) => {
+    c.addEventListener('click', () => pick(c));
+    c.addEventListener('keydown', e => {
+      const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (step) { e.preventDefault(); pick(chips[(i + step + chips.length) % chips.length], true); }
+    });
+  });
   const form = $('#form'), done = $('#done'), email = $('#email'), err = $('#email-err');
   const valid = () => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim());
   email.addEventListener('input', () => { if (valid()) { err.hidden = true; email.removeAttribute('aria-invalid'); } });
@@ -916,7 +963,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     send.disabled = true; send.setAttribute('aria-busy', 'true'); label.textContent = 'Sending ';
     setTimeout(() => { send.disabled = false; send.removeAttribute('aria-busy'); label.textContent = 'Send inquiry '; form.hidden = true; done.hidden = false; done.focus(); }, 700);
   });
-  $('#again').addEventListener('click', () => { form.reset(); done.hidden = true; form.hidden = false; email.focus(); });
+  $('#again').addEventListener('click', () => { form.reset(); resetChips(); done.hidden = true; form.hidden = false; email.focus(); });
   /* ---------- hero: the inquiry starts here, then continues in the form below ---------- */
   const starter = $('#starter'), sEmail = $('#starter-email'), sErr = $('#starter-err');
   const okMail = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
@@ -1088,6 +1135,9 @@ if (MODE === 'hover') { seg.hidden = true; coord.hidden = false; host.setAttribu
 const flat = () => {
   const old = $('.iso-gl'), cv = document.createElement('canvas'); cv.className = 'iso-gl'; cv.setAttribute('aria-hidden', 'true'); old.replaceWith(cv);
   seg.hidden = true; track.classList.remove('is-pinned');   // nothing to travel through without the camera
+  /* the painted map is a picture: no tab stop, and no promise of arrow-key stepping it cannot keep */
+  host.removeAttribute('tabindex'); host.setAttribute('role', 'img');
+  host.setAttribute('aria-label', MODE === 'hover' ? 'Block map of Syria with its terrain.' : 'Block map of Syria. Column height shows population by governorate.');
   const paint = () => {
     const w = host.clientWidth, h = host.clientHeight, d = Math.min(devicePixelRatio || 1, 2), ctx = cv.getContext('2d');
     if (!w || !ctx) return;
