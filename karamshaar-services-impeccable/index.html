@@ -102,6 +102,8 @@ p{text-wrap:pretty}
 .nav::after{height:150px;background:linear-gradient(180deg,rgba(8,16,34,.62) 0,rgba(8,16,34,.34) 45%,rgba(8,16,34,0) 100%)}
 .nav.is-scrolled::after{background:linear-gradient(180deg,rgba(8,16,34,.78) 0,rgba(8,16,34,.46) 45%,rgba(8,16,34,0) 100%)}
 .brand svg{height:30px;width:77px}
+.lb{transform-box:fill-box;transform-origin:100% 50%}
+.lb1{transform:scaleX(var(--s1,1))}.lb2{transform:scaleX(var(--s2,1))}.lb3{transform:scaleX(var(--s3,1))}.lb4{transform:scaleX(var(--s4,1))}
 .nav-links a{color:rgba(226,233,246,.72)}
 .nav-links a:hover{color:#fff;background:rgba(255,255,255,.07)}
 .nav-links a[aria-current]{color:#fff}
@@ -474,6 +476,15 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .seg-thumb,.cover,.bimg i{transition:none}
   .swap{animation:none}
 }
+/* header on phones: flush to the top so the veil starts at the screen edge, a shorter blur, menu button kept in view */
+@media (max-width:1100px){
+  .nav,.nav.is-scrolled{top:0;height:64px;width:calc(100% - 32px);max-width:calc(100vw - 32px);padding:0;gap:12px}
+  .nav::before{height:88px;-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);-webkit-mask-image:linear-gradient(180deg,#000 0,#000 30%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 30%,transparent 100%)}
+  .nav::after{height:100px}
+  .nav-end{gap:4px;margin-right:-8px}
+  .nav .btn-sm{height:38px;padding:0 16px;font-size:.88rem}
+  .menu{flex:none;color:#fff;font-size:1.5rem}
+}
 </style>
 </head>
 
@@ -484,10 +495,10 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 <!-- Brand mark: bars and wordmark paths taken from the live site's logo, recoloured for a dark field -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="ks-logo" viewBox="0 0 1430 558">
-    <path fill="#7f9dd0" d="M438.1 246.4H23.7c-10-.1-18.1-8.3-18-18.3v-60.6c0-10 8-18.2 18-18.3h414.4c10 .1 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
-    <path fill="#f1ead7" d="M435.8 107.5H86.1c-10-.1-18.1-8.3-18-18.3V28.6c0-10 8-18.2 18-18.3h349.7c10 0 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
-    <path fill="#f1ead7" d="M436.7 383.3H187.3c-10-.1-18-8.3-17.9-18.3v-60.6c0-10 7.9-18.2 17.9-18.3h249.4c10 .1 18 8.3 17.9 18.3V365c0 10-7.9 18.2-17.9 18.3"/>
-    <path fill="#7f9dd0" d="M435.8 515.8H137.9c-10 0-18.1-8.3-18-18.3v-60.6c0-10 8-18.2 18-18.3h297.9c10 0 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
+    <path class="lb lb1" fill="#7f9dd0" d="M438.1 246.4H23.7c-10-.1-18.1-8.3-18-18.3v-60.6c0-10 8-18.2 18-18.3h414.4c10 .1 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
+    <path class="lb lb2" fill="#f1ead7" d="M435.8 107.5H86.1c-10-.1-18.1-8.3-18-18.3V28.6c0-10 8-18.2 18-18.3h349.7c10 0 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
+    <path class="lb lb3" fill="#f1ead7" d="M436.7 383.3H187.3c-10-.1-18-8.3-17.9-18.3v-60.6c0-10 7.9-18.2 17.9-18.3h249.4c10 .1 18 8.3 17.9 18.3V365c0 10-7.9 18.2-17.9 18.3"/>
+    <path class="lb lb4" fill="#7f9dd0" d="M435.8 515.8H137.9c-10 0-18.1-8.3-18-18.3v-60.6c0-10 8-18.2 18-18.3h297.9c10 0 18.1 8.3 18 18.3v60.6c0 10-8 18.2-18 18.3"/>
     <g fill="#f1ead7">
       <path d="m605.2 92.5 67.2-82.9h-43.9L574 77.8h-12.2V9.5h-36V183h36v-73.7h12.4l54.3 73.7h46z"/>
       <path d="M816.3 183h36.9L789.3 9.5h-44L681.4 183h36.9l12.6-35.7h72.9l12.6 35.7Zm-74.9-65.9 25.9-73.6 25.8 73.6z"/>
@@ -923,6 +934,30 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
     if (en.isIntersecting) { en.target.classList.add('in'); rio.unobserve(en.target); }
   }), { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
   $$('.rv').forEach(el => rio.observe(el));
+
+  /* ---------- logo: on hover the four bars re-measure themselves like a chart rendering ----------
+     Each bar keeps its right edge fixed and eases its length toward a new random value
+     every few hundred ms; on leave they ease back to the true logo. */
+  if (!reduce) $$('.brand').forEach(brand => {
+    const svg = brand.querySelector('svg');
+    const cur = [1, 1, 1, 1], goal = [1, 1, 1, 1], next = [0, 0, 0, 0], gap = [380, 520, 440, 600];
+    let hot = false, raf = 0;
+    const pick = i => .3 + Math.random() * .75;
+    const tick = t => {
+      let moving = false;
+      for (let i = 0; i < 4; i++) {
+        if (hot && t > next[i]) { goal[i] = Math.min(1, pick(i)); next[i] = t + gap[i] * (.7 + Math.random() * .6); }
+        cur[i] += (goal[i] - cur[i]) * .14;
+        if (Math.abs(goal[i] - cur[i]) > .002) moving = true; else cur[i] = goal[i];
+        svg.style.setProperty('--s' + (i + 1), cur[i].toFixed(4));
+      }
+      raf = hot || moving ? requestAnimationFrame(tick) : 0;
+    };
+    const go = on => { hot = on; if (!on) goal.fill(1); if (!raf) raf = requestAnimationFrame(tick); };
+    brand.addEventListener('pointerenter', () => go(true));
+    brand.addEventListener('pointerleave', () => go(false));
+    brand.addEventListener('focus', () => go(true)); brand.addEventListener('blur', () => go(false));
+  });
 
   /* ---------- nav state ---------- */
   new IntersectionObserver(([en]) => $('#nav').classList.toggle('is-scrolled', !en.isIntersecting)).observe($('#top-sentinel'));
