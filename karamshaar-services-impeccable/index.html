@@ -160,8 +160,8 @@ p{text-wrap:pretty}
 .statement p{position:relative}
 .statement p::before,.statement p::after{content:"";position:absolute;left:calc(-1 * clamp(20px,2.6vw,36px));top:.18em;bottom:.18em;width:2px;border-radius:2px}
 .statement p::before{background:var(--line)}
-.statement p::after{background:var(--cream);transform:scaleY(0);transform-origin:top;transition:transform .9s var(--ease)}
-.statement p.is-focus::after{transform:scaleY(1)}
+.statement p::after{background:var(--cream);transform:scaleY(0);transform-origin:bottom;transition:transform .9s var(--ease)}
+.statement p.is-focus::after{transform:scaleY(1);transform-origin:top}
 
 /* ---------- practice (sticky stack) ---------- */
 .practice{padding:0 0 clamp(110px,13vw,180px)}
