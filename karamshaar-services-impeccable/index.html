@@ -88,6 +88,8 @@ p{text-wrap:pretty}
 /* ---------- reveal (fora-style rise) ---------- */
 .js .rv{opacity:0;transform:translate3d(0,var(--y,48px),0);transition:opacity 1.2s var(--spring) var(--d,0s),transform 1.2s var(--spring) var(--d,0s)}
 .js .rv.in{opacity:1;transform:none}
+/* stacked cards stay opaque while they reveal, so the card beneath never shows through */
+.js .pcard.rv{opacity:1;transition:transform 1.2s var(--spring) var(--d,0s)}
 
 /* ---------- nav ---------- */
 .nav{position:fixed;z-index:50;top:16px;left:0;right:0;margin-inline:auto;width:min(1280px,100% - 32px);height:66px;padding:0 12px 0 22px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-radius:var(--r-card);background:rgba(13,25,48,.96);border:1px solid var(--line);animation:navIn 1s cubic-bezier(.44,0,.56,1) both;transition:background-color .25s var(--ease)}
