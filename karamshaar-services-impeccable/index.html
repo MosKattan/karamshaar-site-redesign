@@ -162,6 +162,8 @@ p{text-wrap:pretty}
 .statement p::before{background:var(--line)}
 .statement p::after{background:var(--cream);transform:scaleY(0);transform-origin:bottom;transition:transform .9s var(--ease)}
 .statement p.is-focus::after{transform:scaleY(1);transform-origin:top}
+.statement.is-up p::after{transform-origin:top}
+.statement.is-up p.is-focus::after{transform-origin:bottom}
 
 /* ---------- practice (sticky stack) ---------- */
 .practice{padding:0 0 clamp(110px,13vw,180px)}
@@ -914,12 +916,14 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
      the light once its top has risen past the reading line, halfway down the screen. */
   const paras = $$('.statement p');
   if (!reduce) {
-    let queued = false;
+    let queued = false, cur = -1;
     const light = () => {
       queued = false;
       const line = innerHeight * .5;
       let focus = paras[0];
       for (const p of paras) if (p.getBoundingClientRect().top < line) focus = p;
+      const i = paras.indexOf(focus);
+      if (i !== cur) { if (cur >= 0) paras[0].closest('.statement').classList.toggle('is-up', i < cur); cur = i; }
       paras.forEach(p => p.classList.toggle('is-focus', p === focus));
     };
     const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(light); } };
