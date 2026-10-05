@@ -463,6 +463,15 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .map-readout{flex-direction:column;align-items:flex-start;gap:12px}
   .map-note{text-align:left}
   .starter{margin-top:32px}
+  /* phones: headline and lede, then the map, then the inquiry form, so the map sits above the button.
+     The grid and copy wrappers drop out of the layout and their children become flex items of .hero. */
+  .hero-grid,.hero-copy{display:contents}
+  .hero-copy>h1,.hero-copy>.lede,.hero-copy>.starter,.hero-foot{width:calc(100% - 32px);margin-inline:auto}
+  .hero-copy>h1{order:1}
+  .hero-copy>.lede{order:2;max-width:none}
+  .iso{order:3}
+  .hero-foot{order:4;margin-top:16px}
+  .hero-copy>.starter{order:5;max-width:none;margin-top:28px}
   .starter-row{flex-direction:column;border-radius:22px;padding:8px}
   .starter input{flex:none;width:100%}
   .starter .btn{width:100%}
@@ -1457,14 +1466,14 @@ const measure = () => {
 };
 new ResizeObserver(measure).observe(host); measure();
 const BLEED = .12;
-const ZOOM = { wide: 1, contained: 1.3 };   // how far past the fitted size the model is drawn; the extra runs off the right and bottom edges   // on the wide layout the model fills the stage height, and up to this share of its width (the north-east tip) may run off the right edge
+const ZOOM = { wide: 1, contained: .94 };   // how far past the fitted size the model is drawn; the extra runs off the right and bottom edges   // on the wide layout the model fills the stage height, and up to this share of its width (the north-east tip) may run off the right edge
 const view = (w, h) => {   // s is column units per px
   if (!ST || !ST.w) measure();
   const span = bx1 - bx0 + .6, open = 1;
   const head = (MODE === 'hover' ? 46 : 84) * span / ST.w;   // room above the model for the callout
   const s = Math.max(span * open / ST.w, (by1 - by0 + head + .3) / ST.h) / (wide.matches ? ZOOM.wide : ZOOM.contained);
-  const left = wide.matches ? ST.x : ST.x + w * .03;   // the west coast stays in view (wide: tucked just under the end of the copy); the north-east runs off the right edge
-  const drop = h * (wide.matches ? -.035 : .02);   // wide: lifted so the tallest blocks rise toward the nav; the south still runs off the bottom at this size
+  const left = wide.matches ? ST.x : (w - span / s) / 2;   // the west coast stays in view (wide: tucked just under the end of the copy); the north-east runs off the right edge
+  const drop = wide.matches ? h * -.035 : 0;   // wide: lifted so the tallest blocks rise toward the nav; the south still runs off the bottom at this size
   return { s, cx: bx0 - .3 - (left - w / 2) * s, cy: (by0 + by1 + head) / 2 + (ST.y + ST.h / 2 - h / 2 + drop) * s };
 };
 
