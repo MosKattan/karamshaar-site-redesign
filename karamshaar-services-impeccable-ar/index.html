@@ -387,15 +387,17 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 .iso-call{position:absolute;left:0;top:0;pointer-events:none;opacity:0;transition:opacity .25s var(--ease)}
 .iso-call.on{opacity:1}
 .iso-call.away{opacity:0}
-.iso-call i{position:absolute;left:0;bottom:0;width:1px;height:88px;background:linear-gradient(180deg,var(--cream),rgba(241,234,215,.2));transform-origin:bottom}
-.iso-call p{position:absolute;left:12px;bottom:40px;white-space:nowrap;line-height:1.3;text-shadow:0 1px 14px rgba(6,12,28,.9),0 0 3px rgba(6,12,28,.7)}
-.iso-call[data-side="l"] p{left:auto;right:12px;text-align:right}
-/* near the top of the hero the callout hangs below its block, so it never runs under the nav */
-.iso-call[data-low] i{bottom:auto;top:0;transform-origin:top;background:linear-gradient(0deg,var(--cream),rgba(241,234,215,.2))}
-.iso-call[data-low] p{bottom:auto;top:46px;padding:8px 12px 9px;border-radius:12px;background:rgba(13,25,48,.88);border:1px solid var(--line);text-shadow:none;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.iso-call[data-low] i{height:48px}
-.iso-call b{display:block;font-family:var(--serif);font-weight:400;font-size:1.7rem;line-height:1.12;letter-spacing:-.01em;color:var(--cream)}
-.iso-call span{font-size:.88rem;letter-spacing:.03em;font-variant-numeric:tabular-nums;color:var(--mist)}
+/* the label is bare type on a hairline that ends in a dot on the block: no box, small, the name over a quiet figure */
+.iso-call i{position:absolute;left:0;bottom:0;width:1px;height:54px;background:linear-gradient(180deg,rgba(241,234,215,0),rgba(241,234,215,.8));transform-origin:bottom}
+.iso-call i::after{content:"";position:absolute;left:-2.5px;bottom:-2.5px;width:6px;height:6px;border-radius:50%;background:var(--cream)}
+.iso-call p{position:absolute;left:11px;bottom:30px;white-space:nowrap;line-height:1.25;text-shadow:0 1px 12px rgba(6,12,28,.9),0 0 3px rgba(6,12,28,.7)}
+.iso-call[data-side="l"] p{left:auto;right:11px;text-align:right}
+/* near the top of the hero the label hangs below its block, so it never runs under the nav */
+.iso-call[data-low] i{bottom:auto;top:0;transform-origin:top;height:38px;background:linear-gradient(0deg,rgba(241,234,215,0),rgba(241,234,215,.8))}
+.iso-call[data-low] i::after{bottom:auto;top:-2.5px}
+.iso-call[data-low] p{bottom:auto;top:24px}
+.iso-call b{display:block;font-family:var(--serif);font-weight:400;font-size:1.1rem;line-height:1.15;letter-spacing:0;color:var(--cream)}
+.iso-call span{display:block;margin-top:2px;font-size:.72rem;letter-spacing:.03em;font-variant-numeric:tabular-nums;color:var(--mist)}
 .iso-call.on i{animation:callLine .6s var(--spring) both}
 .iso-call.on p{animation:callIn .7s var(--spring) both}
 @keyframes callLine{from{transform:scaleY(0)}}
@@ -465,20 +467,20 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .starter{max-width:420px}
   .iso{order:2;position:relative;inset:auto;width:min(100% - 48px,640px);margin:40px auto 0;aspect-ratio:1.34}
   .iso::before{content:"";position:absolute;z-index:-1;left:4%;right:10%;bottom:-3%;height:34%;background:radial-gradient(closest-side,rgba(4,9,22,.62),rgba(4,9,22,0));pointer-events:none}
-  .iso-call i{height:66px}
-  .iso-call p{bottom:26px}
-  .iso-call b{font-size:1.36rem}
-  .iso-call span{font-size:.8rem}
+  .iso-call i{height:46px}
+  .iso-call p{bottom:24px}
+  .iso-call b{font-size:1.02rem}
+  .iso-call span{font-size:.68rem}
   .hero-foot{order:3;margin-top:16px}
   .map-readout{justify-content:space-between}
 }
 @media (max-width:767px){
   .hero{padding:112px 0 44px}
   .iso{width:calc(100% - 32px);margin-top:32px}
-  .iso-call i{height:50px}
-  .iso-call p{bottom:16px}
-  .iso-call b{font-size:1.12rem}
-  .iso-call span{font-size:.74rem}
+  .iso-call i{height:40px}
+  .iso-call p{bottom:20px}
+  .iso-call b{font-size:.95rem}
+  .iso-call span{font-size:.66rem}
   .map-readout{flex-direction:column;align-items:flex-start;gap:12px}
   .map-note{text-align:left}
   .starter{margin-top:32px}
@@ -676,10 +678,10 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 [data-theme="light"] .starter input::placeholder{color:rgba(22,38,75,.68)}
 [data-theme="light"] .starter-err{color:#9c2a3d}
 /* map callouts and key: navy on cream, a cream halo instead of a dark one */
-[data-theme="light"] .iso-call i{background:linear-gradient(180deg,var(--c-blue),rgba(33,58,95,.15))}
-[data-theme="light"] .iso-call[data-low] i{background:linear-gradient(0deg,var(--c-blue),rgba(33,58,95,.15))}
-[data-theme="light"] .iso-call p{padding:7px 12px 8px;border-radius:12px;background:rgba(251,246,236,.92);box-shadow:0 10px 26px -14px rgba(70,52,20,.45);text-shadow:none}
-[data-theme="light"] .iso-call[data-low] p{background:rgba(251,246,236,.92);text-shadow:none}
+[data-theme="light"] .iso-call i{background:linear-gradient(180deg,rgba(33,58,95,0),rgba(33,58,95,.8))}
+[data-theme="light"] .iso-call[data-low] i{background:linear-gradient(0deg,rgba(33,58,95,0),rgba(33,58,95,.8))}
+[data-theme="light"] .iso-call i::after{background:var(--c-blue)}
+[data-theme="light"] .iso-call p,[data-theme="light"] .iso-call[data-low] p{text-shadow:0 0 14px rgba(244,236,220,1),0 0 6px rgba(244,236,220,.95),0 0 2px rgba(244,236,220,.9)}
 [data-theme="light"] .iso-call b,[data-theme="light"] .map-coord b{color:var(--c-blue-ink)}
 [data-theme="light"] .iso-call span,[data-theme="light"] .map-note b{color:var(--steel-2)}
 [data-theme="light"] .map-note{text-shadow:none}
