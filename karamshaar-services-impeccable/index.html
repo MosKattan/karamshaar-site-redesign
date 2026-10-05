@@ -278,13 +278,13 @@ p{text-wrap:pretty}
 .proof::before{content:"";position:absolute;z-index:-1;left:50%;translate:-50% 0;top:270px;width:min(1100px,120%);height:900px;clip-path:polygon(50% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(205,189,148,.3),rgba(205,189,148,.02) 75%)}
 .proof h2 .dim{display:inline}
 .covers{display:flex;justify-content:center;align-items:flex-end;margin:clamp(56px,7vw,96px) auto 0;padding-inline:12px}
-.cover{flex:none;width:clamp(130px,27vw,360px);border-radius:6px;overflow:hidden;box-shadow:0 34px 70px -28px rgba(3,9,22,.9),0 0 0 1px rgba(255,255,255,.06);transition:rotate .9s var(--spring),translate .9s var(--spring)}
+.cover{flex:none;width:clamp(150px,23vw,300px);border-radius:6px;overflow:hidden;box-shadow:0 34px 70px -28px rgba(3,9,22,.9),0 0 0 1px rgba(255,255,255,.06);transition:rotate .9s var(--spring),translate .9s var(--spring)}
 .cover img{width:100%;height:auto}
-.cover:nth-child(1){rotate:-6deg;translate:4% 6%;z-index:1}
-.cover:nth-child(2){width:clamp(160px,31vw,420px);z-index:2}
-.cover:nth-child(3){rotate:6deg;translate:-4% 6%;z-index:1}
-.covers:hover .cover:nth-child(1){rotate:-3deg;translate:0 2%}
-.covers:hover .cover:nth-child(3){rotate:3deg;translate:0 2%}
+.cover:nth-child(1){rotate:-7deg;translate:9% 6%;z-index:1}
+.cover:nth-child(2){width:clamp(170px,26vw,340px);z-index:2}
+.cover:nth-child(3){rotate:7deg;translate:-9% 6%;z-index:1}
+.covers:hover .cover:nth-child(1){rotate:-3deg;translate:-4% 2%}
+.covers:hover .cover:nth-child(3){rotate:3deg;translate:4% 2%}
 .covers:hover .cover:nth-child(2){translate:0 -3%}
 .proof-foot{margin-top:clamp(64px,7vw,96px);display:flex;flex-direction:column;align-items:center;gap:26px}
 .proof-foot p{max-width:33em;color:var(--muted);font-weight:400;font-size:1.1rem}
@@ -487,7 +487,6 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .nav .btn-sm{height:38px;padding:0 16px;font-size:.88rem}
   .menu{flex:none;color:#fff;font-size:1.5rem}
 }
-@media (max-width:767px){.cover:nth-child(1){translate:16% 6%}.cover:nth-child(3){translate:-16% 6%}.covers:hover .cover:nth-child(1){translate:10% 2%}.covers:hover .cover:nth-child(3){translate:-10% 2%}}
 </style>
 </head>
 
@@ -798,9 +797,9 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   <div class="wrap">
     <h2 class="rv">Judge the work <span class="dim">before you commission it.</span></h2>
     <div class="covers rv" style="--y:72px">
-      <figure class="cover"><img src="assets/pub-investor-guides.webp" alt="Cover of Doing Business in Syria: Investor Guides, June 2026, showing the Investor's Handbook" loading="lazy" width="1200" height="739"></figure>
-      <figure class="cover"><img src="assets/pub-kas-report.webp" alt="Cover of State-Building by Decree, a Konrad-Adenauer-Stiftung report, July 2026" loading="lazy" width="1200" height="739"></figure>
-      <figure class="cover"><img src="assets/pub-banking-sanctions.webp" alt="Cover of Implications and policy responses for banking sector sanctions on Syria, July 2025" loading="lazy" width="662" height="408"></figure>
+      <figure class="cover"><img src="assets/cover-brief.webp" alt="Cover of a thematic brief on investor protection in Syria, June 2026" loading="lazy" width="1500" height="2000"></figure>
+      <figure class="cover"><img src="assets/cover-sif.webp" alt="Cover of Syria in Figures, July 2026, showing a relief map of Syria" loading="lazy" width="1597" height="2000"></figure>
+      <figure class="cover"><img src="assets/cover-map.webp" alt="Syria in Figures cover with a map of Syrian cities" loading="lazy" width="1515" height="2000"></figure>
     </div>
     <div class="proof-foot rv">
       <p>Syria in Figures and our thematic briefs show how we handle data, context, and argument.</p>
