@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/tools/git-sync.mjs\" pull",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tools/git-sync.mjs\" pull --merge",
             "timeout": 60,
             "statusMessage": "Checking GitHub for changes"
           }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/tools/git-sync.mjs\" pull --throttle=120",
+            "command": "node \"$CLAUDE_PROJECT_DIR/tools/git-sync.mjs\" pull --merge --throttle=120",
             "timeout": 60
           }
         ]
