@@ -2,15 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "karamshaar-services",
+      "name": "site",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5178", "--directory", "karamshaar-services"],
-      "port": 5178
-    },
-    {
-      "name": "karamshaar-impeccable",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5179", "--directory", "karamshaar-services-impeccable"],
+      "runtimeArgs": ["-m", "http.server", "5179", "--directory", "site"],
       "port": 5179
     }
   ]

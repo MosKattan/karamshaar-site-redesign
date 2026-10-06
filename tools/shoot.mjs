@@ -35,7 +35,7 @@ try {
   await send('Page.enable'); await send('Runtime.enable');
   if (process.env.RM) await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   if (process.env.BLOCK) { await send('Network.enable'); await send('Network.setBlockedURLs', { urls: [process.env.BLOCK] }); }
-  await send('Page.navigate', { url: 'http://localhost:' + (process.env.PORT || 5178) + '/' + path });
+  await send('Page.navigate', { url: 'http://localhost:' + (process.env.PORT || 5179) + '/' + path });
   await sleep(4200);
   const ev = async expr => (await send('Runtime.evaluate', { expression: expr, returnByValue: true, awaitPromise: true })).result.value;
   const docH = await ev('document.documentElement.scrollHeight');
