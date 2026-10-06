@@ -30,7 +30,7 @@ try {
   ws.addEventListener('message', e => { const m = JSON.parse(e.data); if (m.id && pending.has(m.id)) { const p = pending.get(m.id); pending.delete(m.id); m.error ? p.rej(new Error(m.error.message)) : p.res(m.result); }
     if (m.method === 'Runtime.exceptionThrown') console.log('PAGE ERROR', m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text);
     if (m.method === 'Runtime.consoleAPICalled' && ['error', 'warning'].includes(m.params.type)) console.log('PAGE ' + m.params.type, m.params.args.map(a => a.value ?? a.description).join(' ')); });
-  await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 700 });
+  await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: +(process.env.DPR || 1), mobile: width < 700 });   // env DPR=2 shoots as a high-resolution screen
   if (width < 700) await send('Emulation.setTouchEmulationEnabled', { enabled: true });
   await send('Page.enable'); await send('Runtime.enable');
   if (process.env.RM) await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });

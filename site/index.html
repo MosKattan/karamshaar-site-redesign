@@ -329,7 +329,9 @@ html[dir=rtl] .stat{--pop-origin:100% 50%}
 .b-e::after{content:"";position:absolute;z-index:-1;right:18px;top:18px;width:210px;height:150px;background:radial-gradient(circle,rgba(197,210,232,.55) 1.6px,transparent 2.1px) 0 0/15px 15px;-webkit-mask-image:linear-gradient(215deg,#000,transparent 66%);mask-image:linear-gradient(215deg,#000,transparent 66%)}
 .b-f{background:var(--cream);border-color:transparent;color:var(--n950)}
 .b-f p{color:rgba(13,25,48,.74)}
-.b-f .bimg{min-height:170px;background-image:url(assets/brochure.webp);background-size:300% auto;background-position:93% 71%}
+/* brochure.webp is the part of the firm's brochure page that this card shows, with room to spare: 614 by 600 px cut from the 1414 by 2000 page at 744, 994.
+   The size and position below draw it exactly as the whole page was drawn at 300% and 93% 71%. */
+.b-f .bimg{min-height:170px;background-image:url(assets/brochure.webp);background-size:calc(300% * 614 / 1414) auto;background-position:93% 71%}
 .b-f .bbody{padding:24px}
 .b-f .bmeta{color:#35507f}
 
@@ -1324,9 +1326,9 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
   <div class="wrap">
     <h2 class="rv">Judge the work <span class="dim">before you commission it.</span></h2>
     <div class="covers rv" style="--y:72px">
-      <figure class="cover"><img src="assets/cover-brief.webp" alt="Cover of a thematic brief on investor protection in Syria, June 2026" loading="lazy" width="1500" height="2000"></figure>
-      <figure class="cover"><img src="assets/cover-sif.webp" alt="Cover of Syria in Figures, July 2026, showing a relief map of Syria" loading="lazy" width="1597" height="2000"></figure>
-      <figure class="cover"><img src="assets/cover-map.webp" alt="Syria in Figures cover with a map of Syrian cities" loading="lazy" width="1515" height="2000"></figure>
+      <figure class="cover"><img src="assets/cover-brief.webp" alt="Cover of a thematic brief on investor protection in Syria, June 2026" loading="lazy" decoding="async" width="810" height="1080"></figure>
+      <figure class="cover"><img src="assets/cover-sif.webp" alt="Cover of Syria in Figures, July 2026, showing a relief map of Syria" loading="lazy" decoding="async" width="800" height="1002"></figure>
+      <figure class="cover"><img src="assets/cover-map.webp" alt="Syria in Figures cover with a map of Syrian cities" loading="lazy" decoding="async" width="800" height="1056"></figure>
     </div>
     <div class="proof-foot rv">
       <p>Syria in Figures and our thematic briefs show how we handle data, context, and argument.</p>
