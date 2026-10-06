@@ -12,3 +12,6 @@ tools/shots/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Single-file export (re-create with tools/export-single.mjs)
+tools/export/
