@@ -315,7 +315,7 @@ html.framed,html.framed body{overscroll-behavior-y:none}
    Every client and donor at once, standing still. Four columns by kind of institution, on one baseline,
    each as tall as its count, so the wall steps up like the columns of the block map. The heading takes
    the space the short columns leave free. The names are in the markup; the script hangs each mark on its name. */
-.wall{--wall-face:var(--n900);--wall-lit:#1a3156;--wall-edge:rgba(241,234,215,.6);--wall-cap:rgba(241,234,215,.4);--wall-base:rgba(160,186,228,.38);--k:1;--mw:calc(118px*var(--k));
+.wall{--wall-face:var(--n900);--wall-lit:#274677;--wall-edge:rgba(241,234,215,.85);--wall-cap:rgba(241,234,215,.4);--wall-base:rgba(160,186,228,.38);--k:1;--mw:calc(118px*var(--k));
   position:relative;isolation:isolate;padding:clamp(100px,12vw,170px) 0 0;border-top:1px solid var(--line)}
 /* the wall's grid carried on behind it, drawn in the script (wide layouts only) */
 .wall-bg{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.6s var(--ease) .3s}
@@ -353,15 +353,20 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .wm{transition:opacity .35s var(--ease);mix-blend-mode:screen;filter:grayscale(1) invert(1) contrast(1.2) brightness(1.9) url(#wall-cream);opacity:.88}
 .wm.keep{filter:grayscale(1) contrast(4) url(#wall-cream)}
 .wm.soft{filter:grayscale(1) invert(1) contrast(4) url(#wall-cream)}   /* a two-colour panel: pushed to one solid tone so it reads as a mark, not a faded picture */
+/* the same file again, in its own colours, waiting under the single-colour mark. On navy its lightness is turned over and its
+   hue turned back, so a dark blue mark becomes a light blue one and the white ground drops out; on cream it is the file as it is */
+.wc{mix-blend-mode:screen;filter:invert(1) hue-rotate(180deg) saturate(1.7);opacity:0;transition:opacity .35s var(--ease)}
+.wc.keep{filter:none}
 .wname{grid-column:2;font-size:.88rem;line-height:1.32;color:var(--lit);text-wrap:balance;transition:color .25s var(--ease)}
-/* under the pointer the whole rectangle lights as one: a brighter face inside a cream line, the mark and the name at full strength,
+/* under the pointer the whole rectangle lights as one: a brighter face inside a cream line, the mark in its own colours, the name at full strength,
    while its row of the grid behind comes to rest squared up to it */
 .wcell{position:relative;transition:background-color .35s var(--ease)}
 .wcell::after{content:"";position:absolute;inset:-1px 0 0;border:1px solid var(--wall-edge);pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
 @media (hover:hover){
   .wcell:hover{background:var(--wall-lit)}
   .wcell:hover::after{opacity:1}
-  .wcell:hover .wm{opacity:1}
+  .wcell:hover .wm{opacity:0}
+  .wcell:hover .wc{opacity:1}
   .wcell:hover .wname{color:var(--text)}
 }
 /* a name with no mark stands alone, set larger: the page without its script, or a logo that fails to load */
@@ -864,9 +869,10 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 [data-theme="light"] .rtrue{background:#fffdf7;box-shadow:0 0 0 1px rgba(22,38,75,.1),0 12px 24px -12px rgba(70,52,20,.5)}
 
 /* clients wall: paler faces on the cream field, marks in the page's navy ink, blue rules */
-[data-theme="light"] .wall{--wall-face:var(--c-raise);--wall-lit:#fffdf7;--wall-edge:rgba(33,58,95,.55);--wall-cap:rgba(22,38,75,.46);--wall-base:rgba(22,38,75,.32)}
+[data-theme="light"] .wall{--wall-face:var(--c-raise);--wall-lit:#fffefa;--wall-edge:rgba(33,58,95,.7);--wall-cap:rgba(22,38,75,.46);--wall-base:rgba(22,38,75,.32)}
 [data-theme="light"] .wm{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.4) brightness(1.14) url(#wall-ink);opacity:.86}
 [data-theme="light"] .wm.soft{filter:grayscale(1) contrast(4) url(#wall-ink)}
+[data-theme="light"] .wc{mix-blend-mode:multiply;filter:none}
 [data-theme="light"] .wm.dense{filter:grayscale(1) brightness(.8) contrast(4) url(#wall-ink)}
 [data-theme="light"] .wm.keep{filter:grayscale(1) invert(1) contrast(4) url(#wall-ink)}
 
@@ -1871,8 +1877,8 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
   }
 
   /* ---------- clients wall: the same organisations, standing still, one column per kind of institution ----------
-     The names and their columns are in the markup. This hangs a single-colour mark on each name.
-     The name is real text, so the image carries no alt. */
+     The names and their columns are in the markup. This hangs its mark on each name: twice, in the wall's single colour
+     and in the logo's own colours, which show under the pointer. The name is real text, so the images carry no alt. */
   const wall = $('#wall');
   if (wall) {
     const cols = $$('.wcol', wall), el = (tag, cls) => Object.assign(document.createElement(tag), { className: cls });
@@ -1889,12 +1895,13 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     LOGOS.forEach(([name, path, kind], i) => {
       const li = cellOf.get(name) || cellOf.get(tr(name)); if (!li) return;
       const [x, y, w, h, shape = 1, nudge = 1] = BOX[i], ratio = shape * w / h, width = 48 * nudge * ratio ** .55;   // equal visual weight: a wide wordmark gets length, an emblem gets height
-      const mark = el('span', 'wmark'), crop = el('span', 'wcrop'), mono = Object.assign(new Image(), { alt: '', loading: 'lazy', decoding: 'async' });
+      const mark = el('span', 'wmark'), crop = el('span', 'wcrop'), [mono, full] = [0, 1].map(() => Object.assign(new Image(), { alt: '', loading: 'lazy', decoding: 'async' }));
       for (const [k, v] of Object.entries({ w: width.toFixed(1) + 'px', h: (width / ratio).toFixed(1) + 'px', fx: x, fy: y, fw: w, fh: h })) mark.style.setProperty('--' + k, v);
       mono.className = 'wm' + (kind ? ' ' + kind : '');
       mono.onerror = () => li.classList.add('no-mark');
-      mono.src = U + path;
-      crop.append(mono); mark.append(crop);
+      full.className = 'wc' + (/keep/.test(kind) ? ' keep' : '');
+      mono.src = full.src = U + path;
+      crop.append(mono, full); mark.append(crop);
       li.prepend(mark); li.classList.remove('no-mark');
     });
     cols.forEach((c, ci) => {
