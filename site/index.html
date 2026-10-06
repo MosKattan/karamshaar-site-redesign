@@ -687,6 +687,8 @@ html[dir=rtl] .g2::after{right:auto;left:0;background:linear-gradient(270deg,tra
 html[dir=rtl] .g3::before{right:auto;left:28px;-webkit-mask-image:linear-gradient(145deg,#000,transparent 70%);mask-image:linear-gradient(145deg,#000,transparent 70%)}
 html[dir=rtl] .g4::before{right:auto;left:0;clip-path:polygon(0 0,0 100%,100% 100%);background:linear-gradient(160deg,color-mix(in srgb,var(--bar) 24%,transparent),transparent 70%)}
 html[dir=rtl] .formats::before{right:auto;left:-8%}
+html[dir=rtl] .b-d::before{left:auto;right:16%}
+html[dir=rtl] .b-d::after{background:linear-gradient(270deg,rgba(201,173,219,.05),rgba(201,173,219,.24))}
 html[dir=rtl] .b-e::after{right:auto;left:18px;-webkit-mask-image:linear-gradient(145deg,#000,transparent 66%);mask-image:linear-gradient(145deg,#000,transparent 66%)}
 html[dir=rtl] .b-b::before{right:auto;left:-14%}
 html[dir=rtl] .rate-feature::before{right:auto;left:-12%}
@@ -836,6 +838,7 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 [data-theme="light"] .pcard:nth-child(4){--bg:#f1e6d1!important}
 [data-theme="light"] .pcard-list li{border-top-color:rgba(22,38,75,.14)}
 [data-theme="light"] .pcard-geo{opacity:.42}
+[data-theme="light"] .b-d::before,[data-theme="light"] .b-d::after{opacity:.45}
 
 /* formats */
 [data-theme="light"] .formats{background:var(--c-deep)}
@@ -883,13 +886,6 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     radial-gradient(70% 45% at 92% 0%,rgba(112,136,168,.12),rgba(112,136,168,0) 72%),
     radial-gradient(75% 62% at 0% 100%,rgba(214,190,140,.34),rgba(214,190,140,0) 78%),
     linear-gradient(180deg,#f8f1e3 0%,#f5ecdb 45%,#f1e6d1 100%)}
-/* ---------- formats: one title size across the six cards; Due diligence shares the dot pattern with Operational research ---------- */
-.b-b h3{font-size:1.6rem;font-weight:500;line-height:1.16;letter-spacing:inherit}
-.b-d::before{display:none}
-.b-d::after{content:"";position:absolute;z-index:-1;right:18px;top:18px;left:auto;width:210px;height:150px;background:radial-gradient(circle,rgba(197,210,232,.5) 1.6px,transparent 2.1px) 0 0/15px 15px;-webkit-mask-image:linear-gradient(215deg,#000,transparent 66%);mask-image:linear-gradient(215deg,#000,transparent 66%)}
-html[dir=rtl] .b-d::after{right:auto;left:18px;-webkit-mask-image:linear-gradient(145deg,#000,transparent 66%);mask-image:linear-gradient(145deg,#000,transparent 66%)}
-@media (max-width:767px){.b-d::after{display:none}}
-[data-theme="light"] .b-d::after{background:radial-gradient(circle,rgba(33,58,95,.32) 1.6px,transparent 2.1px) 0 0/15px 15px}
 </style>
 </head>
 
