@@ -2207,8 +2207,8 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       glow += ((hot ? 1 : 0) - glow) * (reduce ? 1 : 1 - Math.exp(-dt * 7));
       if (Math.abs(glow - (hot ? 1 : 0)) > .004) settling = true;
       ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, W, H);
-      const light = day(), ink = light ? '33,58,95' : '197,210,232', lit = light ? '33,58,95' : '241,234,215', a = light ? .1 : .058;
-      const pop = light ? .9 : .78, soft = light ? 1 : .78;   // how strongly the coloured cells and the pointer's glow show. The night field is held back so it stays behind the wall
+      const light = day(), ink = light ? '33,58,95' : '197,210,232', lit = light ? '33,58,95' : '241,234,215', a = light ? .1 : .042;
+      const pop = light ? .9 : .5, soft = light ? 1 : .55;   // how strongly the coloured cells and the pointer's glow show. The night field is held back so it stays behind the wall
       const i0 = Math.floor((-x0 - pos) / cw) - 1, i1 = Math.ceil((W - x0 - pos) / cw) + 1;
 
       /* the lines: rows stand still on the wall's rows, columns travel with the field */
