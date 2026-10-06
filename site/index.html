@@ -346,8 +346,8 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .wm.soft{filter:grayscale(1) invert(1) contrast(4) url(#wall-cream)}   /* a two-colour panel: pushed to one solid tone so it reads as a mark, not a faded picture */
 .wname{grid-column:2;font-size:.88rem;line-height:1.32;color:var(--lit);text-wrap:balance;transition:color .25s var(--ease)}
 /* under the pointer the single-colour mark develops into the organisation's own logo, on a cream chip */
-.wtrue{position:absolute;inset:-7px -10px;overflow:hidden;border-radius:var(--r-in);background:var(--cream);box-shadow:0 12px 24px -12px rgba(4,9,22,.9);isolation:isolate;pointer-events:none;opacity:0;scale:.96;transition:opacity .22s var(--ease),scale .35s var(--spring)}
-.wfull{inset:7px 10px}
+.wtrue{position:absolute;inset:-6px;overflow:hidden;border-radius:var(--r-in);background:var(--cream);box-shadow:0 12px 24px -12px rgba(4,9,22,.9);isolation:isolate;pointer-events:none;opacity:0;scale:.96;transition:opacity .22s var(--ease),scale .35s var(--spring)}
+.wfull{inset:6px}
 .wtrue img{mix-blend-mode:multiply}
 @media (hover:hover){
   .wcell:hover .wtrue{opacity:1;scale:1}
