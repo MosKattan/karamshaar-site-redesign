@@ -214,10 +214,6 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .pcard-list{align-self:end}
 .pcard-list li{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:19px 0;border-top:1px solid rgba(200,215,240,.18);font-size:1.1rem}
 /* a small study under each title: hairline strokes, faint, in the manner of a notebook sketch. It takes the space the title and the paragraph leave free, so it never makes a card taller */
-.pcard-art{position:relative;flex:1 1 0;min-height:64px;max-height:132px;margin-inline-start:31px;color:color-mix(in srgb,var(--bar) 60%,currentColor);opacity:.5;pointer-events:none}
-.pcard-art svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:round;stroke-linejoin:round}
-.pcard-art svg *{vector-effect:non-scaling-stroke}
-.pcard-art .c{stroke-dasharray:2 3;opacity:.75}
 .pcard-geo{position:absolute;z-index:-1;inset:0;pointer-events:none}
 .pcard-geo::before,.pcard-geo::after{content:"";position:absolute}
 .g1::before{right:-6%;top:-10%;width:52%;height:130%;clip-path:polygon(50% 0,100% 100%,0 100%);background:linear-gradient(180deg,color-mix(in srgb,var(--bar) 26%,transparent),transparent 85%)}
@@ -445,7 +441,6 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 .foot-base a{text-decoration:none}
 
 /* ---------- Impeccable pass: working action, map key, legend swatches ---------- */
-.sw{flex:none;display:inline-block;width:12px;height:12px;border-radius:2px;background:var(--tint)}
 .starter{margin-top:32px;width:100%;max-width:392px}
 .starter label{display:block;margin-bottom:6px;font-size:.78rem;font-weight:500;letter-spacing:.02em;color:var(--muted)}
 .starter-row{display:flex;gap:6px;padding:4px;border-radius:999px;background:rgba(160,186,228,.1);box-shadow:inset 0 0 0 1px rgba(160,186,228,.3);transition:box-shadow .2s var(--ease)}
@@ -457,7 +452,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
 .btn:disabled{opacity:.62;cursor:progress}
 
 
-.pcard-title .sw{width:15px;height:15px;margin-top:.7em;border-radius:3px}
+.pcard-title .ico{flex:none;width:34px;height:34px;margin-top:.22em;color:var(--bar);fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .b-b h3{font-size:clamp(1.9rem,2.9vw,2.6rem);font-weight:400;line-height:1.08;letter-spacing:-.02em}
 .b-b::before{content:"";position:absolute;z-index:-1;right:-14%;top:-30%;width:62%;height:150%;clip-path:polygon(50% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(205,189,148,.2),transparent 80%)}
 
@@ -1024,8 +1019,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       <article class="pcard rv" style="--i:0;--bar:var(--lilac);--bg:#16294a">
         <span class="pcard-geo g1" aria-hidden="true"></span>
         <div class="pcard-main">
-          <div class="pcard-title"><i class="sw" style="--tint:var(--bar)"></i><h3>Market and sector assessments</h3></div>
-          <div class="pcard-art" aria-hidden="true"><svg viewBox="0 0 200 120" preserveAspectRatio="xMinYMid meet"><path d="M8 102H192"/><path d="M28 102V80h16v22M60 102V66h16v36M92 102V72h16v30M124 102V48h16v54M156 102V30h16v72"/><path class="c" d="M14 96L190 14"/><circle cx="164" cy="26" r="3.5"/><path d="M184 30v72M180 30h8M180 102h8"/><path d="M30 34h22M30 41h13"/></svg></div>
+          <div class="pcard-title"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><path d="M7 20v-6M12 20v-10M17 20v-4"/><path d="M5 9l4-3 3 2 6-5"/><path d="M15 3h3v3"/></svg><h3>Market and sector assessments</h3></div>
           <p>Where the economy stands, how a sector works, and whether an opportunity holds up. Built on primary and secondary data.</p>
         </div>
         <ul class="pcard-list">
@@ -1039,8 +1033,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       <article class="pcard rv" style="--i:1;--bar:var(--peri);--bg:#1d355d">
         <span class="pcard-geo g2" aria-hidden="true"></span>
         <div class="pcard-main">
-          <div class="pcard-title"><i class="sw" style="--tint:var(--bar)"></i><h3>Due diligence, compliance and sanctions</h3></div>
-          <div class="pcard-art" aria-hidden="true"><svg viewBox="0 0 200 120" preserveAspectRatio="xMinYMid meet"><path d="M22 12H82L98 28V108H22Z"/><path d="M82 12V28H98"/><path d="M34 42H84M34 54H88M34 66H76M34 78H86M34 90H64"/><circle cx="130" cy="70" r="26"/><path d="M149 89L174 114"/><circle class="c" cx="130" cy="70" r="33"/><path class="c" d="M130 26V114M88 70H172"/><path d="M119 70l8 8 14-17"/></svg></div>
+          <div class="pcard-title"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg><h3>Due diligence, compliance and sanctions</h3></div>
           <p>Background checks on individuals and entities inside and outside Syria, drawing on open sources, field interviews, and a wide local network.</p>
         </div>
         <ul class="pcard-list">
@@ -1054,8 +1047,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       <article class="pcard rv" style="--i:2;--bar:var(--sage);--bg:#264472">
         <span class="pcard-geo g3" aria-hidden="true"></span>
         <div class="pcard-main">
-          <div class="pcard-title"><i class="sw" style="--tint:var(--bar)"></i><h3>Financial and banking advisory</h3></div>
-          <div class="pcard-art" aria-hidden="true"><svg viewBox="0 0 200 120" preserveAspectRatio="xMinYMid meet"><ellipse cx="50" cy="58" rx="28" ry="9"/><path d="M22 58V98M78 58V98"/><path d="M22 71a28 9 0 0 0 56 0M22 84.5a28 9 0 0 0 56 0M22 98a28 9 0 0 0 56 0"/><circle cx="138" cy="58" r="32"/><circle cx="138" cy="58" r="24"/><path class="c" d="M94 58H184M138 14V102"/><path d="M106 108H170M106 104v8M170 104v8"/><path d="M22 34h20M22 41h12"/></svg></div>
+          <div class="pcard-title"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5L12 4l9 5.5H3z"/><path d="M6 12.5v5M10 12.5v5M14 12.5v5M18 12.5v5"/><path d="M3 20h18"/></svg><h3>Financial and banking advisory</h3></div>
           <p>Analysis of financial and banking activity in Syria, supported by our exchange rate trackers and in-house data work.</p>
         </div>
         <ul class="pcard-list">
@@ -1068,8 +1060,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       <article class="pcard rv" style="--i:3;--bar:var(--ochre);--bg:#325688">
         <span class="pcard-geo g4" aria-hidden="true"></span>
         <div class="pcard-main">
-          <div class="pcard-title"><i class="sw" style="--tint:var(--bar)"></i><h3>Energy, reconstruction and development</h3></div>
-          <div class="pcard-art" aria-hidden="true"><svg viewBox="0 0 200 120" preserveAspectRatio="xMinYMid meet"><path d="M16 108H184"/><path d="M36 108A64 64 0 0 1 164 108M54 108A46 46 0 0 1 146 108"/><path d="M135.2 78.4L149 66.9M108 62.7L111.1 45M92 62.7L88.9 45M64.8 78.4L51 66.9"/><path d="M161.5 72.5L169.3 68M135.5 46.5L140 38.7M100 37V28M64.5 46.5L60 38.7M38.5 72.5L30.7 68"/><path class="c" d="M100 108L114.9 23.3M100 108L85.1 23.3"/><circle cx="100" cy="108" r="2.5"/></svg></div>
+          <div class="pcard-title"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/></svg><h3>Energy, reconstruction and development</h3></div>
           <p>Energy studies, aid and development work, and reconstruction, including real estate advisory and project development.</p>
         </div>
         <ul class="pcard-list">
@@ -1588,10 +1579,9 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       if (kept[a] == null) { if (!on || !AR[now]) continue; kept[a] = now; attrs.set(el, kept); }
       el.setAttribute(a, on ? AR[kept[a]] : kept[a]);
     }
-    /* the switch names the other language; the practice sketches hug the card's inline end */
+    /* the switch names the other language */
     for (const a of document.querySelectorAll('.lang, .mnav a[lang]')) a.lang = on ? 'en' : 'ar';
-    for (const s of document.querySelectorAll('.pcard-art svg')) s.setAttribute('preserveAspectRatio', on ? 'xMaxYMid meet' : 'xMinYMid meet');
-  };
+    for (const s of document.querySelectorAll('  };
   const set = lang => {
     const go = () => {
       root.lang = lang; if (lang === 'ar') root.dir = 'rtl'; else root.removeAttribute('dir');
