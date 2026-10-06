@@ -201,11 +201,11 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .stat::before{content:"";position:absolute;inset-block:2px;inset-inline-start:0;width:1px;background:var(--line);transform-origin:50% 0}
 .stat:first-child{padding-inline-start:0}
 .stat:first-child::before{display:none}
-.stat-num{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,4.1vw,3.75rem);line-height:1;letter-spacing:-.03em;font-variant-numeric:lining-nums;color:var(--text);white-space:nowrap}
+.stat-num{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.1vw,2.8rem);line-height:1;letter-spacing:-.03em;font-variant-numeric:lining-nums;color:var(--text);white-space:nowrap}
 .stat-vis{display:flex;align-items:baseline}
 .stat-unit,.stat-plus{color:var(--fig-accent)}
 .stat-plus{--dx:-.3em;align-self:flex-start;margin-top:.12em;margin-inline-start:.1em;font-size:.58em}   /* a small raised plus, so the number itself stays the loudest thing */
-.stat-label{max-width:15em;font-size:.92rem;line-height:1.4;color:var(--muted);text-wrap:balance;transition:color .3s var(--ease)}
+.stat-label{max-width:15em;font-size:.82rem;line-height:1.4;color:var(--muted);text-wrap:balance;transition:color .3s var(--ease)}
 /* the reel: the final digit holds the place (hidden while the strip runs), the strip of digits slides up behind a soft-edged window.
    The window is a mask on padding the negative margin takes back, so a wide digit passing a narrow place is not cut */
 .reel{--win:linear-gradient(180deg,transparent .12em,#000 .36em,#000 calc(100% - .34em),transparent calc(100% - .14em));position:relative;display:inline-block;padding:.2em;margin:-.2em;-webkit-mask-image:var(--win);mask-image:var(--win)}
@@ -218,7 +218,10 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 /* a second turn under the pointer: the strip starts on the digit already showing, so nothing jumps */
 .stats.in .reel-strip.re{transform:translate3d(0,0,0);transition:transform 1s var(--spring) var(--rd,0s)}
 .stats.in .reel-strip.re.go{transform:translate3d(0,var(--to),0)}
-@media (hover:hover){.stat:hover .stat-label{color:var(--lit)}}
+/* hover: the figure and its label pop up a little and settle back; the digits stay as they are */
+.stat-vis,.stat-label{transition:transform .35s var(--spring),color .3s var(--ease);transform-origin:var(--pop-origin,0 50%)}
+html[dir=rtl] .stat{--pop-origin:100% 50%}
+@media (hover:hover){.stat:hover .stat-label{color:var(--lit);transform:translate3d(0,-2px,0) scale(1.04)}.stat:hover .stat-vis{transform:translate3d(0,-3px,0) scale(1.08)}}
 .reel.done{-webkit-mask-image:none;mask-image:none}
 .reel.done .reel-size{visibility:visible}
 /* the row arrives: each figure rises in turn with its rule drawing down, the reels run, and the plus signs land last */
@@ -230,7 +233,7 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 /* tablets: three across, two rows, a rule between the rows */
 @media (min-width:768px) and (max-width:1100px){
   .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .stat-num{font-size:clamp(2.7rem,5.6vw,3.5rem)}
+  .stat-num{font-size:clamp(2.1rem,4.3vw,2.7rem)}
   .stat{padding-inline-start:clamp(20px,3vw,32px)}
   .stat:nth-child(3n+1){padding-inline-start:0}
   .stat:nth-child(3n+1)::before{display:none}
@@ -244,8 +247,8 @@ html.framed,html.framed body{overscroll-behavior-y:none}
   .figures{padding:8px 0}
   .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .stat{gap:10px;padding-block:26px;padding-inline:18px 4px}
-  .stat-num{font-size:clamp(2.3rem,11vw,2.9rem)}
-  .stat-label{font-size:.88rem}
+  .stat-num{font-size:clamp(1.9rem,8.6vw,2.25rem)}
+  .stat-label{font-size:.8rem}
   .stat:nth-child(odd){padding-inline-start:0}
   .stat:nth-child(odd)::before{display:none}
   .stat:nth-child(n+3){border-top:1px solid var(--line)}
@@ -254,6 +257,7 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 @media (prefers-reduced-motion:reduce){
   .js .stat{transform:none;transition:opacity .4s ease var(--d,0s)}
   .js .stat::before,.js .stat-plus{transform:none;transition:none}
+  .stat:hover .stat-vis,.stat:hover .stat-label{transform:none}
 }
 
 /* ---------- statement ---------- */
@@ -1840,7 +1844,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
        110+    115 TV interviews
        45+     46 profiles on the About page; the eight countries are the ones the home page names
      A figure with data-draft is a stand-in, not a fact about the firm, until the real number replaces it.
-     Under a mouse pointer a figure turns its reels once more: each digit runs one full turn and comes back to itself. */
+     Under a mouse pointer a figure pops up slightly (CSS only); the reels run once, on arrival. */
   const stats = $('#stats');
   if (stats) {
     const span = (cls, text) => Object.assign(document.createElement('span'), { className: cls, textContent: text || '' });
@@ -1872,11 +1876,6 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       num.replaceChildren(span('sr-only', text), vis);
     });
     window.KS.apply(stats);   // the unit letter is a word in Arabic
-    if (!reduce) $$('.stat', stats).forEach(stat => stat.addEventListener('pointerenter', e => {
-      const reels = $$('.reel', stat);
-      if (e.pointerType === 'touch' || !stats.classList.contains('in') || reels.some(r => !r.classList.contains('done'))) return;   // not while it is still arriving or already turning
-      reels.forEach((reel, k) => roll(reel, +reel.firstChild.textContent, 10, k * .05, true));
-    }));
     new IntersectionObserver(([en], o) => { if (en.isIntersecting) { o.disconnect(); stats.classList.add('in'); } }, { threshold: .3 }).observe(stats);
   }
 
