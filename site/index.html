@@ -171,8 +171,8 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 /* ---------- clients ---------- */
 .clients{position:relative;background:var(--n900);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0}
 /* the hero's corner vignette carries on over the band and the section below, fading out, so the hero has no hard lower edge */
-.clients::before{content:"";position:absolute;z-index:3;left:0;right:0;top:-1px;height:340px;pointer-events:none;background:radial-gradient(75% 100% at 100% 0,rgba(4,9,24,.82),rgba(4,9,24,.4) 45%,rgba(4,9,24,0) 78%)}
-.clients-row{display:grid;grid-template-columns:200px minmax(0,1fr);align-items:center;gap:32px}
+.clients::before{content:"";position:absolute;z-index:3;left:0;right:0;top:-1px;height:340px;pointer-events:none;transition:opacity .5s var(--ease);background:radial-gradient(75% 100% at 100% 0,rgba(4,9,24,.82),rgba(4,9,24,.4) 45%,rgba(4,9,24,0) 78%)}
+.clients-row{display:grid;grid-template-columns:200px minmax(0,1fr) auto;align-items:center;gap:32px}
 .clients h2{font-family:var(--sans);font-size:.95rem;font-weight:400;letter-spacing:0;line-height:1.4;color:var(--muted)}
 .marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .marquee ul{display:flex;align-items:center;gap:52px;width:max-content;animation:slide 64s linear infinite}
@@ -184,6 +184,55 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .marquee img.keep{filter:grayscale(1) contrast(4)}
 .marquee img.crop{width:30px;max-width:none;object-fit:cover;object-position:44% 50%}
 .marquee li:hover img{opacity:1}
+
+/* the band opens. The button swaps the strip for two slower rows drifting opposite ways: each mark larger, its name beneath.
+   Under the pointer a mark develops into the organisation's own colours, on a cream chip. Cells are built in the script from the same list */
+.more{position:relative;z-index:4;display:inline-flex;align-items:center;gap:10px;height:40px;padding:0 15px 0 18px;border:0;border-radius:999px;background:transparent;color:var(--lit);font-size:.88rem;font-weight:500;line-height:1;white-space:nowrap;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(241,234,215,.3);transition:color .2s var(--ease),background-color .2s var(--ease),box-shadow .2s var(--ease),scale .2s var(--ease)}
+.more:hover{color:var(--text);background:rgba(241,234,215,.06);box-shadow:inset 0 0 0 1px rgba(241,234,215,.75)}
+.more:active{scale:.98}
+.more-t{display:grid}
+.more-t span{grid-area:1/1;transition:opacity .25s var(--ease),translate .5s var(--spring)}
+.more-t span:last-child,.open .more-t span:first-child{opacity:0}
+.more-t span:last-child{translate:0 7px}
+.open .more-t span:first-child{translate:0 -7px}
+.open .more-t span:last-child{opacity:1;translate:none}
+.more i{position:relative;flex:none;width:12px;height:12px;transition:rotate .6s var(--spring)}
+.more i::before,.more i::after{content:"";position:absolute;left:0;right:0;top:50%;height:1.5px;margin-top:-.75px;border-radius:1px;background:currentColor}
+.more i::after{rotate:90deg}
+.open .more i{rotate:135deg}
+.clients.open::before{opacity:0}
+.marquee{transition:opacity .35s var(--ease),visibility 0s}
+.open .marquee{opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility 0s .35s}
+.open .marquee ul{animation-play-state:paused}
+.roster{position:relative;z-index:4;display:grid;grid-template-rows:0fr;transition:grid-template-rows .8s var(--spring)}
+.open .roster{grid-template-rows:1fr}
+.roster-in{min-height:0;overflow:hidden}
+.rrow{direction:ltr;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.rrow:first-child{padding-top:14px}
+.rrow ul{display:flex;align-items:flex-start;gap:12px;width:max-content;animation:slide-r 120s linear infinite paused}
+.rrow.rev ul{animation-direction:reverse}
+.open .rrow ul{animation-play-state:running}
+.open .roster:hover .rrow ul{animation-play-state:paused}
+@keyframes slide-r{to{transform:translateX(calc(-50% - 6px))}}
+.rcell{flex:none;width:188px;padding-bottom:18px;text-align:center;opacity:0;translate:0 18px;transition:opacity .3s var(--ease),translate .3s var(--ease)}
+.open .rcell{opacity:1;translate:none;transition:opacity .9s var(--spring) var(--d,0s),translate .9s var(--spring) var(--d,0s)}
+.rmark{position:relative;display:grid;place-items:center;height:104px;border-radius:var(--r-in);background:var(--n900)}
+.rmark img{height:66px;width:auto;max-width:164px;object-fit:contain}
+.rmark img.crop{width:38px;max-width:none;object-fit:cover;object-position:44% 50%}
+.rm{mix-blend-mode:screen;filter:grayscale(1) invert(1) contrast(1.2) brightness(1.9);opacity:.82}
+.rm.keep{filter:grayscale(1) contrast(4)}
+.rtrue{position:absolute;inset:6px 8px;display:grid;place-items:center;border-radius:var(--r-in);background:var(--cream);box-shadow:0 14px 28px -14px rgba(4,9,22,.9);isolation:isolate;pointer-events:none;opacity:0;scale:.95;transition:opacity .22s var(--ease),scale .45s var(--spring)}
+.rtrue img{mix-blend-mode:multiply}
+.rname{display:block;margin-top:10px;padding:0 10px;font-size:.84rem;line-height:1.35;color:var(--muted);text-wrap:balance;transition:color .25s var(--ease)}
+.rcell:hover .rtrue{opacity:1;scale:1}
+.rcell:hover .rname{color:var(--text)}
+@media (max-width:767px){
+  .rcell{width:140px;padding-bottom:14px}
+  .rmark{height:82px}
+  .rmark img{height:46px;max-width:108px}
+  .rmark img.crop{width:28px}
+  .rname{font-size:.78rem;padding:0 4px}
+}
 
 /* ---------- statement ---------- */
 .statement{position:relative;isolation:isolate;padding:clamp(110px,15vw,210px) 0}
@@ -261,6 +310,81 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .b-f .bimg{min-height:170px;background-image:url(assets/brochure.webp);background-size:300% auto;background-position:93% 71%}
 .b-f .bbody{padding:24px}
 .b-f .bmeta{color:#35507f}
+
+/* ---------- clients wall ----------
+   Every client and donor at once, standing still. Four columns by kind of institution, on one baseline,
+   each as tall as its count, so the wall steps up like the columns of the block map. The heading takes
+   the space the short columns leave free. Cells are built in the script from the same list as the strip. */
+.wall{--wall-bg:var(--n950);--wall-hi:#13243f;--wall-cap:rgba(241,234,215,.4);--wall-base:rgba(160,186,228,.38);--k:1;--mw:calc(118px*var(--k));
+  padding:clamp(100px,12vw,170px) 0 0;border-top:1px solid var(--line)}
+.wall-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:auto auto;column-gap:24px}
+.wall-head{grid-column:1/3;grid-row:1;align-self:start;padding-bottom:clamp(40px,5vw,68px)}
+.wcol{align-self:end}
+.wcol:nth-child(2){grid-column:1;grid-row:2}
+.wcol:nth-child(3){grid-column:2;grid-row:2}
+.wcol:nth-child(4){grid-column:3;grid-row:1/3}
+.wcol:nth-child(5){grid-column:4;grid-row:1/3}
+/* the ground line the four columns stand on */
+.wall-grid::after{content:"";grid-column:1/-1;grid-row:3;height:1px;background:var(--wall-base);transform-origin:0 50%;transition:transform 1.3s var(--spring)}
+.wcol h3{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:0 12px 14px;font-family:var(--sans);font-size:.84rem;font-weight:500;line-height:1.3;letter-spacing:.02em;color:var(--steel-2)}
+.wcol h3 span{font-variant-numeric:tabular-nums;color:var(--faint)}
+/* a cell carries the section colour, opaque, so the blend on its mark has something to blend with */
+.wcell{display:grid;grid-template-columns:var(--mw) minmax(0,1fr);align-items:center;gap:16px;min-height:84px;padding:8px 12px;border-top:1px solid var(--line);background:var(--wall-bg);transition:background-color .25s var(--ease)}
+.wcell:first-child{border-top-color:var(--wall-cap)}   /* the lit top edge of each column */
+/* optical sizing: the files are small squares with the logo floating somewhere inside. The script knows where (the BOX
+   figures), so each mark is cut to its own outline, given the same visual weight whatever its shape, and set flush to the column edge */
+.wmark{position:relative;justify-self:start;width:calc(var(--w)*var(--k));height:calc(var(--h)*var(--k))}
+.wcrop,.wfull{position:absolute;inset:0}
+.wcrop{overflow:hidden}
+.wmark img{position:absolute;max-width:none;left:calc(-100%*var(--fx)/var(--fw));top:calc(-100%*var(--fy)/var(--fh));width:calc(100%/var(--fw));height:calc(100%/var(--fh))}
+.wm{mix-blend-mode:screen;filter:grayscale(1) invert(1) contrast(1.2) brightness(1.9);opacity:.84}
+.wm.keep{filter:grayscale(1) contrast(4)}
+.wm.soft{opacity:.7}   /* a solid panel, not a line mark: held back so it does not outweigh its neighbours */
+.wname{font-size:.88rem;line-height:1.32;color:var(--lit);text-wrap:balance;transition:color .25s var(--ease)}
+/* under the pointer the single-colour mark develops into the organisation's own logo, on a cream chip */
+.wtrue{position:absolute;inset:-7px -10px;overflow:hidden;border-radius:var(--r-in);background:var(--cream);box-shadow:0 12px 24px -12px rgba(4,9,22,.9);isolation:isolate;pointer-events:none;opacity:0;scale:.96;transition:opacity .22s var(--ease),scale .35s var(--spring)}
+.wfull{inset:7px 10px}
+.wtrue img{mix-blend-mode:multiply}
+@media (hover:hover){
+  .wcell:hover{background:var(--wall-hi)}
+  .wcell:hover .wtrue{opacity:1;scale:1}
+  .wcell:hover .wname{color:var(--text)}
+}
+/* a logo that fails to load leaves its name standing alone, set larger */
+.wcell.no-mark{grid-template-columns:minmax(0,1fr)}
+.no-mark .wmark{display:none}
+.no-mark .wname{font-family:var(--serif);font-size:1.12rem;color:var(--text)}
+/* the wall rises: the ground line draws across, then each column builds from its base upward */
+.js .wall-grid:not(.in)::after{transform:scaleX(0)}
+.js .wall-grid .wcell{opacity:0;transform:translate3d(0,20px,0);transition:opacity .9s var(--spring) var(--d,0s),transform .9s var(--spring) var(--d,0s),background-color .25s var(--ease)}
+.js .wall-grid .wcol h3{opacity:0;transition:opacity .9s var(--ease) var(--dl,0s)}
+.js .wall-grid.in .wcell{opacity:1;transform:none}
+.js .wall-grid.in .wcol h3{opacity:1}
+@media (max-width:1340px){.wall{--k:.92}}
+@media (max-width:1250px){.wall{--k:.84}}
+@media (max-width:1179px){
+  .wall{--k:1}
+  .wall-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;row-gap:44px}
+  .wall-head{grid-column:1/-1;padding-bottom:0}
+  .wall-grid .wcol{grid-column:auto;grid-row:auto;align-self:start}
+  .wall-grid::after{display:none}
+  .wcol ul{border-bottom:1px solid var(--wall-base)}
+}
+/* phones: logo tiles three across, so the whole list still fits one screen. The names stay for screen readers.
+   The rules are drawn on the list itself so they run the full width under a short last row, and each group rises as one piece */
+@media (max-width:767px){
+  .wall{--k:.86}
+  .wall-grid{grid-template-columns:minmax(0,1fr);row-gap:34px}
+  .wcol h3{padding-inline:0}
+  .wcol ul{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:linear-gradient(var(--wall-cap),var(--wall-cap)) 0 0/100% 1px no-repeat,linear-gradient(var(--line) 1px,transparent 1px) 0 0/100% 78px repeat-y var(--wall-bg)}
+  .wcell{grid-template-columns:minmax(0,1fr);justify-items:center;height:78px;min-height:0;padding:8px;border-top:0;background:none}
+  .wmark{justify-self:center}
+  .wcell:not(.no-mark) .wname{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .no-mark .wname{font-size:.9rem;text-align:center}
+  .js .wall-grid .wcell{opacity:1;transform:none;transition:none}
+  .js .wall-grid ul{opacity:0;transform:translate3d(0,24px,0);transition:opacity .9s var(--spring) var(--dc,0s),transform .9s var(--spring) var(--dc,0s)}
+  .js .wall-grid.in ul{opacity:1;transform:none}
+}
 
 /* ---------- rates ---------- */
 .rates{padding:clamp(100px,12vw,170px) 0}
@@ -442,7 +566,9 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .nav .lang{display:none}
   .pcard-geo{opacity:.55}
   .b-e::after{display:none}
-  .clients-row{grid-template-columns:minmax(0,1fr);gap:18px}
+  .clients-row{grid-template-columns:minmax(0,1fr) auto;gap:18px}
+  .marquee{grid-column:1/-1;grid-row:2;max-height:72px;transition:opacity .35s var(--ease),visibility 0s,max-height .6s var(--spring),margin-top .6s var(--spring)}
+  .open .marquee{max-height:0;margin-top:-18px;transition:opacity .35s var(--ease),visibility 0s .35s,max-height .6s var(--spring),margin-top .6s var(--spring)}
   .statement-in{margin-left:0}
   .pcard{position:relative;top:auto;min-height:0;grid-template-columns:minmax(0,1fr);box-shadow:none}
   .stack{gap:16px}
@@ -509,6 +635,11 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .nav,.mnav{animation:none}
   .marquee{overflow-x:auto}
   .marquee ul{animation:none}
+  /* the open band stands still: every name once, wrapped and centred */
+  .rrow{-webkit-mask-image:none;mask-image:none}
+  .rrow ul{animation:none;flex-wrap:wrap;justify-content:center;width:auto}
+  .rrow li[aria-hidden]{display:none}
+  .roster,.rcell,.open .rcell{transition-duration:.01s;transition-delay:0s}
   .iso{transition:none}
   .iso-call.on i,.iso-call.on p{animation:none}
   .uline{transition:none;transform:scaleX(1)}
@@ -516,6 +647,11 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .statement p::after{transition:none;transform:scaleY(1)}
   .seg-thumb,.cover,.bimg i{transition:none}
   .swap{animation:none}
+  .wall-grid::after{transition:none}
+  .js .wall-grid .wcell{transform:none;transition:opacity .4s ease,background-color .25s var(--ease)}
+  .js .wall-grid .wcol h3{transition:opacity .4s ease}
+  .js .wall-grid ul{transform:none;transition:opacity .4s ease}
+  .wtrue{scale:1;transition:opacity .22s var(--ease)}
 }
 /* header on phones: flush to the top so the veil starts at the screen edge, a shorter blur, menu button kept in view */
 @media (max-width:1100px){
@@ -558,6 +694,9 @@ html[dir=rtl] .skip{left:auto;right:12px}
 html[dir=rtl] .brand svg{direction:ltr}   /* the wordmark is Latin: its tagline is laid out from the left */
 html[dir=rtl] :is(.ph-arrow-right,.ph-arrow-up-right)::before{display:inline-block;scale:-1 1}
 html[dir=rtl] .marquee{direction:ltr}
+html[dir=rtl] .wall-grid::after{transform-origin:100% 50%}
+html[dir=rtl] .wcol h3{font-weight:500}
+html[dir=rtl] .wname{line-height:1.6}
 html[dir=rtl] .uline{left:.12em;right:0;transform-origin:right}
 html[dir=rtl] .statement-in{margin-left:0;margin-right:clamp(0px,8.5vw,112px);padding-left:0;padding-right:clamp(20px,2.6vw,36px)}
 html[dir=rtl] .statement p::before,html[dir=rtl] .statement p::after{left:auto;right:calc(-1 * clamp(20px,2.6vw,36px))}
@@ -706,6 +845,22 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 [data-theme="light"] .marquee img.dense{filter:grayscale(1) brightness(.8) contrast(4)}   /* pale colour marks (the UN blue) need the grey pushed down before the white is lifted */
 [data-theme="light"] .marquee li:hover img{opacity:1}
 [data-theme="light"] .marquee img.keep{filter:grayscale(1) invert(1) contrast(4)}
+[data-theme="light"] .more{box-shadow:inset 0 0 0 1px rgba(22,38,75,.3)}
+[data-theme="light"] .more:hover{background:rgba(22,38,75,.04);box-shadow:inset 0 0 0 1px rgba(22,38,75,.7)}
+[data-theme="light"] .rmark{background:var(--c-raise)}
+[data-theme="light"] .rm{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.4) brightness(1.14);opacity:.8}
+[data-theme="light"] .rm.soft{opacity:.46}
+[data-theme="light"] .rm.dense{filter:grayscale(1) brightness(.8) contrast(4)}
+[data-theme="light"] .rm.keep{filter:grayscale(1) invert(1) contrast(4)}
+[data-theme="light"] .rtrue{background:#fffdf7;box-shadow:0 0 0 1px rgba(22,38,75,.1),0 12px 24px -12px rgba(70,52,20,.5)}
+
+/* clients wall: ink marks on the cream field, blue rules, the pointer's chip in paper white */
+[data-theme="light"] .wall{--wall-bg:var(--c-bg);--wall-hi:#eee3cf;--wall-cap:rgba(22,38,75,.46);--wall-base:rgba(22,38,75,.32)}
+[data-theme="light"] .wm{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.4) brightness(1.14);opacity:.8}
+[data-theme="light"] .wm.soft{opacity:.46}
+[data-theme="light"] .wm.dense{filter:grayscale(1) brightness(.8) contrast(4)}
+[data-theme="light"] .wm.keep{filter:grayscale(1) invert(1) contrast(4)}
+[data-theme="light"] .wtrue{background:#fffdf7;box-shadow:0 0 0 1px rgba(22,38,75,.1),0 12px 24px -12px rgba(70,52,20,.5)}
 
 /* statement: unread paragraphs recede into the cream, the rail fills with blue */
 [data-theme="light"] .statement p{color:rgba(22,38,75,.3)}
@@ -877,6 +1032,14 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     <div class="marquee">
       <ul id="logos"></ul>
     </div>
+    <button class="more" id="more" type="button" aria-expanded="false" aria-controls="roster"><span class="more-t"><span>View all</span><span aria-hidden="true">Close</span></span><i aria-hidden="true"></i></button>
+  </div>
+  <!-- the open band: two rows, built in the script from the same LOGOS list as the strip -->
+  <div class="roster" id="roster" inert>
+    <div class="roster-in">
+      <div class="rrow"><ul></ul></div>
+      <div class="rrow rev"><ul></ul></div>
+    </div>
   </div>
 </section>
 
@@ -1026,6 +1189,23 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
           <span class="bmeta"><i class="ph ph-clock" aria-hidden="true"></i>Hourly or daily</span>
         </div>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CLIENTS WALL ================= -->
+<!-- The strip under the hero scrolls past; this one stands still and shows every client and donor at once.
+     Its cells come from the same LOGOS list, in the script, sorted into these four columns -->
+<section class="wall" aria-labelledby="wall-h">
+  <div class="wrap">
+    <div class="wall-grid" id="wall">
+      <header class="wall-head rv">
+        <h2 id="wall-h">Clients and donors. <span class="dim">The institutions we have worked with.</span></h2>
+      </header>
+      <div class="wcol"><h3 id="wall-g0">International organisations <span aria-hidden="true"></span></h3><ul aria-labelledby="wall-g0"></ul></div>
+      <div class="wcol"><h3 id="wall-g1">Development agencies <span aria-hidden="true"></span></h3><ul aria-labelledby="wall-g1"></ul></div>
+      <div class="wcol"><h3 id="wall-g2">Foreign ministries <span aria-hidden="true"></span></h3><ul aria-labelledby="wall-g2"></ul></div>
+      <div class="wcol"><h3 id="wall-g3">Foundations and non-profits <span aria-hidden="true"></span></h3><ul aria-labelledby="wall-g3"></ul></div>
     </div>
   </div>
 </section>
@@ -1216,7 +1396,15 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     "Column height shows": "ارتفاع العمود يمثّل",
     "Move across the map": "حرّك المؤشر فوق الخريطة",
     "Clients and donors": "العملاء والجهات المانحة",
+    "View all": "عرض الكل",
+    "Close": "إغلاق",
     "Clients and donors we have worked with": "العملاء والجهات المانحة التي عملنا معها",
+    "Clients and donors.": "العملاء والجهات المانحة.",
+    "The institutions we have worked with.": "المؤسسات التي عملنا معها.",
+    "International organisations": "المنظمات الدولية",
+    "Development agencies": "وكالات التنمية",
+    "Foreign ministries": "وزارات الخارجية",
+    "Foundations and non-profits": "المؤسسات والمنظمات غير الربحية",
     "We help clients make informed decisions about Syria's economy, business environment, and investment landscape.": "نساعد عملاءنا على اتخاذ قرارات مستنيرة بشأن اقتصاد سوريا وبيئة الأعمال والمشهد الاستثماري فيها.",
     "What sets us apart is a combination that is hard to find in one place: thoughtful data-driven analysis, deep knowledge of the local context, and access to sources and field data inside and outside the country.": "ما يميّزنا هو مزيج يصعب أن تجده في مكان واحد: تحليل مدروس قائم على البيانات، ومعرفة عميقة بالسياق المحلي، ووصول إلى مصادر وبيانات ميدانية داخل البلاد وخارجها.",
     "Every engagement is tailored to the client, whether an international organisation, a government, a business, a donor, or an NGO.": "نُعدّ كل مهمة وفق حاجة العميل، سواء كان منظمة دولية أو حكومة أو شركة أو جهة مانحة أو منظمة غير حكومية.",
@@ -1347,6 +1535,9 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     "French Ministry of Foreign Affairs": "وزارة أوروبا والخارجية الفرنسية",
     "Dutch Ministry of Foreign Affairs": "وزارة الخارجية الهولندية",
     "European Endowment for Democracy": "الصندوق الأوروبي للديمقراطية",
+    "GIZ": "الوكالة الألمانية للتعاون الدولي (GIZ)",
+    "KfW": "بنك التنمية الألماني (KfW)",
+    "Expertise France": "الوكالة الفرنسية للخبرة الفنية الدولية",
     "Rockefeller Brothers Fund": "صندوق الأخوين روكفلر",
     "Atlantic Council": "المجلس الأطلسي",
     "Friedrich Ebert Stiftung": "مؤسسة فريدريش إيبرت",
@@ -1572,25 +1763,26 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
 
   /* ---------- client logos (hotlinked from the live site for this dry run) ---------- */
   const U = 'https://karamshaar.com/wp-content/uploads/';
+  /* name, file, treatment, column of the clients wall (0 international organisations, 1 development agencies, 2 foreign ministries, 3 foundations and non-profits) */
   const LOGOS = [
-    ['World Bank', '2024/11/World-Bank.webp'],
-    ['United Nations', '2025/06/UN.avif', 'dense'],
-    ['European Union', '2026/08/Flag_of_Europe-1.svg', 'keep'],
-    ['German Federal Foreign Office', '2024/11/German-Federal-Foreign-Office.webp'],
-    ['United States Department of State', '2026/01/d86ba934-55dc-412e-8740-83c04d3e3264-removebg-preview.webp'],
-    ['Foreign, Commonwealth and Development Office', '2024/11/FCDO.webp'],
-    ['French Ministry of Foreign Affairs', '2024/11/French-MFA.webp', 'soft'],   // a full-colour panel: lighter in the cream theme so it does not outweigh the line marks
-    ['Dutch Ministry of Foreign Affairs', '2024/11/Ducht-MFA.webp', 'keep crop'],   // crop: trims the white margins beside its dark panel
-    ['European Endowment for Democracy', '2024/11/European-Endowment-for-Democracy_edited_edited.webp'],
-    ['GIZ', '2024/11/GIZ_edited.webp'],
-    ['KfW', '2024/11/KFW_edited.webp'],
-    ['Expertise France', '2024/11/Expertise-France_edited.webp'],
-    ['Rockefeller Brothers Fund', '2024/11/Rockefeller-Brothers-Fund.webp'],
-    ['Atlantic Council', '2024/11/275979645_311132841112718_7831813686819079315_n.webp'],
-    ['Friedrich Ebert Stiftung', '2024/11/Fredrich-Ebert-Stiftung.webp'],
-    ['Konrad Adenauer Stiftung', '2024/11/KAS_edited.webp'],
-    ['Asfari Foundation', '2024/11/Asfari-Foundation.webp'],
-    ['Syrian Forum', '2024/11/Syrian-Forum.webp']
+    ['World Bank', '2024/11/World-Bank.webp', '', 0],
+    ['United Nations', '2025/06/UN.avif', 'dense', 0],
+    ['European Union', '2026/08/Flag_of_Europe-1.svg', 'keep', 0],
+    ['German Federal Foreign Office', '2024/11/German-Federal-Foreign-Office.webp', '', 2],
+    ['United States Department of State', '2026/01/d86ba934-55dc-412e-8740-83c04d3e3264-removebg-preview.webp', '', 2],
+    ['Foreign, Commonwealth and Development Office', '2024/11/FCDO.webp', '', 2],
+    ['French Ministry of Foreign Affairs', '2024/11/French-MFA.webp', 'soft', 2],   // a full-colour panel: lighter in the cream theme so it does not outweigh the line marks
+    ['Dutch Ministry of Foreign Affairs', '2024/11/Ducht-MFA.webp', 'keep crop', 2],   // crop: trims the white margins beside its dark panel
+    ['European Endowment for Democracy', '2024/11/European-Endowment-for-Democracy_edited_edited.webp', '', 3],
+    ['GIZ', '2024/11/GIZ_edited.webp', '', 1],
+    ['KfW', '2024/11/KFW_edited.webp', '', 1],
+    ['Expertise France', '2024/11/Expertise-France_edited.webp', '', 1],
+    ['Rockefeller Brothers Fund', '2024/11/Rockefeller-Brothers-Fund.webp', '', 3],
+    ['Atlantic Council', '2024/11/275979645_311132841112718_7831813686819079315_n.webp', '', 3],
+    ['Friedrich Ebert Stiftung', '2024/11/Fredrich-Ebert-Stiftung.webp', '', 3],
+    ['Konrad Adenauer Stiftung', '2024/11/KAS_edited.webp', '', 3],
+    ['Asfari Foundation', '2024/11/Asfari-Foundation.webp', '', 3],
+    ['Syrian Forum', '2024/11/Syrian-Forum.webp', '', 3]
   ];
   const ul = $('#logos');
   [0, 1].forEach(pass => LOGOS.forEach(([name, path, keep]) => {   // keep: a light mark on a dark field. Not inverted; the contrast drops the field to black, which the screen blend hides
@@ -1603,6 +1795,73 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     li.append(img); ul.append(li);
   }));
   window.KS.apply(ul);   // the names above are the alt text
+
+  /* ---------- the open band: the same list dealt into two rows, each cell a larger mark with its name beneath ----------
+     As on the strip, each row holds the list twice so it can loop. The mark is there twice too: the single-colour one,
+     and the untouched logo on a chip that shows under the pointer. The name is real text, so the images carry no alt. */
+  const more = $('#more'), roster = $('#roster');
+  if (more && roster) {
+    const band = more.closest('.clients'), rows = $$('.rrow ul', roster), labels = $$('.more-t span', more);
+    [0, 1].forEach(pass => LOGOS.forEach(([name, path, kind], i) => {
+      const li = document.createElement('li'); li.className = 'rcell';
+      if (pass) li.setAttribute('aria-hidden', 'true');
+      else li.style.setProperty('--d', (.12 + Math.min(i >> 1, 7) * .05 + (i & 1) * .08).toFixed(2) + 's');   // the cells in view rise one after another, the second row a beat behind
+      const mark = document.createElement('span'); mark.className = 'rmark';
+      const chip = document.createElement('span'); chip.className = 'rtrue'; chip.setAttribute('aria-hidden', 'true');
+      const [mono, full] = [0, 1].map(() => { const im = new Image(); im.alt = ''; im.decoding = 'async'; return im; });
+      mono.className = 'rm' + (kind ? ' ' + kind : ''); if (/crop/.test(kind)) full.className = 'crop';
+      mono.onerror = () => mark.remove();   // a logo that fails to load leaves its name standing alone
+      mono.src = full.src = U + path;
+      const label = document.createElement('span'); label.className = 'rname'; label.textContent = name;
+      chip.append(full); mark.append(mono, chip); li.append(mark, label);
+      rows[i & 1].append(li);
+    }));
+    window.KS.apply(roster);
+    more.addEventListener('click', () => {
+      const open = band.classList.toggle('open');
+      more.setAttribute('aria-expanded', String(open)); roster.inert = !open;
+      labels.forEach((l, i) => l.setAttribute('aria-hidden', String(open ? !i : !!i)));
+    });
+  }
+
+  /* ---------- clients wall: the same list, standing still, one column per kind of institution ----------
+     Each cell holds the mark twice: the single-colour one, and the untouched logo on a chip that shows under the pointer.
+     The name is real text beside it, so the images carry no alt. */
+  const wall = $('#wall');
+  if (wall) {
+    const cols = $$('.wcol', wall), el = (tag, cls) => Object.assign(document.createElement(tag), { className: cls });
+    /* where the visible mark sits inside each file, in LOGOS order: left, top, width, height as fractions of the image,
+       then the image's own width over height when it is not square, then an optional nudge for marks that read heavy or thin.
+       Measured from the files; a replaced logo needs its line measured again. */
+    const BOX = [
+      [.037, .373, .918, .201], [.156, .213, .68, .566], [.241, .109, .518, .769, 1.5], [.082, .104, .836, .731], [.023, .023, .968, .964, 1, 1.08],
+      [.075, .343, .858, .276], [0, .313, 1, .38, 1, .9], [.2, .213, .587, .5], [0, .367, 1, .333, 1, 1.08],
+      [.26, .327, .507, .413], [.082, .311, .893, .32], [.027, .253, .947, .327],
+      [.112, .284, .799, .455], [.008, .008, .983, .983], [.08, .2, .847, .487], [0, 0, .833, 1, 1, .86], [.18, .127, .653, .66], [.008, .25, .968, .411]
+    ];
+    LOGOS.forEach(([name, path, kind, col], i) => {
+      const [x, y, w, h, shape = 1, nudge = 1] = BOX[i], ratio = shape * w / h, width = 48 * nudge * ratio ** .55;   // equal visual weight: a wide wordmark gets length, an emblem gets height
+      const li = el('li', 'wcell'), mark = el('span', 'wmark'), crop = el('span', 'wcrop'), chip = el('span', 'wtrue'), inner = el('span', 'wfull'), label = el('span', 'wname');
+      const [mono, full] = [0, 1].map(() => Object.assign(new Image(), { alt: '', loading: 'lazy', decoding: 'async' }));
+      for (const [k, v] of Object.entries({ w: width.toFixed(1) + 'px', h: (width / ratio).toFixed(1) + 'px', fx: x, fy: y, fw: w, fh: h })) mark.style.setProperty('--' + k, v);
+      mono.className = 'wm' + (kind ? ' ' + kind : '');
+      mono.onerror = () => li.classList.add('no-mark');
+      mono.src = full.src = U + path;
+      chip.setAttribute('aria-hidden', 'true'); label.textContent = name;
+      crop.append(mono); inner.append(full); chip.append(inner); mark.append(crop, chip); li.append(mark, label);
+      $('ul', cols[col]).append(li);
+    });
+    cols.forEach((c, ci) => {   // each column builds from its base upward, the columns one after another; the heading and its count arrive last
+      const cells = $$('.wcell', c), n = cells.length;
+      cells.forEach((cell, i) => cell.style.setProperty('--d', (.25 + ci * .1 + (n - 1 - i) * .06).toFixed(2) + 's'));
+      c.style.setProperty('--dl', (.45 + ci * .1 + n * .06).toFixed(2) + 's');
+      c.style.setProperty('--dc', (.15 + ci * .1).toFixed(2) + 's');
+      $('h3 span', c).textContent = n;
+    });
+    window.KS.apply(wall);
+    new IntersectionObserver(([en], o) => { if (en.isIntersecting) { wall.classList.add('in'); o.disconnect(); } },
+      { threshold: Math.min(.3, innerHeight * .5 / (wall.offsetHeight || 1)) }).observe(wall);
+  }
 
   /* ---------- rates toggle ---------- */
   const rates = $('#rates');
