@@ -33,4 +33,5 @@ Both switches are also buttons in the nav. So every change has four states to ch
 
 - The owner is not a programmer. Explain results in plain language and keep git mechanics out of his way. Syncing with GitHub is automatic (hooks run `tools/git-sync.mjs`).
 - Screenshots: `node tools/shoot.mjs <prefix> <width> <height> auto [path such as "?lang=ar&theme=light"]` with the `site` preview running. Output goes to `tools/shots/` (not synced).
-- Republishing the artifact: the published page is the local file with the Phosphor icon `<link>` replaced by an inlined `<style>` subset. Read the artifact first, lift that block into a scratch copy of `site/index.html`, then publish to the same URL. Ask before publishing.
+- Republishing the artifact: the published page is the local file with the Phosphor icon `<link>` replaced by an inlined `<style>` subset. Read the artifact first, lift that block into a scratch copy of `site/index.html`, then publish to the same URL.
+- **Always keep both up to date (standing rule, owner's instruction 2026-10-06):** after every change to `site/`, republish the artifact to the same URL and make sure the change is committed and pushed to GitHub, without waiting to be asked. Before ending a turn that changed `site/`, confirm `git status` is clean and the artifact is current, and tell the owner in plain words that both are done.
