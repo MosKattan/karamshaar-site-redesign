@@ -2207,7 +2207,8 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       glow += ((hot ? 1 : 0) - glow) * (reduce ? 1 : 1 - Math.exp(-dt * 7));
       if (Math.abs(glow - (hot ? 1 : 0)) > .004) settling = true;
       ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, W, H);
-      const light = day(), ink = light ? '33,58,95' : '197,210,232', lit = light ? '33,58,95' : '241,234,215', a = light ? .1 : .075;
+      const light = day(), ink = light ? '33,58,95' : '197,210,232', lit = light ? '33,58,95' : '241,234,215', a = light ? .1 : .058;
+      const pop = light ? .9 : .78, soft = light ? 1 : .78;   // how strongly the coloured cells and the pointer's glow show. The night field is held back so it stays behind the wall
       const i0 = Math.floor((-x0 - pos) / cw) - 1, i1 = Math.ceil((W - x0 - pos) / cw) + 1;
 
       /* the lines: rows stand still on the wall's rows, columns travel with the field */
@@ -2224,7 +2225,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       for (const c of cells) {
         const age = (now - c.born) / c.life; if (age < 0 || c.j < 0 || c.j >= rowsN) continue;
         const k = reduce ? 1 : age < .25 ? age / .25 : age > .7 ? (1 - age) / .3 : 1, x = x0 + c.i * cw + pos, y = base - (c.j + 1) * rh;
-        const show = k * k * (3 - 2 * k) * seen(x, y) ** 2 * (1 - .45 * under(titles, x, y)) * (1 - under([{ l: hd.l - 16, r: hd.r + 16, t: hd.t - rh / 2, b: hd.b + rh / 2 }], x, y));   // and one drifting in behind the heading fades out
+        const show = pop * k * k * (3 - 2 * k) * seen(x, y) ** 2 * (1 - .45 * under(titles, x, y)) * (1 - under([{ l: hd.l - 16, r: hd.r + 16, t: hd.t - rh / 2, b: hd.b + rh / 2 }], x, y));   // and one drifting in behind the heading fades out
         if (show < .01 || x + cw < 0 || x > W) continue;
         ctx.fillStyle = `rgba(${c.tint},${(.15 * show).toFixed(3)})`; ctx.fillRect(x + 3, y + 3, cw - 6, rh - 6);
         outline(x, y, .52 * show, c.tint);
@@ -2234,7 +2235,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
         const ci = Math.floor((px - x0 - pos) / cw), cj = Math.floor((base - py) / rh);
         for (let di = -1; di <= 1; di++) for (let dj = -1; dj <= 1; dj++) {
           const x = x0 + (ci + di) * cw + pos, y = base - (cj + dj + 1) * rh, s = seen(x, y);
-          if (s > .02 && cj + dj >= 0) outline(x, y, (di || dj ? .1 : .28) * s, lit);
+          if (s > .02 && cj + dj >= 0) outline(x, y, (di || dj ? .1 : .28) * s * soft, lit);
         }
       }
       /* a client under the pointer: the cells that border its rectangle light */
@@ -2243,8 +2244,8 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
         for (let i = ia; i <= ib; i++) for (let j = jr - 1; j <= jr + 1; j++) {
           const x = x0 + i * cw + pos, y = base - (j + 1) * rh, s = seen(x, y);
           if (j < 0 || s < .02 || (j === jr && x + cw > box.l + 1 && x < box.r - 1)) continue;
-          ctx.fillStyle = `rgba(${lit},${(.07 * glow * s).toFixed(3)})`; ctx.fillRect(x + 3, y + 3, cw - 6, rh - 6);
-          outline(x, y, .34 * glow * s, lit);
+          ctx.fillStyle = `rgba(${lit},${(.07 * glow * s * soft).toFixed(3)})`; ctx.fillRect(x + 3, y + 3, cw - 6, rh - 6);
+          outline(x, y, .34 * glow * s * soft, lit);
         }
       }
 
