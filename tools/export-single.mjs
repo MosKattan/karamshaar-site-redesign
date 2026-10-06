@@ -18,6 +18,9 @@ const get = async (url, ua) => {
 };
 const replaceOnce = (needle, to) => { if (!html.includes(needle)) throw new Error('not found: ' + needle.slice(0, 60)); html = html.replace(needle, () => to); };
 
+// 0. the shared file always opens dark: a theme saved by an earlier visit is ignored (?theme=light still works, and the button still switches)
+replaceOnce("const q=new URLSearchParams(location.search).get('theme'),k=q||localStorage.getItem('ks-theme');", "const q=new URLSearchParams(location.search).get('theme'),k=q;");
+
 // 1. local pictures (src="assets/..." and url(assets/...))
 html = html.replace(/(["(])assets\/([\w.-]+\.(?:webp|png|jpg|avif|svg))/g, (m, q, f) =>
   q + 'data:' + MIME[extname(f)] + ';base64,' + b64(readFileSync(join(site, 'assets', f))));
