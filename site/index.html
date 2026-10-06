@@ -9,11 +9,13 @@
 <meta name="description" content="Research, due diligence, briefs and training on Syria's economy, business environment and investment landscape.">
 <meta name="theme-color" content="#0d1930">
 
-<!-- Dry run: fonts, icons, Lenis and Three.js come from CDNs. Bundle and self-host before production. -->
+<!-- Dry run: fonts, Lenis and Three.js come from CDNs. Bundle and self-host before production. The icons are drawn in the stylesheet below. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..800&family=Fira+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..800&family=Fira+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,400&display=swap" rel="stylesheet">
+<!-- the italic is only used at weight 400 (the emphasised words in headings), so only that weight is fetched. A heavier italic needs its weight added here -->
+<link rel="preconnect" href="https://unpkg.com">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
 
 <script>document.documentElement.classList.add('js');try{const q=new URLSearchParams(location.search).get('theme'),k=q||localStorage.getItem('ks-theme');if(k==='light')document.documentElement.dataset.theme='light'}catch(e){}try{if((new URLSearchParams(location.search).get('lang')||localStorage.getItem('ks-lang'))==='ar'){document.documentElement.lang='ar';document.documentElement.dir='rtl'}}catch(e){}</script>
 <style>
@@ -85,6 +87,24 @@ p{text-wrap:pretty}
 .link-arrow{display:inline-flex;align-items:center;gap:.5em;font-weight:500;text-decoration:none;color:var(--cream);white-space:nowrap}
 .link-arrow .ph{transition:translate .25s var(--ease)}
 .link-arrow:hover .ph{translate:4px 0}
+
+/* ---------- icons ----------
+   Ten drawings from Phosphor Icons 2.1.1, regular weight (MIT licence), each used as a mask filled with the text colour.
+   They stand in for the Phosphor icon font, which cost a stylesheet and a 144 KB font file for these ten: the square is 1em,
+   set on the line exactly where the font put its glyph (the font's baseline sits one sixteenth of an em above the square's foot).
+   A new icon needs its drawing added here as one more .ph-name rule. */
+.ph{font-style:normal;line-height:0}
+.ph::before{content:"";display:inline-block;width:1em;height:1em;vertical-align:-.0625em;background:currentColor;-webkit-mask:var(--ph) center/100% 100% no-repeat;mask:var(--ph) center/100% 100% no-repeat}
+.ph-arrow-right{--ph:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z'/%3E%3C/svg%3E")}
+.ph-arrow-up-right{--ph:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z'/%3E%3C/svg%3E")}
+.ph-list{--ph:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z'/%3E%3C/svg%3E")}
+.ph-x{--ph:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z'/%3E%3C/svg%3E")}
+.ph-crosshair-simple{--ph:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm8,191.63V184a8,8,0,0,0-16,0v31.63A88.13,88.13,0,0,1,40.37,136H72a8,8,0,0,0,0-16H40.37A88.13,88.13,0,0,1,120,40.37V72a8,8,0,0,0,16,0V40.37A88.13,88.13,0,0,1,215.63,120H184a8,8,0,0,0,0,16h31.63A88.13,88.13,0,0,1,136,215.63Z'/%3E%3C/svg%3E")}
+.ph-ruler{--ph:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M235.32,73.37,182.63,20.69a16,16,0,0,0-22.63,0L20.68,160a16,16,0,0,0,0,22.63l52.69,52.68a16,16,0,0,0,22.63,0L235.32,96A16,16,0,0,0,235.32,73.37ZM84.68,224,32,171.31l32-32,26.34,26.35a8,8,0,0,0,11.32-11.32L75.31,128,96,107.31l26.34,26.35a8,8,0,0,0,11.32-11.32L107.31,96,128,75.31l26.34,26.35a8,8,0,0,0,11.32-11.32L139.31,64l32-32L224,84.69Z'/%3E%3C/svg%3E")}
+.ph-clock{--ph:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z'/%3E%3C/svg%3E")}
+.ph-check{--ph:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z'/%3E%3C/svg%3E")}
+.ph-check-circle{--ph:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z'/%3E%3C/svg%3E")}
+.ph-envelope-simple{--ph:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z'/%3E%3C/svg%3E")}
 
 /* ---------- reveal (fora-style rise) ---------- */
 .js .rv{opacity:0;transform:translate3d(0,var(--y,48px),0);transition:opacity 1.2s var(--spring) var(--d,0s),transform 1.2s var(--spring) var(--d,0s)}
@@ -185,9 +205,7 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .stat-vis{display:flex;align-items:baseline}
 .stat-unit,.stat-plus{color:var(--fig-accent)}
 .stat-plus{--dx:-.3em;align-self:flex-start;margin-top:.12em;margin-inline-start:.1em;font-size:.58em}   /* a small raised plus, so the number itself stays the loudest thing */
-.stat-label{max-width:15em;font-size:.92rem;line-height:1.4;color:var(--muted);text-wrap:balance}
-/* a stand-in number waiting for the confirmed one says so */
-.stat-flag{display:inline-block;margin-inline-start:2px;padding:0 7px;border:1px dashed color-mix(in srgb,var(--fig-accent) 55%,transparent);border-radius:6px;font-size:.68rem;font-style:normal;line-height:1.55;letter-spacing:.03em;color:var(--fig-accent);white-space:nowrap;vertical-align:.08em}
+.stat-label{max-width:15em;font-size:.92rem;line-height:1.4;color:var(--muted);text-wrap:balance;transition:color .3s var(--ease)}
 /* the reel: the final digit holds the place (hidden while the strip runs), the strip of digits slides up behind a soft-edged window.
    The window is a mask on padding the negative margin takes back, so a wide digit passing a narrow place is not cut */
 .reel{--win:linear-gradient(180deg,transparent .12em,#000 .36em,#000 calc(100% - .34em),transparent calc(100% - .14em));position:relative;display:inline-block;padding:.2em;margin:-.2em;-webkit-mask-image:var(--win);mask-image:var(--win)}
@@ -197,6 +215,10 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .reel-strip{position:absolute;top:.2em;left:0;right:0;text-align:center;pointer-events:none;will-change:transform;transition:transform 2s var(--spring) calc(var(--d,0s) + var(--rd,0s))}
 .reel-strip span{display:block;height:1em;margin-bottom:.4em}
 .stats.in .reel-strip{transform:translate3d(0,var(--to),0)}   /* a share of the strip's own height, set by the script: all of it but the last digit */
+/* a second turn under the pointer: the strip starts on the digit already showing, so nothing jumps */
+.stats.in .reel-strip.re{transform:translate3d(0,0,0);transition:transform 1s var(--spring) var(--rd,0s)}
+.stats.in .reel-strip.re.go{transform:translate3d(0,var(--to),0)}
+@media (hover:hover){.stat:hover .stat-label{color:var(--lit)}}
 .reel.done{-webkit-mask-image:none;mask-image:none}
 .reel.done .reel-size{visibility:visible}
 /* the row arrives: each figure rises in turn with its rule drawing down, the reels run, and the plus signs land last */
@@ -703,7 +725,6 @@ html[dir=rtl] .stat-num{font-weight:600}
 html[dir=rtl] .stat-plus{--dx:.3em}
 html[dir=rtl] .stat-unit{margin-inline-start:.4em;font-size:.4em;font-weight:600}   /* the unit is a word in Arabic, set small beside the number */
 html[dir=rtl] .stat-label{line-height:1.7}
-html[dir=rtl] .stat-flag{line-height:1.7}
 html[dir=rtl] .wall-grid::after{transform-origin:100% 50%}
 html[dir=rtl] .wcol h3{font-weight:500}
 html[dir=rtl] .wname{line-height:1.52}
@@ -1031,16 +1052,16 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
 
 <!-- ================= FIGURES ================= -->
 <!-- The firm in six numbers. Four are counted from the live site (the "figures" script lists where each comes from).
-     The two marked data-draft are stand-ins until the firm confirms the real number: put the number in, then delete
-     data-draft and the "Placeholder" tag beside the label. -->
+     The two marked data-draft are stand-ins, not facts about the firm (the owner had their visible tag removed on 6 October 2026
+     and is collecting the real numbers): when one arrives, put it in and delete data-draft. -->
 <section class="figures" aria-label="Karam Shaar Advisory in figures">
   <div class="wrap">
     <ul class="stats" id="stats">
-      <li class="stat" data-draft><b class="stat-num">2.5M+</b><span class="stat-label">Data points in our trackers and databases <i class="stat-flag">Placeholder</i></span></li>
+      <li class="stat" data-draft><b class="stat-num">2.5M+</b><span class="stat-label">Data points in our trackers and databases</span></li>
       <li class="stat"><b class="stat-num">190+</b><span class="stat-label">Publications and articles</span></li>
       <li class="stat"><b class="stat-num">1,400+</b><span class="stat-label">Media quotes since 2020</span></li>
       <li class="stat"><b class="stat-num">110+</b><span class="stat-label">TV interviews</span></li>
-      <li class="stat" data-draft><b class="stat-num">80+</b><span class="stat-label">Research projects delivered <i class="stat-flag">Placeholder</i></span></li>
+      <li class="stat" data-draft><b class="stat-num">80+</b><span class="stat-label">Research projects delivered</span></li>
       <li class="stat"><b class="stat-num">45+</b><span class="stat-label">Team members in 8 countries</span></li>
     </ul>
   </div>
@@ -1437,7 +1458,6 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     "TV interviews": "مقابلات تلفزيونية",
     "Research projects delivered": "مشاريع بحثية منجزة",
     "Team members in 8 countries": "أعضاء الفريق في 8 دول",
-    "Placeholder": "رقم مبدئي",
     "M@stat-unit": "مليون",
     "Clients and donors.": "العملاء والجهات المانحة.",
     "The institutions we have worked with.": "المؤسسات التي عملنا معها.",
@@ -1653,7 +1673,8 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
 })();
 </script>
 
-<script src="https://unpkg.com/lenis@1/dist/lenis.min.js"></script>
+<!-- async: the page script below does not wait for it (it reveals the hero text), smooth scrolling starts when it lands. The exact version saves the CDN a redirect -->
+<script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js" id="lenis-src" async></script>
 <script>
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1663,11 +1684,14 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
 
   /* ---------- smooth scroll (Lenis, as on fora.so) ---------- */
   let lenis = null;
-  if (!reduce && window.Lenis) {
+  const smooth = () => {
+    if (lenis || reduce || !window.Lenis) return;
     lenis = new Lenis({ duration: 1.15, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
     const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
-  }
+  };
+  smooth();
+  if (!lenis && !reduce) { const src = $('#lenis-src'); if (src) src.addEventListener('load', smooth); }   // the library is still on its way
   /* ---------- pull to refresh inside a frame ----------
      In a frame a pull at the top only bounces the frame (and shows its edge): the browser's
      pull-to-refresh belongs to the outer page. So in a frame on a touch screen the bounce is off
@@ -1815,10 +1839,21 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
        1,400+  591 quotes in English-language media and 810 in Arabic-language media, the first in April 2020
        110+    115 TV interviews
        45+     46 profiles on the About page; the eight countries are the ones the home page names
-     A figure with data-draft is a stand-in, not a fact about the firm, until the real number replaces it. */
+     A figure with data-draft is a stand-in, not a fact about the firm, until the real number replaces it.
+     Under a mouse pointer a figure turns its reels once more: each digit runs one full turn and comes back to itself. */
   const stats = $('#stats');
   if (stats) {
     const span = (cls, text) => Object.assign(document.createElement('span'), { className: cls, textContent: text || '' });
+    /* put a strip on a reel: steps + 1 digits counting up from "from". When it stops, the strip is dropped and the plain digit stays */
+    const roll = (reel, from, steps, delay, again) => {
+      const strip = span('reel-strip' + (again ? ' re' : ''));
+      for (let v = 0; v <= steps; v++) strip.append(span('', String((from + v) % 10)));
+      strip.style.setProperty('--to', (-100 * steps / (steps + 1)).toFixed(4) + '%'); strip.style.setProperty('--rd', delay.toFixed(2) + 's');
+      const stop = () => { if (strip.isConnected) { reel.classList.add('done'); strip.remove(); } };
+      strip.addEventListener('transitionend', stop, { once: true });
+      reel.classList.remove('done'); reel.append(strip);
+      if (again) { void strip.offsetWidth; strip.classList.add('go'); setTimeout(stop, 1600); }   // the timer covers a turn the browser never finished, such as a tab put in the background
+    };
     $$('.stat', stats).forEach((stat, si) => {
       stat.style.setProperty('--d', (si * .09).toFixed(2) + 's');
       const num = $('.stat-num', stat), m = num.textContent.trim().match(/^([\d.,]+)([A-Za-z]*)(\+?)$/);
@@ -1828,22 +1863,20 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       let k = 0;
       for (const ch of figure) {
         if (ch < '0' || ch > '9') { digits.append(span('stat-sep', ch)); continue; }
-        const reel = span('reel'), last = (k ? Math.min(k, 2) * 10 : 0) + +ch;   // how far this reel travels: the first counts straight up to its digit
+        const reel = span('reel done'), last = (k ? Math.min(k, 2) * 10 : 0) + +ch;   // how far this reel travels: the first counts straight up to its digit
         reel.append(span('reel-size', ch));
-        if (reduce || !last) reel.classList.add('done');
-        else {
-          const strip = span('reel-strip');
-          for (let v = 0; v <= last; v++) strip.append(span('', String(v % 10)));
-          strip.style.setProperty('--to', (-100 * last / (last + 1)).toFixed(4) + '%'); strip.style.setProperty('--rd', (k * .07).toFixed(2) + 's');
-          strip.addEventListener('transitionend', () => { reel.classList.add('done'); strip.remove(); }, { once: true });
-          reel.append(strip);
-        }
+        if (!reduce && last) roll(reel, 0, last, k * .07);
         digits.append(reel); k++;
       }
       vis.append(digits); if (unit) vis.append(span('stat-unit', unit)); if (plus) vis.append(span('stat-plus', plus));
       num.replaceChildren(span('sr-only', text), vis);
     });
     window.KS.apply(stats);   // the unit letter is a word in Arabic
+    if (!reduce) $$('.stat', stats).forEach(stat => stat.addEventListener('pointerenter', e => {
+      const reels = $$('.reel', stat);
+      if (e.pointerType === 'touch' || !stats.classList.contains('in') || reels.some(r => !r.classList.contains('done'))) return;   // not while it is still arriving or already turning
+      reels.forEach((reel, k) => roll(reel, +reel.firstChild.textContent, 10, k * .05, true));
+    }));
     new IntersectionObserver(([en], o) => { if (en.isIntersecting) { o.disconnect(); stats.classList.add('in'); } }, { threshold: .3 }).observe(stats);
   }
 
@@ -2194,6 +2227,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     const draw = now => {
       raf = 0;
       if (!visible || !ready) return;
+      if (!reduce && !hot && glow < .004 && now - last < 12) { raf = requestAnimationFrame(draw); return; }   // cruising: 60 frames a second is all a 7px drift can show, so a 120 or 144 Hz screen skips the frames between. Under the pointer it runs at full rate
       const dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
       /* the field cruises; while a client is under the pointer it is drawn to the nearest place where a line meets the rectangle's edge, and rests there */
       let settling = false;
