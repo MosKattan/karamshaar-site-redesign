@@ -345,26 +345,23 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 /* optical sizing: the files are small squares with the logo floating somewhere inside. The script knows where (the BOX
    figures), so each mark is cut to its own outline, given the same visual weight whatever its shape, and set flush to the column edge */
 .wmark{position:relative;justify-self:start;width:calc(var(--w)*var(--k));height:calc(var(--h)*var(--k))}
-.wcrop,.wfull{position:absolute;inset:0}
+.wcrop{position:absolute;inset:0}
 .wcrop{overflow:hidden}
 .wmark img{position:absolute;max-width:none;left:calc(-100%*var(--fx)/var(--fw));top:calc(-100%*var(--fy)/var(--fh));width:calc(100%/var(--fw));height:calc(100%/var(--fh))}
 /* one ink for the whole wall: the last step of each filter tints the mark with the page's own cream (the navy ink in the
    light theme), through the two small SVG filters that sit beside the logo symbol at the top of the body */
-.wm{mix-blend-mode:screen;filter:grayscale(1) invert(1) contrast(1.2) brightness(1.9) url(#wall-cream);opacity:.88}
+.wm{transition:opacity .35s var(--ease);mix-blend-mode:screen;filter:grayscale(1) invert(1) contrast(1.2) brightness(1.9) url(#wall-cream);opacity:.88}
 .wm.keep{filter:grayscale(1) contrast(4) url(#wall-cream)}
 .wm.soft{filter:grayscale(1) invert(1) contrast(4) url(#wall-cream)}   /* a two-colour panel: pushed to one solid tone so it reads as a mark, not a faded picture */
 .wname{grid-column:2;font-size:.88rem;line-height:1.32;color:var(--lit);text-wrap:balance;transition:color .25s var(--ease)}
-/* under the pointer the single-colour mark develops into the organisation's own logo, on a cream chip */
-.wtrue{position:absolute;inset:-6px;overflow:hidden;border-radius:var(--r-in);background:var(--cream);box-shadow:0 12px 24px -12px rgba(4,9,22,.9);isolation:isolate;pointer-events:none;opacity:0;scale:.96;transition:opacity .22s var(--ease),scale .35s var(--spring)}
-.wfull{inset:6px}
-.wtrue img{mix-blend-mode:multiply}
-/* and its whole rectangle lights: a brighter face inside a cream line, while its row of the grid behind comes to rest squared up to it */
+/* under the pointer the whole rectangle lights as one: a brighter face inside a cream line, the mark and the name at full strength,
+   while its row of the grid behind comes to rest squared up to it */
 .wcell{position:relative;transition:background-color .35s var(--ease)}
 .wcell::after{content:"";position:absolute;inset:-1px 0 0;border:1px solid var(--wall-edge);pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
 @media (hover:hover){
   .wcell:hover{background:var(--wall-lit)}
   .wcell:hover::after{opacity:1}
-  .wcell:hover .wtrue{opacity:1;scale:1}
+  .wcell:hover .wm{opacity:1}
   .wcell:hover .wname{color:var(--text)}
 }
 /* a name with no mark stands alone, set larger: the page without its script, or a logo that fails to load */
@@ -664,7 +661,6 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .wall-grid::after{transition:none}
   .js .wcol .wcell{transform:none;transition:opacity .4s ease,background-color .35s var(--ease)}
   .js .wcol h3{transition:opacity .4s ease}
-  .wtrue{scale:1;transition:opacity .22s var(--ease)}
 }
 /* header on phones: flush to the top so the veil starts at the screen edge, a shorter blur, menu button kept in view */
 @media (max-width:1100px){
@@ -867,13 +863,12 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 [data-theme="light"] .rm.keep{filter:grayscale(1) invert(1) contrast(4)}
 [data-theme="light"] .rtrue{background:#fffdf7;box-shadow:0 0 0 1px rgba(22,38,75,.1),0 12px 24px -12px rgba(70,52,20,.5)}
 
-/* clients wall: paler faces on the cream field, marks in the page's navy ink, blue rules, the pointer's chip in paper white */
+/* clients wall: paler faces on the cream field, marks in the page's navy ink, blue rules */
 [data-theme="light"] .wall{--wall-face:var(--c-raise);--wall-lit:#fffdf7;--wall-edge:rgba(33,58,95,.55);--wall-cap:rgba(22,38,75,.46);--wall-base:rgba(22,38,75,.32)}
 [data-theme="light"] .wm{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.4) brightness(1.14) url(#wall-ink);opacity:.86}
 [data-theme="light"] .wm.soft{filter:grayscale(1) contrast(4) url(#wall-ink)}
 [data-theme="light"] .wm.dense{filter:grayscale(1) brightness(.8) contrast(4) url(#wall-ink)}
 [data-theme="light"] .wm.keep{filter:grayscale(1) invert(1) contrast(4) url(#wall-ink)}
-[data-theme="light"] .wtrue{background:#fffdf7;box-shadow:0 0 0 1px rgba(22,38,75,.1),0 12px 24px -12px rgba(70,52,20,.5)}
 
 /* statement: unread paragraphs recede into the cream, the rail fills with blue */
 [data-theme="light"] .statement p{color:rgba(22,38,75,.3)}
@@ -1876,8 +1871,8 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
   }
 
   /* ---------- clients wall: the same organisations, standing still, one column per kind of institution ----------
-     The names and their columns are in the markup. This hangs a mark on each name: twice, the single-colour one and
-     the untouched logo on a chip that shows under the pointer. The name is real text, so the images carry no alt. */
+     The names and their columns are in the markup. This hangs a single-colour mark on each name.
+     The name is real text, so the image carries no alt. */
   const wall = $('#wall');
   if (wall) {
     const cols = $$('.wcol', wall), el = (tag, cls) => Object.assign(document.createElement(tag), { className: cls });
@@ -1894,14 +1889,12 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     LOGOS.forEach(([name, path, kind], i) => {
       const li = cellOf.get(name) || cellOf.get(tr(name)); if (!li) return;
       const [x, y, w, h, shape = 1, nudge = 1] = BOX[i], ratio = shape * w / h, width = 48 * nudge * ratio ** .55;   // equal visual weight: a wide wordmark gets length, an emblem gets height
-      const mark = el('span', 'wmark'), crop = el('span', 'wcrop'), chip = el('span', 'wtrue'), inner = el('span', 'wfull');
-      const [mono, full] = [0, 1].map(() => Object.assign(new Image(), { alt: '', loading: 'lazy', decoding: 'async' }));
+      const mark = el('span', 'wmark'), crop = el('span', 'wcrop'), mono = Object.assign(new Image(), { alt: '', loading: 'lazy', decoding: 'async' });
       for (const [k, v] of Object.entries({ w: width.toFixed(1) + 'px', h: (width / ratio).toFixed(1) + 'px', fx: x, fy: y, fw: w, fh: h })) mark.style.setProperty('--' + k, v);
       mono.className = 'wm' + (kind ? ' ' + kind : '');
       mono.onerror = () => li.classList.add('no-mark');
-      mono.src = full.src = U + path;
-      chip.setAttribute('aria-hidden', 'true');
-      crop.append(mono); inner.append(full); chip.append(inner); mark.append(crop, chip);
+      mono.src = U + path;
+      crop.append(mono); mark.append(crop);
       li.prepend(mark); li.classList.remove('no-mark');
     });
     cols.forEach((c, ci) => {
