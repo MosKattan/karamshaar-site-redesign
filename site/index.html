@@ -696,7 +696,7 @@ html[dir=rtl] :is(.ph-arrow-right,.ph-arrow-up-right)::before{display:inline-blo
 html[dir=rtl] .marquee{direction:ltr}
 html[dir=rtl] .wall-grid::after{transform-origin:100% 50%}
 html[dir=rtl] .wcol h3{font-weight:500}
-html[dir=rtl] .wname{line-height:1.6}
+html[dir=rtl] .wname{line-height:1.52}
 html[dir=rtl] .uline{left:.12em;right:0;transform-origin:right}
 html[dir=rtl] .statement-in{margin-left:0;margin-right:clamp(0px,8.5vw,112px);padding-left:0;padding-right:clamp(20px,2.6vw,36px)}
 html[dir=rtl] .statement p::before,html[dir=rtl] .statement p::after{left:auto;right:calc(-1 * clamp(20px,2.6vw,36px))}
@@ -1832,7 +1832,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     const cols = $$('.wcol', wall), el = (tag, cls) => Object.assign(document.createElement(tag), { className: cls });
     /* where the visible mark sits inside each file, in LOGOS order: left, top, width, height as fractions of the image,
        then the image's own width over height when it is not square, then an optional nudge for marks that read heavy or thin.
-       Measured from the files; a replaced logo needs its line measured again. */
+       Measured from the files with tools/measure-logos.mjs; a replaced logo needs its line measured again. */
     const BOX = [
       [.037, .373, .918, .201], [.156, .213, .68, .566], [.241, .109, .518, .769, 1.5], [.082, .104, .836, .731], [.023, .023, .968, .964, 1, 1.08],
       [.075, .343, .858, .276], [0, .313, 1, .38, 1, .9], [.2, .213, .587, .5], [0, .367, 1, .333, 1, 1.08],
