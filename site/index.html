@@ -315,8 +315,11 @@ html.framed,html.framed body{overscroll-behavior-y:none}
    Every client and donor at once, standing still. Four columns by kind of institution, on one baseline,
    each as tall as its count, so the wall steps up like the columns of the block map. The heading takes
    the space the short columns leave free. The names are in the markup; the script hangs each mark on its name. */
-.wall{--wall-face:var(--n900);--wall-cap:rgba(241,234,215,.4);--wall-base:rgba(160,186,228,.38);--k:1;--mw:calc(118px*var(--k));
-  padding:clamp(100px,12vw,170px) 0 0;border-top:1px solid var(--line)}
+.wall{--wall-face:var(--n900);--wall-lit:#1a3156;--wall-edge:rgba(241,234,215,.6);--wall-cap:rgba(241,234,215,.4);--wall-base:rgba(160,186,228,.38);--k:1;--mw:calc(118px*var(--k));
+  position:relative;isolation:isolate;padding:clamp(100px,12vw,170px) 0 0;border-top:1px solid var(--line)}
+/* the flat lattice behind the wall, drawn in the script */
+.wall-bg{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.6s var(--ease) .3s}
+.wall-bg.on{opacity:1}
 .wall-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:auto auto;column-gap:24px}
 .wall-head{grid-column:1/3;grid-row:1;align-self:start;padding-bottom:clamp(40px,5vw,68px)}
 .wcol{align-self:end}
@@ -349,7 +352,12 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .wtrue{position:absolute;inset:-6px;overflow:hidden;border-radius:var(--r-in);background:var(--cream);box-shadow:0 12px 24px -12px rgba(4,9,22,.9);isolation:isolate;pointer-events:none;opacity:0;scale:.96;transition:opacity .22s var(--ease),scale .35s var(--spring)}
 .wfull{inset:6px}
 .wtrue img{mix-blend-mode:multiply}
+/* and its whole rectangle lights: a brighter face inside a cream line, which the lattice behind gathers around */
+.wcell{position:relative;transition:background-color .35s var(--ease)}
+.wcell::after{content:"";position:absolute;inset:-1px 0 0;border:1px solid var(--wall-edge);pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
 @media (hover:hover){
+  .wcell:hover{background:var(--wall-lit)}
+  .wcell:hover::after{opacity:1}
   .wcell:hover .wtrue{opacity:1;scale:1}
   .wcell:hover .wname{color:var(--text)}
 }
@@ -359,7 +367,7 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .no-mark .wname{grid-column:1;font-family:var(--serif);font-size:1.12rem;color:var(--text)}
 /* the wall rises: the ground line draws across, then each column builds from its base upward */
 .js .wall-grid:not(.in)::after{transform:scaleX(0)}
-.js .wcol .wcell{opacity:0;transform:translate3d(0,20px,0);transition:opacity .9s var(--spring) var(--d,0s),transform .9s var(--spring) var(--d,0s)}
+.js .wcol .wcell{opacity:0;transform:translate3d(0,20px,0);transition:opacity .9s var(--spring) var(--d,0s),transform .9s var(--spring) var(--d,0s),background-color .35s var(--ease)}
 .js .wcol h3{opacity:0;transition:opacity .9s var(--ease) var(--dl,0s)}
 .js .wcol.in .wcell{opacity:1;transform:none}
 .js .wcol.in h3{opacity:1}
@@ -375,7 +383,7 @@ html.framed,html.framed body{overscroll-behavior-y:none}
   .wall-grid::after{display:none}
   .wcol ul{border-bottom:1px solid var(--wall-base)}
   .wname{font-size:.94rem}
-  .js .wcol .wcell{transition-delay:var(--dn,0s)}
+  .js .wcol .wcell{transition-delay:var(--dn,0s),var(--dn,0s),0s}
   .js .wcol h3{transition-delay:0s}
 }
 /* phones: one column, every organisation still named */
@@ -647,7 +655,7 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .seg-thumb,.cover,.bimg i{transition:none}
   .swap{animation:none}
   .wall-grid::after{transition:none}
-  .js .wcol .wcell{transform:none;transition:opacity .4s ease}
+  .js .wcol .wcell{transform:none;transition:opacity .4s ease,background-color .35s var(--ease)}
   .js .wcol h3{transition:opacity .4s ease}
   .wtrue{scale:1;transition:opacity .22s var(--ease)}
 }
@@ -853,7 +861,7 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 [data-theme="light"] .rtrue{background:#fffdf7;box-shadow:0 0 0 1px rgba(22,38,75,.1),0 12px 24px -12px rgba(70,52,20,.5)}
 
 /* clients wall: paler faces on the cream field, marks in the page's navy ink, blue rules, the pointer's chip in paper white */
-[data-theme="light"] .wall{--wall-face:var(--c-raise);--wall-cap:rgba(22,38,75,.46);--wall-base:rgba(22,38,75,.32)}
+[data-theme="light"] .wall{--wall-face:var(--c-raise);--wall-lit:#fffdf7;--wall-edge:rgba(33,58,95,.55);--wall-cap:rgba(22,38,75,.46);--wall-base:rgba(22,38,75,.32)}
 [data-theme="light"] .wm{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.4) brightness(1.14) url(#wall-ink);opacity:.86}
 [data-theme="light"] .wm.soft{filter:grayscale(1) contrast(4) url(#wall-ink)}
 [data-theme="light"] .wm.dense{filter:grayscale(1) brightness(.8) contrast(4) url(#wall-ink)}
@@ -1199,6 +1207,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
      The names are here, sorted into four columns by kind of institution. The script finds each name in the LOGOS list
      and hangs its mark beside it, so an organisation added to that list needs its line here too -->
 <section class="wall" aria-labelledby="wall-h">
+  <canvas class="wall-bg" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="wall-grid" id="wall">
       <header class="wall-head rv">
@@ -2128,6 +2137,120 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
       ctx.fillStyle = f; ctx.fillRect(0, 0, W, H);
     }
   });
+
+  /* ---------- clients wall: the same lattice laid flat ----------
+     A square-on grid ruled from the wall itself: its horizontals sit on the rows, its verticals on the column edges
+     (each column split into near-square cells, the gutter a narrow cell of its own), and it carries on past the wall
+     to both sides. The columns' faces cover it, so it shows in the gutters, the notch and the margins.
+     A few cells light and fade as in the hero. Under the pointer the grid gathers: its lines bend in toward the
+     client's rectangle and the four lines that carry its edges light, running out a little way beyond it. */
+  const wallCv = document.querySelector('.wall-bg'), wallSec = wallCv && wallCv.closest('.wall'), wallEl = wallSec && wallSec.querySelector('#wall');
+  if (wallCv && wallCv.getContext && wallEl) {
+    const ctx = wallCv.getContext('2d'), lists = [...wallEl.querySelectorAll('ul')], head = wallEl.querySelector('.wall-head');
+    const PULL = .32, REACH = 150, RUN = 280;   // how far a line moves toward the rectangle, over what distance, and how far the lit edges run past it
+    let W = 0, H = 0, D = 1, xs = [], ys = [], cw = 80, rh = 84, x0 = 0, base = 0, period = 1, faces = [], shut = [], hd = null;
+    let cells = [], raf = 0, visible = false, last = 0, want = null, box = null, glow = 0;
+    const rel = el => { const s = wallSec.getBoundingClientRect(), r = el.getBoundingClientRect(); return { l: r.left - s.left, t: r.top - s.top, r: r.right - s.left, b: r.bottom - s.top }; };
+    const size = () => {
+      const s = wallSec.getBoundingClientRect();
+      W = s.width; H = s.height; D = Math.min(devicePixelRatio || 1, 2);
+      wallCv.width = Math.round(W * D); wallCv.height = Math.round(H * D);
+      faces = lists.map(rel); shut = lists.map(u => rel(u.parentElement)); hd = rel(head.querySelector('h2'));   // shut: each column with its label, where no cell may light
+      const first = faces.reduce((a, b) => (b.l < a.l ? b : a)), colW = first.r - first.l, next = faces.filter(f => f.l > first.r - 1).sort((a, b) => a.l - b.l)[0];
+      const gap = next ? Math.max(8, next.l - first.r) : 24, n = Math.max(1, Math.round(colW / 84));
+      rh = (first.b - first.t) / lists[faces.indexOf(first)].children.length; cw = colW / n; period = colW + gap; x0 = first.l;
+      base = Math.max(...faces.map(f => f.b));
+      xs = []; for (let m = Math.floor(-x0 / period) - 1; x0 + m * period < W + period; m++) for (let i = 0; i <= n; i++) xs.push(x0 + m * period + i * cw);
+      ys = []; for (let y = base; y > -rh; y -= rh) ys.push(y);
+    };
+    const open = (x, y) => !shut.some(f => x > f.l - 4 && x < f.r + 4 && y > f.t - rh && y < f.b) && !(x > hd.l - 30 && x < hd.r + 30 && y > hd.t - 30 && y < hd.b + 30);
+    const spawn = now => {
+      for (let tries = 0; tries < 10; tries++) {
+        const i = Math.random() * (xs.length - 1) | 0, j = Math.random() * (ys.length - 1) | 0, w = xs[i + 1] - xs[i];
+        if (w < cw - 1 || xs[i] < 0 || xs[i + 1] > W || ys[j + 1] < 40 || !open(xs[i] + w / 2, ys[j] - rh / 2)) continue;   // whole cells only, clear of the faces and the heading
+        const tints = day() ? TINTS_DAY : TINTS;
+        cells.push({ x: xs[i], y: ys[j + 1], w, tint: tints[Math.random() * tints.length | 0], born: now, life: 4200 + Math.random() * 3800 });
+        return;
+      }
+    };
+    /* a point moves toward the nearest point of the lit rectangle: nothing at the rectangle, most a little way off, nothing far away */
+    const bend = (x, y) => {
+      if (glow < .004) return [x, y];
+      const dx = x - Math.min(Math.max(x, box.l), box.r), dy = y - Math.min(Math.max(y, box.t), box.b), k = PULL * glow * Math.exp(-Math.hypot(dx, dy) / REACH);
+      return [x - dx * k, y - dy * k];
+    };
+    const rule = (ax, ay, bx, by) => {
+      const n = glow < .004 ? 1 : Math.ceil(Math.hypot(bx - ax, by - ay) / 22);
+      for (let s = 0; s <= n; s++) { const [x, y] = bend(ax + (bx - ax) * s / n, ay + (by - ay) * s / n); s ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+    };
+    const draw = now => {
+      raf = 0;
+      if (!visible) return;
+      const moving = !reduce && (want ? glow < .995 || Math.abs(box.l - want.l) + Math.abs(box.t - want.t) > .3 : glow > .004);
+      if (!moving && !reduce && now - last < 30) { raf = requestAnimationFrame(draw); return; }
+      last = now;
+      /* the lit rectangle glides from client to client; the gathering eases in and out */
+      if (want) { if (glow < .01 || reduce) box = { ...want }; else for (const k of 'ltrb') box[k] += (want[k] - box[k]) * .2; }
+      glow += ((want ? 1 : 0) - glow) * (reduce ? 1 : .14);
+      ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, W, H);
+      const ink = day() ? '33,58,95' : '197,210,232', a = day() ? .1 : .075;
+
+      ctx.lineWidth = 1; ctx.strokeStyle = `rgba(${ink},${a})`; ctx.beginPath();
+      for (const x of xs) rule(x + .5, 0, x + .5, base);
+      for (const y of ys) rule(0, y + .5, W, y + .5);
+      ctx.stroke();
+      /* the lines come in from nothing at the top, thin toward the screen edges, and stay out of the heading */
+      ctx.globalCompositeOperation = 'destination-in';
+      const v = ctx.createLinearGradient(0, 0, 0, Math.min(200, H * .3)); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, '#000');
+      ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+      const e = Math.max(0, Math.min(.2, (x0 - 8) / W)), hz = ctx.createLinearGradient(0, 0, W, 0);
+      hz.addColorStop(0, 'rgba(0,0,0,.25)'); hz.addColorStop(e, '#000'); hz.addColorStop(1 - e, '#000'); hz.addColorStop(1, 'rgba(0,0,0,.25)');
+      ctx.fillStyle = hz; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'destination-out';
+      const cx = (hd.l + hd.r) / 2, cy = (hd.t + hd.b) / 2, rx = (hd.r - hd.l) / 2 + 90, ry = (hd.b - hd.t) / 2 + 70;
+      ctx.save(); ctx.translate(cx, cy); ctx.scale(rx, ry);
+      const q = ctx.createRadialGradient(0, 0, .45, 0, 0, 1); q.addColorStop(0, 'rgba(0,0,0,.92)'); q.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = q; ctx.fillRect(-1, -1, 2, 2); ctx.restore();
+      ctx.globalCompositeOperation = 'source-over';
+
+      /* lit cells */
+      if (!reduce && Math.random() < .05 && cells.length < 9) spawn(now);
+      cells = cells.filter(c => now - c.born < c.life);
+      for (const c of cells) {
+        const age = (now - c.born) / c.life, k = reduce ? 1 : age < .25 ? age / .25 : age > .7 ? (1 - age) / .3 : 1, s = k * k * (3 - 2 * k) * (1 - glow * .6);
+        ctx.beginPath(); [[3, 3], [c.w - 3, 3], [c.w - 3, rh - 3], [3, rh - 3]].forEach(([dx, dy], n) => { const [x, y] = bend(c.x + dx, c.y + dy); n ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.closePath();
+        ctx.fillStyle = `rgba(${c.tint},${(.13 * s).toFixed(3)})`; ctx.fill();
+        ctx.strokeStyle = `rgba(${c.tint},${(.45 * s).toFixed(3)})`; ctx.stroke();
+      }
+
+      /* the four lines that carry the lit rectangle's edges, brightest beside it */
+      if (glow > .004) {
+        const lit = day() ? '33,58,95' : '241,234,215', peak = (day() ? .5 : .46) * glow;
+        const edge = (ax, ay, bx, by) => {   // from a corner outward
+          const g = ctx.createLinearGradient(ax, ay, bx, by); g.addColorStop(0, `rgba(${lit},${peak})`); g.addColorStop(1, `rgba(${lit},0)`);
+          ctx.strokeStyle = g; ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+        };
+        const l = Math.round(box.l) + .5, r = Math.round(box.r) - .5, t = Math.round(box.t) + .5, b = Math.round(box.b) + .5;
+        for (const y of [t, b]) { edge(l, y, l - RUN, y); edge(r, y, r + RUN, y); }
+        for (const x of [l, r]) { edge(x, t, x, t - RUN); edge(x, b, x, Math.min(base, b + RUN)); }
+      }
+      if (!reduce || moving) raf = requestAnimationFrame(draw);
+    };
+    const kick = () => { if (!raf && visible) raf = requestAnimationFrame(draw); };
+
+    size();
+    if (reduce) { for (let n = 0; n < 4; n++) spawn(performance.now() - 2000); cells.forEach(c => { c.life = 1e12; }); }
+    new ResizeObserver(() => { size(); kick(); }).observe(wallSec);
+    new IntersectionObserver(([en]) => { visible = en.isIntersecting; kick(); }).observe(wallSec);
+    document.addEventListener('visibilitychange', () => { visible = !document.hidden; kick(); });
+    document.addEventListener('themechange', kick);
+    document.addEventListener('langchange', () => { size(); cells = []; kick(); });
+    if (matchMedia('(hover: hover)').matches) {
+      wallEl.addEventListener('pointerover', e => { const c = e.target.closest('.wcell'); want = c ? rel(c) : null; kick(); });
+      wallEl.addEventListener('pointerleave', () => { want = null; kick(); });
+    }
+    wallCv.classList.add('on');
+  }
 })();
 </script>
 
