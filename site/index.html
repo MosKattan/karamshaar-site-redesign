@@ -168,22 +168,71 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 
 .seg.seg-sm button[aria-pressed="true"]{color:var(--cream)}
 
-/* ---------- clients ---------- */
-.clients{position:relative;background:var(--n900);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0}
+/* ---------- figures ----------
+   The firm in six numbers, where the logo strip used to run (the clients and donors have their own wall further down).
+   Each digit sits on a reel that the script turns up to its value. A reel is as wide as its final digit from the
+   first frame, so the number is typeset once and nothing shifts when the reels stop. */
+.figures{--fig-accent:var(--sand);position:relative;background:var(--n900);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(36px,3.8vw,56px) 0}
 /* the hero's corner vignette carries on over the band and the section below, fading out, so the hero has no hard lower edge */
-.clients::before{content:"";position:absolute;z-index:3;left:0;right:0;top:-1px;height:340px;pointer-events:none;background:radial-gradient(75% 100% at 100% 0,rgba(4,9,24,.82),rgba(4,9,24,.4) 45%,rgba(4,9,24,0) 78%)}
-.clients-row{display:grid;grid-template-columns:200px minmax(0,1fr);align-items:center;gap:32px}
-.clients h2{font-family:var(--sans);font-size:.95rem;font-weight:400;letter-spacing:0;line-height:1.4;color:var(--muted)}
-.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.marquee ul{display:flex;align-items:center;gap:52px;width:max-content;animation:slide 64s linear infinite}
-.marquee:hover ul{animation-play-state:paused}
-@keyframes slide{to{transform:translateX(calc(-50% - 26px))}}
-/* no tiles: each logo is turned into a light single-colour mark. The li carries the strip colour so the screen blend has something to blend with. */
-.marquee li{flex:none;height:72px;display:grid;place-items:center;background:var(--n900)}
-.marquee img{height:50px;width:auto;max-width:136px;object-fit:contain;mix-blend-mode:screen;filter:grayscale(1) invert(1) contrast(1.2) brightness(1.9);opacity:.82;transition:opacity .25s var(--ease)}
-.marquee img.keep{filter:grayscale(1) contrast(4)}
-.marquee img.crop{width:30px;max-width:none;object-fit:cover;object-position:44% 50%}
-.marquee li:hover img{opacity:1}
+.figures::before{content:"";position:absolute;z-index:3;left:0;right:0;top:-1px;height:340px;pointer-events:none;background:radial-gradient(75% 100% at 100% 0,rgba(4,9,24,.82),rgba(4,9,24,.4) 45%,rgba(4,9,24,0) 78%)}
+.figures .wrap{position:relative;z-index:4}   /* the numbers stand in front of that vignette */
+.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
+.stat{position:relative;display:flex;flex-direction:column;gap:14px;padding-inline:clamp(16px,1.9vw,28px) 8px}
+.stat::before{content:"";position:absolute;inset-block:2px;inset-inline-start:0;width:1px;background:var(--line);transform-origin:50% 0}
+.stat:first-child{padding-inline-start:0}
+.stat:first-child::before{display:none}
+.stat-num{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,4.1vw,3.75rem);line-height:1;letter-spacing:-.03em;font-variant-numeric:lining-nums;color:var(--text);white-space:nowrap}
+.stat-vis{display:flex;align-items:baseline}
+.stat-unit,.stat-plus{color:var(--fig-accent)}
+.stat-plus{--dx:-.3em;align-self:flex-start;margin-top:.12em;margin-inline-start:.1em;font-size:.58em}   /* a small raised plus, so the number itself stays the loudest thing */
+.stat-label{max-width:15em;font-size:.92rem;line-height:1.4;color:var(--muted);text-wrap:balance}
+/* a stand-in number waiting for the confirmed one says so */
+.stat-flag{display:inline-block;margin-inline-start:2px;padding:0 7px;border:1px dashed color-mix(in srgb,var(--fig-accent) 55%,transparent);border-radius:6px;font-size:.68rem;font-style:normal;line-height:1.55;letter-spacing:.03em;color:var(--fig-accent);white-space:nowrap;vertical-align:.08em}
+/* the reel: the final digit holds the place (hidden while the strip runs), the strip of digits slides up behind a soft-edged window.
+   The window is a mask on padding the negative margin takes back, so a wide digit passing a narrow place is not cut */
+.reel{--win:linear-gradient(180deg,transparent .12em,#000 .36em,#000 calc(100% - .34em),transparent calc(100% - .14em));position:relative;display:inline-block;padding:.2em;margin:-.2em;-webkit-mask-image:var(--win);mask-image:var(--win)}
+.reel-size{visibility:hidden}
+/* the digits on a strip stand 1.4em apart, so one clears the window before the next fills it. Each is a line of its own,
+   set exactly like the place-holder, so the last one lands on the very pixel the final digit takes */
+.reel-strip{position:absolute;top:.2em;left:0;right:0;text-align:center;pointer-events:none;will-change:transform;transition:transform 2s var(--spring) calc(var(--d,0s) + var(--rd,0s))}
+.reel-strip span{display:block;height:1em;margin-bottom:.4em}
+.stats.in .reel-strip{transform:translate3d(0,var(--to),0)}   /* a share of the strip's own height, set by the script: all of it but the last digit */
+.reel.done{-webkit-mask-image:none;mask-image:none}
+.reel.done .reel-size{visibility:visible}
+/* the row arrives: each figure rises in turn with its rule drawing down, the reels run, and the plus signs land last */
+.js .stat{opacity:0;transform:translate3d(0,26px,0);transition:opacity 1.2s var(--spring) var(--d,0s),transform 1.2s var(--spring) var(--d,0s)}
+.js .stat::before{transform:scaleY(0);transition:transform 1.3s var(--spring) calc(var(--d,0s) + .1s)}
+.js .stat-plus{opacity:0;transform:translate3d(var(--dx),0,0);transition:opacity .6s var(--ease) calc(var(--d,0s) + 1.65s),transform .9s var(--spring) calc(var(--d,0s) + 1.65s)}
+.js .stats.in .stat,.js .stats.in .stat-plus{opacity:1;transform:none}
+.js .stats.in .stat::before{transform:none}
+/* tablets: three across, two rows, a rule between the rows */
+@media (min-width:768px) and (max-width:1100px){
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .stat-num{font-size:clamp(2.7rem,5.6vw,3.5rem)}
+  .stat{padding-inline-start:clamp(20px,3vw,32px)}
+  .stat:nth-child(3n+1){padding-inline-start:0}
+  .stat:nth-child(3n+1)::before{display:none}
+  .stat:nth-child(-n+3){padding-bottom:30px}
+  .stat:nth-child(n+4){padding-top:30px;border-top:1px solid var(--line)}
+  .stat:nth-child(-n+3)::before{bottom:30px}
+  .stat:nth-child(n+4)::before{top:32px}
+}
+/* phones: two across, three rows */
+@media (max-width:767px){
+  .figures{padding:8px 0}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat{gap:10px;padding-block:26px;padding-inline:18px 4px}
+  .stat-num{font-size:clamp(2.3rem,11vw,2.9rem)}
+  .stat-label{font-size:.88rem}
+  .stat:nth-child(odd){padding-inline-start:0}
+  .stat:nth-child(odd)::before{display:none}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .stat::before{inset-block:28px}
+}
+@media (prefers-reduced-motion:reduce){
+  .js .stat{transform:none;transition:opacity .4s ease var(--d,0s)}
+  .js .stat::before,.js .stat-plus{transform:none;transition:none}
+}
 
 /* ---------- statement ---------- */
 .statement{position:relative;isolation:isolate;padding:clamp(110px,15vw,210px) 0}
@@ -525,7 +574,6 @@ legend,label{display:block;margin-bottom:10px;padding:0;font-size:.9rem;font-wei
   .nav .lang{display:none}
   .pcard-geo{opacity:.55}
   .b-e::after{display:none}
-  .clients-row{grid-template-columns:minmax(0,1fr);gap:18px}
   .statement-in{margin-left:0}
   .pcard{position:relative;top:auto;min-height:0;grid-template-columns:minmax(0,1fr);box-shadow:none}
   .stack{gap:16px}
@@ -600,8 +648,6 @@ body::after{content:"";position:fixed;inset:0;z-index:5;pointer-events:none;opac
 @media (prefers-reduced-motion:reduce){
   .js .rv{transform:none;transition:opacity .4s ease var(--d,0s)}
   .nav,.mnav{animation:none}
-  .marquee{overflow-x:auto}
-  .marquee ul{animation:none}
   .iso{transition:none}
   .iso-call.on i,.iso-call.on p{animation:none}
   .uline{transition:none;transform:scaleX(1)}
@@ -653,7 +699,11 @@ html[dir=rtl] .btn:hover .ph,html[dir=rtl] .link-arrow:hover .ph{translate:-4px 
 html[dir=rtl] .skip{left:auto;right:12px}
 html[dir=rtl] .brand svg{direction:ltr}   /* the wordmark is Latin: its tagline is laid out from the left */
 html[dir=rtl] :is(.ph-arrow-right,.ph-arrow-up-right)::before{display:inline-block;scale:-1 1}
-html[dir=rtl] .marquee{direction:ltr}
+html[dir=rtl] .stat-num{font-weight:600}
+html[dir=rtl] .stat-plus{--dx:.3em}
+html[dir=rtl] .stat-unit{margin-inline-start:.4em;font-size:.4em;font-weight:600}   /* the unit is a word in Arabic, set small beside the number */
+html[dir=rtl] .stat-label{line-height:1.7}
+html[dir=rtl] .stat-flag{line-height:1.7}
 html[dir=rtl] .wall-grid::after{transform-origin:100% 50%}
 html[dir=rtl] .wcol h3{font-weight:500}
 html[dir=rtl] .wname{line-height:1.52}
@@ -673,7 +723,7 @@ html[dir=rtl] .hero-track{--sky:
     radial-gradient(90% 55% at 22% -6%,rgba(165,154,202,.30),rgba(165,154,202,0) 70%),
     radial-gradient(70% 45% at 92% 0%,rgba(30,80,162,.30),rgba(30,80,162,0) 72%),
     linear-gradient(180deg,#36487f 0%,#26396d 20%,#1b2d5c 44%,#142548 72%,#11203c 100%)}
-html[dir=rtl] .clients::before{background:radial-gradient(75% 100% at 0 0,rgba(4,9,24,.82),rgba(4,9,24,.4) 45%,rgba(4,9,24,0) 78%)}
+html[dir=rtl] .figures::before{background:radial-gradient(75% 100% at 0 0,rgba(4,9,24,.82),rgba(4,9,24,.4) 45%,rgba(4,9,24,0) 78%)}
 
 /* practice-card, bento and panel decoration, mirrored */
 html[dir=rtl] .g1::before{right:auto;left:-6%}
@@ -802,16 +852,9 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 [data-theme="light"] .seg-sm .seg-thumb{background:var(--c-blue);box-shadow:none}
 @media (max-width:1100px){[data-theme="light"] .iso::before{background:radial-gradient(closest-side,rgba(120,96,48,.16),rgba(120,96,48,0))}}
 
-/* clients: a lighter band, logos as single-colour ink marks */
-[data-theme="light"] .clients{background:var(--c-raise)}
-[data-theme="light"] .clients::before{display:none}
-[data-theme="light"] .marquee li{background:var(--c-raise)}
-/* dark marks on white: lift near-white to pure white so the multiply drops the square out entirely */
-[data-theme="light"] .marquee img{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.4) brightness(1.14);opacity:.8}
-[data-theme="light"] .marquee img.soft{opacity:.46}
-[data-theme="light"] .marquee img.dense{filter:grayscale(1) brightness(.8) contrast(4)}   /* pale colour marks (the UN blue) need the grey pushed down before the white is lifted */
-[data-theme="light"] .marquee li:hover img{opacity:1}
-[data-theme="light"] .marquee img.keep{filter:grayscale(1) invert(1) contrast(4)}
+/* figures: a lighter band, numbers in the navy ink, the plus signs and units in brass */
+[data-theme="light"] .figures{--fig-accent:#84642a;background:var(--c-raise)}
+[data-theme="light"] .figures::before{display:none}
 
 /* clients wall: paler faces on the cream field, marks in the page's navy ink, blue rules */
 [data-theme="light"] .wall{--wall-face:#f8f1e4;--wall-lit:#fffefa;--wall-ink:var(--text);--wall-edge:rgba(33,58,95,.35);--wall-cap:rgba(22,38,75,.18);--wall-base:rgba(22,38,75,.13);--wall-line:rgba(22,38,75,.052)}
@@ -986,13 +1029,20 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
 </section>
 </div>
 
-<!-- ================= CLIENTS ================= -->
-<section class="clients" aria-label="Clients and donors">
-  <div class="wrap clients-row">
-    <h2>Clients and donors we have worked with</h2>
-    <div class="marquee">
-      <ul id="logos"></ul>
-    </div>
+<!-- ================= FIGURES ================= -->
+<!-- The firm in six numbers. Four are counted from the live site (the "figures" script lists where each comes from).
+     The two marked data-draft are stand-ins until the firm confirms the real number: put the number in, then delete
+     data-draft and the "Placeholder" tag beside the label. -->
+<section class="figures" aria-label="Karam Shaar Advisory in figures">
+  <div class="wrap">
+    <ul class="stats" id="stats">
+      <li class="stat" data-draft><b class="stat-num">2.5M+</b><span class="stat-label">Data points in our trackers and databases <i class="stat-flag">Placeholder</i></span></li>
+      <li class="stat"><b class="stat-num">190+</b><span class="stat-label">Publications and articles</span></li>
+      <li class="stat"><b class="stat-num">1,400+</b><span class="stat-label">Media quotes since 2020</span></li>
+      <li class="stat"><b class="stat-num">110+</b><span class="stat-label">TV interviews</span></li>
+      <li class="stat" data-draft><b class="stat-num">80+</b><span class="stat-label">Research projects delivered <i class="stat-flag">Placeholder</i></span></li>
+      <li class="stat"><b class="stat-num">45+</b><span class="stat-label">Team members in 8 countries</span></li>
+    </ul>
   </div>
 </section>
 
@@ -1143,7 +1193,7 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
 </section>
 
 <!-- ================= CLIENTS WALL ================= -->
-<!-- The strip under the hero scrolls past; this one stands still and shows every client and donor at once.
+<!-- Every client and donor at once, standing still.
      The names are here, sorted into four columns by kind of institution. The script finds each name in the LOGOS list
      and hangs its mark beside it, so an organisation added to that list needs its line here too -->
 <section class="wall" aria-labelledby="wall-h">
@@ -1380,8 +1430,15 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     "Enter a valid email address to continue.": "أدخل بريدًا إلكترونيًا صالحًا للمتابعة.",
     "Column height shows": "ارتفاع العمود يمثّل",
     "Move across the map": "حرّك المؤشر فوق الخريطة",
-    "Clients and donors": "العملاء والجهات المانحة",
-    "Clients and donors we have worked with": "العملاء والجهات المانحة التي عملنا معها",
+    "Karam Shaar Advisory in figures": "كرم شعار للاستشارات بالأرقام",
+    "Data points in our trackers and databases": "نقطة بيانات في أدواتنا وقواعد بياناتنا",
+    "Publications and articles": "منشورات ومقالات",
+    "Media quotes since 2020": "اقتباسات إعلامية منذ عام 2020",
+    "TV interviews": "مقابلات تلفزيونية",
+    "Research projects delivered": "مشاريع بحثية منجزة",
+    "Team members in 8 countries": "أعضاء الفريق في 8 دول",
+    "Placeholder": "رقم مبدئي",
+    "M@stat-unit": "مليون",
     "Clients and donors.": "العملاء والجهات المانحة.",
     "The institutions we have worked with.": "المؤسسات التي عملنا معها.",
     "International organisations": "المنظمات الدولية",
@@ -1749,7 +1806,49 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); light();
   }
 
-  /* ---------- client logos (hotlinked from the live site for this dry run) ---------- */
+  /* ---------- figures: the firm in six numbers, each digit on its own reel ----------
+     The numbers are plain text in the markup, so the row reads without this script. Here each digit goes on a reel:
+     a strip of digits that runs up from 0 and stops on its own, the reels further right passing it once or twice first,
+     like a counter. A reel is as wide as its final digit from the start and is swapped for that digit when it stops.
+     Where the numbers come from (counted on karamshaar.com on 6 October 2026, each rounded down):
+       190+    64 publications and 132 Syria in Figures articles (21 issues)
+       1,400+  591 quotes in English-language media and 810 in Arabic-language media, the first in April 2020
+       110+    115 TV interviews
+       45+     46 profiles on the About page; the eight countries are the ones the home page names
+     A figure with data-draft is a stand-in, not a fact about the firm, until the real number replaces it. */
+  const stats = $('#stats');
+  if (stats) {
+    const span = (cls, text) => Object.assign(document.createElement('span'), { className: cls, textContent: text || '' });
+    $$('.stat', stats).forEach((stat, si) => {
+      stat.style.setProperty('--d', (si * .09).toFixed(2) + 's');
+      const num = $('.stat-num', stat), m = num.textContent.trim().match(/^([\d.,]+)([A-Za-z]*)(\+?)$/);
+      if (!m) return;
+      const [text, figure, unit, plus] = m, vis = span('stat-vis'), digits = span('stat-digits');
+      vis.setAttribute('aria-hidden', 'true'); digits.dir = 'ltr';   // digits always run left to right; the unit and the plus follow the page's direction
+      let k = 0;
+      for (const ch of figure) {
+        if (ch < '0' || ch > '9') { digits.append(span('stat-sep', ch)); continue; }
+        const reel = span('reel'), last = (k ? Math.min(k, 2) * 10 : 0) + +ch;   // how far this reel travels: the first counts straight up to its digit
+        reel.append(span('reel-size', ch));
+        if (reduce || !last) reel.classList.add('done');
+        else {
+          const strip = span('reel-strip');
+          for (let v = 0; v <= last; v++) strip.append(span('', String(v % 10)));
+          strip.style.setProperty('--to', (-100 * last / (last + 1)).toFixed(4) + '%'); strip.style.setProperty('--rd', (k * .07).toFixed(2) + 's');
+          strip.addEventListener('transitionend', () => { reel.classList.add('done'); strip.remove(); }, { once: true });
+          reel.append(strip);
+        }
+        digits.append(reel); k++;
+      }
+      vis.append(digits); if (unit) vis.append(span('stat-unit', unit)); if (plus) vis.append(span('stat-plus', plus));
+      num.replaceChildren(span('sr-only', text), vis);
+    });
+    window.KS.apply(stats);   // the unit letter is a word in Arabic
+    new IntersectionObserver(([en], o) => { if (en.isIntersecting) { o.disconnect(); stats.classList.add('in'); } }, { threshold: .3 }).observe(stats);
+  }
+
+  /* ---------- client logos (hotlinked from the live site for this dry run), hung on the clients wall below ----------
+     Third field: keep is a light mark on a dark field (not inverted), soft and dense are marks that need a stronger push to one tone, crop trims side margins. */
   const U = 'https://karamshaar.com/wp-content/uploads/';
   const LOGOS = [
     ['World Bank', '2024/11/World-Bank.webp'],
@@ -1771,17 +1870,6 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     ['Asfari Foundation', '2024/11/Asfari-Foundation.webp'],
     ['Syrian Forum', '2024/11/Syrian-Forum.webp']
   ];
-  const ul = $('#logos');
-  [0, 1].forEach(pass => LOGOS.forEach(([name, path, keep]) => {   // keep: a light mark on a dark field. Not inverted; the contrast drops the field to black, which the screen blend hides
-    const li = document.createElement('li');
-    if (pass) li.setAttribute('aria-hidden', 'true');
-    const img = new Image();
-    img.alt = pass ? '' : name; img.loading = 'lazy'; img.decoding = 'async'; if (keep) img.className = keep;
-    img.onerror = () => li.remove();
-    img.src = U + path;
-    li.append(img); ul.append(li);
-  }));
-  window.KS.apply(ul);   // the names above are the alt text
 
   /* ---------- clients wall: the same organisations, standing still, one column per kind of institution ----------
      The names and their columns are in the markup. This hangs its mark on each name: twice, in the wall's single colour
