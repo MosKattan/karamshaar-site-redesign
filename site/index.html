@@ -317,9 +317,15 @@ html.framed,html.framed body{overscroll-behavior-y:none}
    the space the short columns leave free. The names are in the markup; the script hangs each mark on its name. */
 .wall{--wall-face:var(--n900);--wall-lit:#1a3156;--wall-edge:rgba(241,234,215,.6);--wall-cap:rgba(241,234,215,.4);--wall-base:rgba(160,186,228,.38);--k:1;--mw:calc(118px*var(--k));
   position:relative;isolation:isolate;padding:clamp(100px,12vw,170px) 0 0;border-top:1px solid var(--line)}
-/* the flat lattice behind the wall, drawn in the script */
+/* the wall's grid carried on behind it, drawn in the script (wide layouts only) */
 .wall-bg{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.6s var(--ease) .3s}
 .wall-bg.on{opacity:1}
+/* the lit lines that run out from the rectangle under the pointer, along its row and in front of the wall. The script places them */
+.wall-row{position:absolute;left:0;right:0;top:0;height:var(--h,84px);transform:translateY(var(--y,0));pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
+.wall-row.on{opacity:1}
+.wall-row::before,.wall-row::after{content:"";position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent calc(var(--l) - 360px),var(--wall-edge) var(--l),transparent var(--l)),linear-gradient(90deg,transparent var(--r),var(--wall-edge) var(--r),transparent calc(var(--r) + 360px))}
+.wall-row::before{top:0}
+.wall-row::after{bottom:0}
 .wall-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:auto auto;column-gap:24px}
 .wall-head{grid-column:1/3;grid-row:1;align-self:start;padding-bottom:clamp(40px,5vw,68px)}
 .wcol{align-self:end}
@@ -352,7 +358,7 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .wtrue{position:absolute;inset:-6px;overflow:hidden;border-radius:var(--r-in);background:var(--cream);box-shadow:0 12px 24px -12px rgba(4,9,22,.9);isolation:isolate;pointer-events:none;opacity:0;scale:.96;transition:opacity .22s var(--ease),scale .35s var(--spring)}
 .wfull{inset:6px}
 .wtrue img{mix-blend-mode:multiply}
-/* and its whole rectangle lights: a brighter face inside a cream line, which the lattice behind gathers around */
+/* and its whole rectangle lights: a brighter face inside a cream line, while its row of the grid behind comes to rest squared up to it */
 .wcell{position:relative;transition:background-color .35s var(--ease)}
 .wcell::after{content:"";position:absolute;inset:-1px 0 0;border:1px solid var(--wall-edge);pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
 @media (hover:hover){
@@ -381,6 +387,7 @@ html.framed,html.framed body{overscroll-behavior-y:none}
   .wall-head{grid-column:1/-1;padding-bottom:0}
   .wall-grid .wcol{grid-column:auto;grid-row:auto}
   .wall-grid::after{display:none}
+  .wall-bg,.wall-row{display:none}
   .wcol ul{border-bottom:1px solid var(--wall-base)}
   .wname{font-size:.94rem}
   .js .wcol .wcell{transition-delay:var(--dn,0s),var(--dn,0s),0s}
@@ -2138,114 +2145,147 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     }
   });
 
-  /* ---------- clients wall: the same lattice laid flat ----------
-     A square-on grid ruled from the wall itself. Its horizontals sit on the wall's rows and never move. Between them each
-     row is divided into near-square cells (the column gutter a narrow one of its own), and each row slides slowly
-     sideways at its own pace, neighbours in opposite directions. The columns' faces cover the grid, so it shows in the
-     gutters, the notch and the margins. Cells light and fade in the practice tints as in the hero, singly or in short runs.
-     Under the pointer only that client's row answers: it eases to a stop with its divisions squared up to the columns,
-     and the two lines that carry the rectangle's top and bottom light. Let go and the row drifts on. */
+  /* ---------- clients wall: the wall's own grid, carried on behind it ----------
+     The wall is four columns of rectangles with a gutter between them. Behind it run rows of the same thing: faint
+     blocks exactly one column wide with exactly one gutter of space between them, on the wall's own row lines. Some
+     blocks are one rectangle, some are split into halves or squares. Each row slides slowly sideways at its own
+     pace, neighbours in opposite directions, like slats passing behind the columns; the faces cover them, so they
+     show in the open slots above the columns, under the titles, in the gutters and in the margins.
+     Boxes light and fade in the practice tints as in the hero, singly or in short runs, riding with their row.
+     Under the pointer only that client's row answers: it glides to a stop in register, its blocks squared up to
+     the columns and its spaces to the gutters. Let go and it gathers pace again.
+     Movement is measured in time, not frames, and nothing is snapped to whole pixels, so the slide stays even.
+     Wide layouts only: stacked, the columns no longer share rows for a grid to sit on. */
   const wallCv = document.querySelector('.wall-bg'), wallSec = wallCv && wallCv.closest('.wall'), wallEl = wallSec && wallSec.querySelector('#wall');
   if (wallCv && wallCv.getContext && wallEl) {
     const ctx = wallCv.getContext('2d'), lists = [...wallEl.querySelectorAll('ul')], head = wallEl.querySelector('.wall-head');
-    const RUN = 320;   // how far the lit lines run past the rectangle
-    let W = 0, H = 0, D = 1, n = 4, cw = 80, rh = 84, x0 = 0, base = 0, period = 1, rows = [], shut = [], hd = null;
-    let cells = [], raf = 0, visible = false, last = 0, t0 = performance.now(), want = null, box = null, hot = -1, glow = 0;
+    const wide = matchMedia('(min-width:1180px)'), STIFF = 5.5;   // STIFF: how briskly a row settles into register (a critically damped spring)
+    const band = wallSec.appendChild(Object.assign(document.createElement('span'), { className: 'wall-row' })); band.setAttribute('aria-hidden', 'true');   // the lit lines that run out from the rectangle along its row, in front of the wall
+    let W = 0, H = 0, D = 1, n = 4, cw = 76, colW = 302, rh = 84, x0 = 0, base = 0, period = 326, rows = [], faces = [], titles = [], shut = [], hd = null;
+    let cells = [], raf = 0, visible = false, last = 0, hot = -1;
     const rel = el => { const s = wallSec.getBoundingClientRect(), r = el.getBoundingClientRect(); return { l: r.left - s.left, t: r.top - s.top, r: r.right - s.left, b: r.bottom - s.top }; };
     const size = () => {
+      if (!wide.matches) { rows = []; cells = []; return; }
       const s = wallSec.getBoundingClientRect();
       W = s.width; H = s.height; D = Math.min(devicePixelRatio || 1, 2);
       wallCv.width = Math.round(W * D); wallCv.height = Math.round(H * D);
-      const faces = lists.map(rel); shut = lists.map(u => rel(u.parentElement)); hd = rel(head.querySelector('h2'));   // shut: each column with its label, where no cell may start
-      const first = faces.reduce((a, b) => (b.l < a.l ? b : a)), colW = first.r - first.l, next = faces.filter(f => f.l > first.r - 1).sort((a, b) => a.l - b.l)[0];
-      const gap = next ? Math.max(8, next.l - first.r) : 24;
-      n = Math.max(1, Math.round(colW / 84)); rh = (first.b - first.t) / lists[faces.indexOf(first)].children.length; cw = colW / n; period = colW + gap; x0 = first.l;
+      faces = lists.map(rel).sort((a, b) => a.l - b.l); hd = rel(head.querySelector('h2'));
+      const lift = new DOMMatrixReadOnly(getComputedStyle(head).transform).m42; hd.t -= lift; hd.b -= lift;   // the heading may still be mid-rise: take where it will rest
+      titles = lists.map(u => { const t = rel(u.previousElementSibling), f = rel(u); return { l: f.l, r: f.r, t: t.t - 6, b: f.t }; });
+      shut = faces.slice(1).map((b, i) => ({ l: faces[i].r, r: b.l, t: Math.max(faces[i].t, b.t) + 1, b: Math.min(faces[i].b, b.b) })).filter(g => g.b > g.t);   // a gutter with a face on both sides stays clear
+      const first = faces.reduce((a, b) => (b.l < a.l ? b : a)), next = faces.filter(f => f.l > first.r - 1).sort((a, b) => a.l - b.l)[0];
+      colW = first.r - first.l; period = colW + (next ? Math.max(8, next.l - first.r) : 24); x0 = first.l;
+      rh = (first.b - first.t) / lists.reduce((a, u) => (u.getBoundingClientRect().left < a.getBoundingClientRect().left ? u : a)).children.length; n = Math.max(2, Math.round(colW / rh)); cw = colW / n;
       base = Math.max(...faces.map(f => f.b));
-      const count = Math.ceil(base / rh) + 1;
-      /* each row keeps its pace and its start across a resize; lock is how far it has squared up to the columns */
-      rows = Array.from({ length: count }, (_, j) => rows[j] || { speed: (j % 2 ? -1 : 1) * (5 + ((j * 37) % 5)), start: ((j * 53) % 97) / 97, lock: 0 });
+      /* a row keeps its place and its pace across a resize */
+      rows = Array.from({ length: Math.ceil(base / rh) + 1 }, (_, j) => rows[j] || (() => {
+        const speed = reduce ? 0 : (j % 2 ? -1 : 1) * (4.5 + ((j * 37) % 4));
+        return { speed, vel: speed, pos: reduce ? 0 : (((j * 53) % 97) / 97) * period, target: 0 };
+      })());
       cells = [];
     };
-    const smooth = k => k * k * (3 - 2 * k);
-    /* where row j's pattern begins: drifting freely, or eased onto the nearest position that squares it with the columns */
-    const shift = (j, t) => {
-      const r = rows[j], free = reduce ? 0 : (r.start * period + r.speed * t) % period;
-      return free - (free - Math.round(free / period) * period) * smooth(r.lock);
+    /* how block u of row j is divided, in squares: one rectangle, two halves, a square and the rest, or all squares. The same every time it is asked */
+    const split = (j, u) => {
+      let h = Math.imul(j + 11, 374761393) + Math.imul(u, 668265263) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); h = ((h ^ (h >>> 16)) >>> 0) % 10;
+      const half = n >> 1;
+      return h < 3 ? [n] : h < 5 ? [half, n - half] : h < 7 ? [1, n - 1] : h < 9 ? [n - 1, 1] : Array(n).fill(1);
     };
-    const open = (x, y) => !shut.some(f => x > f.l - 4 && x < f.r + 4 && y > f.t - rh && y < f.b) && !(x > hd.l - 30 && x < hd.r + 30 && y > hd.t - 30 && y < hd.b + 30);
-    const spawn = (now, t) => {
-      for (let tries = 0; tries < 12; tries++) {
-        const j = Math.random() * (rows.length - 1) | 0, top = base - (j + 1) * rh, m = Math.floor((Math.random() * W - x0) / period), i = Math.random() * n | 0;
-        const x = x0 + m * period + i * cw + shift(j, t);
-        if (top < 30 || !open(x + cw / 2, top + rh / 2)) continue;   // clear of the faces, the labels and the heading
-        const tints = day() ? TINTS_DAY : TINTS, tint = tints[Math.random() * tints.length | 0], life = 4200 + Math.random() * 3800;
-        const run = Math.random() < .3 ? 2 + (Math.random() * 3 | 0) : 1, wide = run === 1 && i < n - 1 && Math.random() < .3 ? 2 : 1;   // a short run along the row, a double-width rectangle, or a single square
-        for (let s = 0; s < run && i + s < n; s++) cells.push({ j, m, i: i + s, wide, tint, born: now + s * 260, life });
+    const open = (x, y) => x > 0 && x < W && !faces.some(f => x > f.l && x < f.r && y > f.t && y < f.b) && !(x > hd.l - 30 && x < hd.r + 30 && y > hd.t - 30 && y < hd.b + 30);
+    /* how much of a box in the row at y is in the open (0 to 1), and how much of it sits behind a title */
+    const under = (list, x, w, y) => list.reduce((a, f) => (y + rh / 2 > f.t && y + rh / 2 < f.b ? a + Math.max(0, Math.min(x + w, f.r) - Math.max(x, f.l)) : a), 0) / w;
+    const seen = (x, w, y) => 1 - Math.min(1, under(faces, x, w, y) + under(shut, x, w, y));
+    const spawn = now => {
+      for (let tries = 0; tries < 14; tries++) {
+        const j = 1 + (Math.random() * (rows.length - 2) | 0), y = base - (j + 1) * rh, x = Math.random() * W, at = x - x0 - rows[j].pos;
+        let u = Math.floor(at / period), parts = split(j, u), p = 0, inside = at - u * period;
+        if (y < 24 || inside > colW) continue;   // too near the top to show, or it fell in a space
+        while (p < parts.length - 1 && inside > parts[p] * cw) inside -= parts[p++] * cw;
+        const mid = x - inside + parts[p] * cw / 2;
+        if (!open(mid, y + rh / 2) || seen(mid - parts[p] * cw / 2, parts[p] * cw, y) < .98) continue;   // behind a face, under the heading, or only partly in the open
+        const tints = (day() ? TINTS_DAY : TINTS).slice(0, 5), tint = tints[Math.random() * tints.length | 0], life = 4600 + Math.random() * 3800, step = rows[j].speed < 0 ? -1 : 1;
+        for (let k = 0, run = Math.random() < .32 ? 2 + (Math.random() * 3 | 0) : 1; k < run; k++) {   // a short run along the row, box after box, across blocks if need be
+          cells.push({ j, u, p, tint, born: now + k * 280, life });
+          p += step;
+          if (p < 0) { u--; p = split(j, u).length - 1; } else if (p >= split(j, u).length) { u++; p = 0; }
+        }
         return;
       }
     };
     const draw = now => {
       raf = 0;
-      if (!visible) return;
-      const settling = rows.some((r, j) => (j === hot ? r.lock < .995 : r.lock > .004));
-      if (!reduce && now - last < 30) { raf = requestAnimationFrame(draw); return; }
-      last = now;
-      const t = (now - t0) / 1000;
-      for (let j = 0; j < rows.length; j++) rows[j].lock += ((j === hot ? 1 : 0) - rows[j].lock) * (reduce ? 1 : .09);
-      if (want) box = want;
-      glow += ((want ? 1 : 0) - glow) * (reduce ? 1 : .12);
+      if (!visible || !rows.length) return;
+      const dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
+      /* each row cruises at its own pace; the one under the pointer is drawn to the nearest position in register and stops there */
+      let settling = false;
+      rows.forEach((r, j) => {
+        if (j === hot) { r.vel += (-STIFF * STIFF * (r.pos - r.target) - 2 * STIFF * r.vel) * dt; if (Math.abs(r.pos - r.target) > .05 || Math.abs(r.vel) > .5) settling = true; else { r.pos = r.target; r.vel = 0; } }
+        else r.vel += (r.speed - r.vel) * (1 - Math.exp(-dt * 1.3));
+        r.pos += r.vel * dt;
+      });
       ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, W, H);
-      const ink = day() ? '33,58,95' : '197,210,232', a = day() ? .1 : .075;
+      const light = day(), ink = light ? '33,58,95' : '197,210,232';
+      const each = (j, fn) => { const pos = rows[j].pos; for (let u = Math.ceil((-colW - x0 - pos) / period); x0 + u * period + pos < W; u++) fn(u, x0 + u * period + pos); };
 
-      /* the rows' own lines, then each row's divisions */
-      ctx.lineWidth = 1; ctx.strokeStyle = `rgba(${ink},${a})`; ctx.beginPath();
+      /* the blocks' faint faces: a step toward the tone of the wall's own faces */
+      ctx.fillStyle = light ? 'rgba(255,253,246,.24)' : 'rgba(150,182,236,.03)'; ctx.beginPath();
+      for (let j = 0; j < rows.length; j++) each(j, (u, x) => ctx.rect(x, base - (j + 1) * rh, colW, rh));
+      ctx.fill();
+      /* the row lines stand still; the blocks' edges and their divisions travel */
+      ctx.lineWidth = 1; ctx.strokeStyle = `rgba(${ink},${light ? .085 : .065})`; ctx.beginPath();
       for (let j = 0; j <= rows.length; j++) { const y = Math.round(base - j * rh) + .5; ctx.moveTo(0, y); ctx.lineTo(W, y); }
-      for (let j = 0; j < rows.length; j++) {
-        const y1 = base - j * rh, y2 = y1 - rh, off = shift(j, t);
-        for (let m = Math.floor((-off - x0) / period) - 1; x0 + m * period + off < W; m++) for (let i = 0; i <= n; i++) {
-          const x = Math.round(x0 + m * period + i * cw + off) + .5;
-          if (x > -1 && x < W + 1) { ctx.moveTo(x, y1); ctx.lineTo(x, y2); }
-        }
-      }
       ctx.stroke();
+      ctx.lineWidth = 1.5;   // a touch wider and fainter than a hairline, so an edge between two pixels looks the same as one on a pixel
+      for (const pass of [0, 1]) {   // 0: the blocks' own edges. 1: the divisions inside them, fainter
+        ctx.strokeStyle = `rgba(${ink},${(light ? .1 : .078) * (pass ? .55 : 1)})`; ctx.beginPath();
+        for (let j = 0; j < rows.length; j++) {
+          const y1 = base - j * rh, y2 = y1 - rh;
+          each(j, (u, x) => {
+            if (!pass) { ctx.moveTo(x, y1); ctx.lineTo(x, y2); ctx.moveTo(x + colW, y1); ctx.lineTo(x + colW, y2); return; }
+            let at = x; for (const part of split(j, u).slice(0, -1)) { at += part * cw; ctx.moveTo(at, y1); ctx.lineTo(at, y2); }
+          });
+        }
+        ctx.stroke();
+      }
+      ctx.lineWidth = 1;
 
-      /* lit cells ride along with their row */
-      if (!reduce && Math.random() < .09 && cells.length < 22) spawn(now, t);
+      /* lit boxes ride with their row */
+      if (!reduce && Math.random() < dt * 1.5 && cells.length < 16) spawn(now);
       cells = cells.filter(c => now - c.born < c.life && c.j < rows.length);
       for (const c of cells) {
         const age = (now - c.born) / c.life; if (age < 0) continue;
-        const k = reduce ? 1 : age < .25 ? age / .25 : age > .7 ? (1 - age) / .3 : 1, e = smooth(k);
-        const x = x0 + c.m * period + c.i * cw + shift(c.j, t), y = base - (c.j + 1) * rh, w = cw * c.wide;
-        ctx.fillStyle = `rgba(${c.tint},${(.15 * e).toFixed(3)})`; ctx.fillRect(x + 3, y + 3, w - 6, rh - 6);
-        ctx.strokeStyle = `rgba(${c.tint},${(.5 * e).toFixed(3)})`; ctx.strokeRect(Math.round(x) + 3.5, Math.round(y) + 3.5, w - 7, rh - 7);
+        const k = age < .22 ? age / .22 : age > .68 ? (1 - age) / .32 : 1, e = k * k * (3 - 2 * k), parts = split(c.j, c.u);
+        let x = x0 + c.u * period + rows[c.j].pos; for (let p = 0; p < c.p; p++) x += parts[p] * cw;
+        const y = base - (c.j + 1) * rh, w = parts[c.p] * cw;
+        const show = e * seen(x, w, y) ** 2 * (1 - .72 * under(titles, x, w, y));   // it dims as it slides behind a column, and is held back behind a title
+        if (show < .01) continue;
+        ctx.fillStyle = `rgba(${c.tint},${(.105 * show).toFixed(3)})`; ctx.fillRect(x + 4, y + 4, w - 8, rh - 8);
+        ctx.strokeStyle = `rgba(${c.tint},${(.36 * show).toFixed(3)})`; ctx.strokeRect(x + 4.5, y + 4.5, w - 9, rh - 9);
       }
 
       /* the grid comes in from nothing at the top, thins toward the screen edges, and stays out of the heading */
       ctx.globalCompositeOperation = 'destination-in';
-      const v = ctx.createLinearGradient(0, 0, 0, Math.min(200, H * .3)); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, '#000');
+      const v = ctx.createLinearGradient(0, 0, 0, Math.min(210, H * .3)); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, '#000');
       ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
       const ed = Math.max(0, Math.min(.2, (x0 - 8) / W)), hz = ctx.createLinearGradient(0, 0, W, 0);
-      hz.addColorStop(0, 'rgba(0,0,0,.25)'); hz.addColorStop(ed, '#000'); hz.addColorStop(1 - ed, '#000'); hz.addColorStop(1, 'rgba(0,0,0,.25)');
+      hz.addColorStop(0, 'rgba(0,0,0,.3)'); hz.addColorStop(ed, '#000'); hz.addColorStop(1 - ed, '#000'); hz.addColorStop(1, 'rgba(0,0,0,.3)');
       ctx.fillStyle = hz; ctx.fillRect(0, 0, W, H);
       ctx.globalCompositeOperation = 'destination-out';
-      const cx = (hd.l + hd.r) / 2, cy = (hd.t + hd.b) / 2, rx = (hd.r - hd.l) / 2 + 90, ry = (hd.b - hd.t) / 2 + 70;
-      ctx.save(); ctx.translate(cx, cy); ctx.scale(rx, ry);
-      const q = ctx.createRadialGradient(0, 0, .45, 0, 0, 1); q.addColorStop(0, 'rgba(0,0,0,.92)'); q.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = q; ctx.fillRect(-1, -1, 2, 2); ctx.restore();
+      ctx.fillStyle = 'rgba(0,0,0,.2)';   // a soft-edged clearing the shape of the heading: a stack of rectangles, each a little smaller
+      for (let k = 13; k >= 0; k--) ctx.fillRect(hd.l - 6 - k * 6, hd.t - k * 5, hd.r - hd.l + 12 + k * 12, hd.b - hd.t + k * 10);
+      for (const g of shut) ctx.clearRect(g.l, g.t, g.r - g.l, g.b - g.t);
       ctx.globalCompositeOperation = 'source-over';
 
-      /* the two lines that carry the lit rectangle's top and bottom, brightest beside it */
-      if (glow > .004 && box) {
-        const lit = day() ? '33,58,95' : '241,234,215', peak = (day() ? .5 : .46) * glow;
-        const l = Math.round(box.l), r = Math.round(box.r);
-        for (const y of [Math.round(box.t) + .5, Math.round(box.b) + .5]) for (const [ax, bx] of [[l, l - RUN], [r, r + RUN]]) {
-          const g = ctx.createLinearGradient(ax, 0, bx, 0); g.addColorStop(0, `rgba(${lit},${peak})`); g.addColorStop(1, `rgba(${lit},0)`);
-          ctx.strokeStyle = g; ctx.beginPath(); ctx.moveTo(ax, y); ctx.lineTo(bx, y); ctx.stroke();
-        }
-      }
       if (!reduce || settling) raf = requestAnimationFrame(draw);
     };
-    const kick = () => { if (!raf && visible) raf = requestAnimationFrame(draw); };
+    const kick = () => { if (!raf && visible && rows.length) { last = performance.now(); raf = requestAnimationFrame(draw); } };
+    const point = cell => {
+      const at = cell && rows.length ? rel(cell) : null;
+      hot = at ? Math.round((base - at.b) / rh) : -1;
+      if (at && rows[hot]) rows[hot].target = Math.round(rows[hot].pos / period) * period;
+      band.classList.toggle('on', !!at);
+      if (at) for (const [k, val] of Object.entries({ y: at.t, h: at.b - at.t, l: at.l, r: at.r })) band.style.setProperty('--' + k, val.toFixed(1) + 'px');
+      kick();
+    };
 
     size();
     new ResizeObserver(() => { size(); kick(); }).observe(wallSec);
@@ -2254,11 +2294,8 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
     document.addEventListener('themechange', kick);
     document.addEventListener('langchange', () => { size(); kick(); });
     if (matchMedia('(hover: hover)').matches) {
-      wallEl.addEventListener('pointerover', e => {
-        const c = e.target.closest('.wcell'); want = c ? rel(c) : null;
-        hot = want ? Math.round((base - want.b) / rh) : -1; kick();
-      });
-      wallEl.addEventListener('pointerleave', () => { want = null; hot = -1; kick(); });
+      wallEl.addEventListener('pointerover', e => point(e.target.closest('.wcell')));
+      wallEl.addEventListener('pointerleave', () => point(null));
     }
     wallCv.classList.add('on');
   }
