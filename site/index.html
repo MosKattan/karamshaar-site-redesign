@@ -724,6 +724,7 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 @media (min-width:768px){.mnav-theme{display:none}}
 /* the switch itself: one soft cross-fade of the whole page where the browser offers it */
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.45s;animation-timing-function:cubic-bezier(.22,.8,.26,1)}
+@property --veil{syntax:'<color>';inherits:false;initial-value:#f4ecdc}   /* registered so the nav veil can fade between cream and navy */
 
 [data-theme="light"]{
   --c-bg:#f4ecdc; --c-raise:#fbf6ec; --c-deep:#ece1cb; --c-sand:#e4d5b6;
@@ -749,8 +750,14 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 [data-theme="light"] .link-arrow{color:var(--c-blue)}
 
 /* nav: a cream veil instead of a dark one */
-[data-theme="light"] .nav::after{background:linear-gradient(180deg,rgba(244,236,220,.9) 0,rgba(244,236,220,.55) 45%,rgba(244,236,220,0) 100%)}
-[data-theme="light"] .nav.is-scrolled::after{background:linear-gradient(180deg,rgba(244,236,220,.96) 0,rgba(244,236,220,.66) 45%,rgba(244,236,220,0) 100%)}
+[data-theme="light"] .nav::after{--veil:#f4ecdc;background:linear-gradient(180deg,color-mix(in srgb,var(--veil) 90%,transparent) 0,color-mix(in srgb,var(--veil) 55%,transparent) 45%,transparent 100%);transition:opacity .3s var(--ease),--veil .3s var(--ease)}
+[data-theme="light"] .nav.is-scrolled::after{background:linear-gradient(180deg,color-mix(in srgb,var(--veil) 96%,transparent) 0,color-mix(in srgb,var(--veil) 66%,transparent) 45%,transparent 100%)}
+/* over the deep blue inquiry band (.on-deep, set by the "nav state" script) the veil turns to a quiet navy and the bar takes its night colours */
+[data-theme="light"] .nav.on-deep{--text:#f3efe3;--muted:rgba(226,233,246,.72);--logo-bar:#7f9dd0;--logo-ink:#f1ead7;--logo-tag:#93acd4}
+[data-theme="light"] .nav.on-deep::after{--veil:rgba(13,25,48,.7)}
+[data-theme="light"] .nav.on-deep .nav-links a:hover,[data-theme="light"] .nav.on-deep .lang:hover,[data-theme="light"] .nav.on-deep .theme:hover,[data-theme="light"] .nav.on-deep .menu:hover{background:rgba(255,255,255,.07)}
+[data-theme="light"] .nav.on-deep .btn-cream{box-shadow:inset 0 0 0 1px rgba(226,233,246,.32)}
+[data-theme="light"] .nav.on-deep .btn-cream:hover{background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(226,233,246,.55)}
 [data-theme="light"] .nav-links a,[data-theme="light"] .nav .lang,[data-theme="light"] .theme{color:var(--muted)}
 [data-theme="light"] .nav-links a:hover,[data-theme="light"] .lang:hover,[data-theme="light"] .theme:hover{color:var(--text);background:rgba(22,38,75,.06)}
 [data-theme="light"] .nav-links a[aria-current]{color:var(--text)}
@@ -1714,6 +1721,12 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
 
   /* ---------- nav state ---------- */
   new IntersectionObserver(([en]) => $('#nav').classList.toggle('is-scrolled', !en.isIntersecting)).observe($('#top-sentinel'));
+  /* light theme: while the deep blue inquiry band sits behind the bar, the bar takes its night colours */
+  const onDeep = () => {
+    const nav = $('#nav'), y = nav.offsetHeight / 2, r = $('.inquiry').getBoundingClientRect();
+    nav.classList.toggle('on-deep', r.top <= y && r.bottom > y);
+  };
+  addEventListener('scroll', onDeep, { passive: true }); addEventListener('resize', onDeep); onDeep();
 
   /* ---------- statement: the paragraph being read is lit ----------
      Measured from scroll position, not IntersectionObserver: inside a cross-origin
