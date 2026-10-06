@@ -315,7 +315,7 @@ html.framed,html.framed body{overscroll-behavior-y:none}
    Every client and donor at once, standing still. Four columns by kind of institution, on one baseline,
    each as tall as its count, so the wall steps up like the columns of the block map. The heading takes
    the space the short columns leave free. The names are in the markup; the script hangs each mark on its name. */
-.wall{--wall-face:var(--n900);--wall-lit:#274677;--wall-edge:rgba(241,234,215,.85);--wall-cap:rgba(241,234,215,.4);--wall-base:rgba(160,186,228,.38);--k:1;--mw:calc(118px*var(--k));
+.wall{--wall-face:var(--n900);--wall-lit:var(--cream);--wall-ink:var(--n950);--wall-edge:rgba(241,234,215,.85);--wall-cap:rgba(241,234,215,.4);--wall-base:rgba(160,186,228,.38);--k:1;--mw:calc(118px*var(--k));
   position:relative;isolation:isolate;padding:clamp(100px,12vw,170px) 0 0;border-top:1px solid var(--line)}
 /* the wall's grid carried on behind it, drawn in the script (wide layouts only) */
 .wall-bg{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity 1.6s var(--ease) .3s}
@@ -353,12 +353,11 @@ html.framed,html.framed body{overscroll-behavior-y:none}
 .wm{transition:opacity .35s var(--ease);mix-blend-mode:screen;filter:grayscale(1) invert(1) contrast(1.2) brightness(1.9) url(#wall-cream);opacity:.88}
 .wm.keep{filter:grayscale(1) contrast(4) url(#wall-cream)}
 .wm.soft{filter:grayscale(1) invert(1) contrast(4) url(#wall-cream)}   /* a two-colour panel: pushed to one solid tone so it reads as a mark, not a faded picture */
-/* the same file again, in its own colours, waiting under the single-colour mark. On navy its lightness is turned over and its
-   hue turned back, so a dark blue mark becomes a light blue one and the white ground drops out; on cream it is the file as it is */
-.wc{mix-blend-mode:screen;filter:invert(1) hue-rotate(180deg) saturate(1.7);opacity:0;transition:opacity .35s var(--ease)}
-.wc.keep{filter:none}
+/* the same file again, untouched, waiting under the single-colour mark. Under the pointer the rectangle turns to cream paper,
+   so the logo shows in its real colours: its white ground multiplies away into the cream */
+.wc{mix-blend-mode:multiply;opacity:0;transition:opacity .35s var(--ease)}
 .wname{grid-column:2;font-size:.88rem;line-height:1.32;color:var(--lit);text-wrap:balance;transition:color .25s var(--ease)}
-/* under the pointer the whole rectangle lights as one: a brighter face inside a cream line, the mark in its own colours, the name at full strength,
+/* under the pointer the whole rectangle lights as one: its face turns to cream paper, the mark shows in its real colours, the name turns to ink,
    while its row of the grid behind comes to rest squared up to it */
 .wcell{position:relative;transition:background-color .35s var(--ease)}
 .wcell::after{content:"";position:absolute;inset:-1px 0 0;border:1px solid var(--wall-edge);pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
@@ -367,7 +366,7 @@ html.framed,html.framed body{overscroll-behavior-y:none}
   .wcell:hover::after{opacity:1}
   .wcell:hover .wm{opacity:0}
   .wcell:hover .wc{opacity:1}
-  .wcell:hover .wname{color:var(--text)}
+  .wcell:hover .wname{color:var(--wall-ink)}
 }
 /* a name with no mark stands alone, set larger: the page without its script, or a logo that fails to load */
 .wcell.no-mark{grid-template-columns:minmax(0,1fr)}
@@ -869,10 +868,9 @@ html[dir=rtl] .covers:hover .cover:nth-child(3){rotate:-3deg;translate:-4% 2%}
 [data-theme="light"] .rtrue{background:#fffdf7;box-shadow:0 0 0 1px rgba(22,38,75,.1),0 12px 24px -12px rgba(70,52,20,.5)}
 
 /* clients wall: paler faces on the cream field, marks in the page's navy ink, blue rules */
-[data-theme="light"] .wall{--wall-face:var(--c-raise);--wall-lit:#fffefa;--wall-edge:rgba(33,58,95,.7);--wall-cap:rgba(22,38,75,.46);--wall-base:rgba(22,38,75,.32)}
+[data-theme="light"] .wall{--wall-face:var(--c-raise);--wall-lit:#fffefa;--wall-ink:var(--text);--wall-edge:rgba(33,58,95,.7);--wall-cap:rgba(22,38,75,.46);--wall-base:rgba(22,38,75,.32)}
 [data-theme="light"] .wm{mix-blend-mode:multiply;filter:grayscale(1) contrast(1.4) brightness(1.14) url(#wall-ink);opacity:.86}
 [data-theme="light"] .wm.soft{filter:grayscale(1) contrast(4) url(#wall-ink)}
-[data-theme="light"] .wc{mix-blend-mode:multiply;filter:none}
 [data-theme="light"] .wm.dense{filter:grayscale(1) brightness(.8) contrast(4) url(#wall-ink)}
 [data-theme="light"] .wm.keep{filter:grayscale(1) invert(1) contrast(4) url(#wall-ink)}
 
