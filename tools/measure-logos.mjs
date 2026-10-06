@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const site = readFileSync(join(here, '..', 'site', 'index.html'), 'utf8');
 const block = site.match(/const LOGOS = \[([\s\S]*?)\n  \];/)[1];
-const LOGOS = [...block.matchAll(/\['([^']+)', '([^']+)', '([^']*)', (\d)\]/g)].map(m => ({ name: m[1], path: m[2], kind: m[3] }));
+const LOGOS = [...block.matchAll(/\['([^']+)', '([^']+)'(?:, '([^']*)')?\]/g)].map(m => ({ name: m[1], path: m[2], kind: m[3] || '' }));
 console.log('logos', LOGOS.length);
 
 const W = 1500, H = 1000, port = 9800 + Math.floor(Math.random() * 100), profile = join(here, 'chrome-profile-' + process.pid), out = join(here, 'shots');
