@@ -20,6 +20,15 @@ That one file already holds every variant. Do not make a second folder or a seco
 
 Both switches are also buttons in the nav. So every change has four states to check: English dark, English light, Arabic dark, Arabic light.
 
+## Test version (temporary, since 2026-10-09)
+
+On 2026-10-09 the owner asked for a test version, to try feedback from two colleagues: stronger colours taken from the logo, Georgia and Arial, a white light theme, faster loading. It is the one exception to rule 4, made at his request.
+
+- **File:** `site/test.html`. A copy of `site/index.html`: the same stylesheet followed by one block headed "TEST VERSION overrides", and script changes marked "test version" in comments. It opens in the light version (`?theme=dark` for dark, `?lang=ar` for Arabic, `?map=flat` for the flat map).
+- **Published copy:** https://claude.ai/artifact/GNBoMic7zoyaqtAQuvKdxo ("Karam Shaar Services (test)"). Republish it to that URL after every change to `site/test.html`, with the same care as the main artifact (images go in `files`).
+- **It is not "the site".** "The website", "the page" and "the artifact" still mean `site/index.html` and its artifact. Do not copy the test's changes into `index.html`, and do not make any further test files, unless the owner asks.
+- When the owner decides, either the test's changes move into `index.html` and `test.html` is deleted, or `test.html` is simply deleted. Then remove this section.
+
 ## Rules
 
 1. **Edit only `site/`.** Everything in `_archive/` is a retired direction, kept for the record. Do not read it for guidance, do not edit it, do not copy from it, and do not suggest going back to it unless the owner asks by name.

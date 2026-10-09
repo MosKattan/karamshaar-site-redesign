@@ -11,7 +11,7 @@ const [prefix = 'shot', W = '1440', H = '900', stepsArg = 'auto', path = ''] = p
 const width = +W, height = +H;
 const out = join(here, 'shots'); mkdirSync(out, { recursive: true });
 const profile = join(here, 'chrome-profile-' + process.pid);
-const port = 9300 + Math.floor(Math.random() * 500);
+const port = 9300 + process.pid % 4000;   // from the process id, so two shoots running at once never share a port (a random one sometimes did)
 const chrome = spawn('C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', [
   '--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, '--hide-scrollbars',
   `--window-size=${width},${height}`, '--no-first-run', '--no-default-browser-check', '--disable-extensions', 'about:blank'

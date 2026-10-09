@@ -20,9 +20,9 @@
 <meta name="description" content="Research, due diligence, briefs and training on Syria's economy, business environment and investment landscape.">
 <meta name="theme-color" content="#ffffff">
 
-<!-- Dry run: Lenis and Three.js come from a CDN. Bundle and self-host before production. The icons are drawn in the stylesheet below.
-     Latin type is Georgia and Arial, which every device already has. The Arabic face (Cairo, as on the live site) is requested only when the page is in Arabic. -->
-<link rel="preconnect" href="https://unpkg.com">
+<!-- Dry run: Lenis and Three.js come from a CDN, both fetched only after the page has loaded (so no other host is contacted before then).
+     Bundle and self-host before production. The icons are drawn in the stylesheet below.
+     Latin type is Georgia and Arial, which nearly every device already has. The Arabic face (Cairo, as on the live site) is requested only when the page is in Arabic. -->
 
 <script>document.documentElement.classList.add('js');try{const q=new URLSearchParams(location.search).get('theme'),k=q||localStorage.getItem('ks-test-theme');if(k!=='dark')document.documentElement.dataset.theme='light'}catch(e){document.documentElement.dataset.theme='light'}
 window.ksArabicFont=()=>{if(document.getElementById('ks-ar-font'))return;for(const[rel,href,x]of[['preconnect','https://fonts.gstatic.com',1],['stylesheet','https://fonts.googleapis.com/css2?family=Cairo:wght@400..700&display=swap']]){const l=document.createElement('link');l.rel=rel;l.href=href;if(x)l.crossOrigin='';else l.id='ks-ar-font';document.head.append(l)}};
@@ -971,27 +971,40 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
    ========================================================= */
 
 /* ---------- type: Georgia for headings, Arial for text and figures. Arabic keeps Cairo, the live site's face ---------- */
-:root{--serif:Georgia,"Times New Roman",Times,serif;--sans:Arial,"Helvetica Neue",Helvetica,sans-serif}
+/* a number inside a Georgia heading ("72 hours") takes Arial's digits, which are lining; Georgia's own are old-style.
+   The face below is those ten characters from the Arial already on the device, so nothing is downloaded */
+@font-face{font-family:"KS Figures";src:local("Arial Bold"),local("Arial-BoldMT");font-weight:700;unicode-range:U+30-39}
+@font-face{font-family:"KS Figures";src:local("Arial"),local("ArialMT");font-weight:400;unicode-range:U+30-39}
+:root{--serif:"KS Figures",Georgia,"Noto Serif","Times New Roman",Times,serif;--sans:Arial,"Helvetica Neue",Helvetica,Roboto,"Liberation Sans",sans-serif}
 html[dir=rtl]{--serif:"Cairo",Tahoma,Arial,sans-serif;--sans:"Cairo",Tahoma,Arial,sans-serif}
 body{text-rendering:auto}
 h1,h2,h3{font-weight:700}
 h1{font-size:clamp(2.5rem,5vw,4.4rem);line-height:1.08;letter-spacing:-.018em}
 h1 em,h2 em{font-weight:700}
-h2{font-size:clamp(1.95rem,3.5vw,3.05rem);line-height:1.14;letter-spacing:-.015em}
+/* a section heading is a bold headline with a regular deck in blue, one clear step below the page headline */
+h2{font-size:clamp(1.75rem,3.1vw,2.7rem);line-height:1.16;letter-spacing:-.01em}
+h2 .dim{font-weight:400}
 h3{font-size:1.4rem;line-height:1.2;letter-spacing:-.005em}
-.hero-copy{max-width:500px}
+@media (min-width:1101px){.hero-copy{max-width:500px}}
 .hero-copy h1{font-size:clamp(2.35rem,3.75vw,3.45rem)}
+html:not([dir=rtl]) .uline{bottom:-.06em}   /* clear of Georgia's descenders */
 .pcard h3{font-size:clamp(1.65rem,2.7vw,2.35rem);font-weight:700;line-height:1.12;letter-spacing:-.012em}
 .b-b h3{font-size:clamp(1.7rem,2.5vw,2.25rem);font-weight:700;line-height:1.12}
 .rate-row h3{font-size:1.3rem;font-weight:700}
 .statement p{font-size:clamp(1.4rem,2.5vw,2.2rem);line-height:1.32;letter-spacing:-.005em}
 .signoff{font-size:clamp(1.9rem,5.2vw,4.7rem);font-weight:400;line-height:1.1;letter-spacing:-.02em}
 /* Arial has two weights, so the medium weight the old face used becomes a clear bold on everything that is pressed or labels a figure */
-.btn,.link-arrow,.seg button,.lang,.mail,.note,.cur,.starter label,.iso-call b,.wcol h3,.map-coord b,.map-note b{font-weight:700}
+.btn,.link-arrow,.seg button,.lang,.mail,.note,.cur,.starter label,.iso-call b,.wcol h3,.map-coord b,.map-note b,
+.skip,.starter-err,.err,legend,label,.foot h4{font-weight:700}
 .nav-links a[aria-current],.mnav a[aria-current]{font-weight:700}
 /* figures are set in Arial bold: Georgia's numerals are old-style and sit unevenly at this size */
 .stat-num,.amt,.rate-row .fig b{font-family:var(--sans);font-weight:700;letter-spacing:-.035em}
 .amt{font-size:clamp(3.7rem,6.8vw,5.5rem)}
+html:not([dir=rtl]) .cur{padding-bottom:3px}   /* "per hour" on the baseline of the Arial figure */
+/* Arabic gets the same step up in weight as the English (Cairo, one file, 400 to 700) */
+html[dir=rtl] :is(h1,h2,h3),html[dir=rtl] em,html[dir=rtl] .signoff,html[dir=rtl] .signoff em,html[dir=rtl] .stat-num,html[dir=rtl] .amt,html[dir=rtl] .rate-row .fig b{font-weight:700}
+.foot-base{align-items:center}
+@media (max-width:1179px){.wall-grid .wcol{align-self:start}}
 
 /* ---------- colour: night version, re-drawn on the logo's blue ---------- */
 :root{
@@ -1001,11 +1014,17 @@ h3{font-size:1.4rem;line-height:1.2;letter-spacing:-.005em}
   --steel:#738aa7; --steel-2:#9db1cb; --mist:#c7d3e3;
   --cream:#f4ecdc; --cream-2:#e9dcc0; --sand:#d3b676; --gold:#b89c5e;
   --blue:#21518c; --blue-deep:#143052;
-  --lilac:#cfa9ec; --peri:#86b3f5; --sage:#a3d68a; --ochre:#e6c57e;
+  /* the four practice-area accents keep their old names but are brand colours now: steel, blue, gold, cream (no lilac, no green) */
+  --lilac:#9db1cb; --peri:#86b3f5; --sage:#d3b676; --ochre:#f4ecdc;
   --text:#f7f2e6; --muted:#b9c6da; --faint:#a3b3ca; --lit:#dbe3ef;
   --line:rgba(157,177,203,.2);
   --logo-bar:#738aa7; --logo-ink:#f4ecdc; --logo-tag:#c7d3e3;
 }
+.b-d::after{background:linear-gradient(90deg,rgba(115,138,167,.06),rgba(115,138,167,.3))}
+html[dir=rtl] .b-d::after{background:linear-gradient(270deg,rgba(115,138,167,.06),rgba(115,138,167,.3))}
+/* the map's label stands on a small plate, so its second line never depends on the colour of the block behind it */
+.iso-call p{padding:5px 9px;border-radius:8px;background:rgba(13,29,48,.88);text-shadow:none}
+.iso-call span{color:var(--lit)}
 .uline{background:var(--steel-2)}   /* the underline is one of the logo's bars */
 h2 .dim{color:var(--steel-2)}
 .hero-track{--sky:
@@ -1025,7 +1044,7 @@ html[dir=rtl] .hero-track{--sky:
 .pcard:nth-child(4){--bg:#27548c!important}
 .b-b{background:linear-gradient(160deg,#1c3e69,#122944)}
 .b-e{background:linear-gradient(200deg,#224d81,#163153 70%)}
-.wall{--wall-face:#0f2137}
+.wall{--wall-face:#112640}
 .proof{background:linear-gradient(180deg,var(--n900),#163153)}
 .inquiry{background:linear-gradient(150deg,#224d81,#143052 62%)}
 .signoff{color:var(--steel-2)}
@@ -1035,10 +1054,10 @@ html[dir=rtl] .hero-track{--sky:
    It stands on the deep blue band in both versions, so it is the same in both */
 .form,.form-done{background:#fff;color:#1e293b}
 legend,label{color:#1e293b}
-.chip{background:#fff;color:#1e293b;box-shadow:inset 0 0 0 1px #aebccf}
+.chip{background:#fff;color:#1e293b;box-shadow:inset 0 0 0 1px #738aa7}
 .chip:hover{box-shadow:inset 0 0 0 1.5px #21518c}
 .chip[aria-checked="true"]{background:#21518c;color:#fff;box-shadow:none}
-.field input,.field textarea{background:#f8f2e4;border-color:#cdbf9f;color:#1e293b;caret-color:#21518c}
+.field input,.field textarea{background:#f8f2e4;border-color:#738aa7;color:#1e293b;caret-color:#21518c}   /* edges in the logo's steel: 3:1 or better against the card and the field */
 .field input::placeholder,.field textarea::placeholder{color:rgba(30,41,59,.72)}
 .field input:focus,.field textarea:focus{border-color:#21518c;box-shadow:0 0 0 3px rgba(33,81,140,.24)}
 .help{color:#545454}
@@ -1056,7 +1075,7 @@ legend,label{color:#1e293b}
   --text:#1e293b; --muted:#475569; --faint:#545454; --lit:#334155;
   --line:#d5dde8;
   --steel-2:#4a6384; --mist:#3f5475;
-  --lilac:#7d55a8; --peri:#2f65b0; --sage:#3f8a3a; --ochre:#a8761c;
+  --lilac:#3f6ea6; --peri:#21518c; --sage:#8a6d2f; --ochre:#143052;   /* mid blue, strong blue, gold, navy */
   --logo-bar:#738aa7; --logo-ink:#545454; --logo-tag:#545454;
   background:#ffffff; scrollbar-color:#9db1cb #f0f5fa;
 }
@@ -1064,9 +1083,9 @@ legend,label{color:#1e293b}
 [data-theme="light"] h2 .dim{color:var(--c-blue)}
 [data-theme="light"] .btn-cream{background:var(--c-blue);color:#fff}
 [data-theme="light"] .btn-cream:hover{background:var(--c-blue-ink)}
-[data-theme="light"] .btn-ghost{box-shadow:inset 0 0 0 1.5px rgba(30,41,59,.45)}
+[data-theme="light"] .btn-ghost{box-shadow:inset 0 0 0 1.5px rgba(30,41,59,.6)}
 [data-theme="light"] .btn-ghost:hover{box-shadow:inset 0 0 0 1.5px var(--c-blue);background:rgba(33,81,140,.06)}
-[data-theme="light"] .nav .btn-cream{background:transparent;color:var(--text);box-shadow:inset 0 0 0 1.5px rgba(30,41,59,.45)}
+[data-theme="light"] .nav .btn-cream{background:transparent;color:var(--text);box-shadow:inset 0 0 0 1.5px rgba(30,41,59,.6)}
 [data-theme="light"] .nav .btn-cream:hover{background:var(--c-blue);color:#fff;box-shadow:none}
 [data-theme="light"] .mnav{background:#fff;box-shadow:0 24px 48px -24px rgba(30,41,59,.3)}
 [data-theme="light"] .ptr{background:#fff;box-shadow:0 10px 24px -10px rgba(30,41,59,.35)}
@@ -1074,34 +1093,36 @@ legend,label{color:#1e293b}
 /* hero: white, with a breath of the logo's steel in the far corner */
 [data-theme="light"] .hero-track{--sky:
     radial-gradient(80% 60% at 88% 0%,rgba(115,138,167,.2),rgba(115,138,167,0) 70%),
-    linear-gradient(180deg,#ffffff 0%,#f8fafd 50%,#edf2f8 100%)}
+    linear-gradient(180deg,#ffffff 0%,#f6f9fc 55%,#ffffff 100%)}
 html[dir=rtl][data-theme="light"] .hero-track{--sky:
     radial-gradient(80% 60% at 12% 0%,rgba(115,138,167,.2),rgba(115,138,167,0) 70%),
-    linear-gradient(180deg,#ffffff 0%,#f8fafd 50%,#edf2f8 100%)}
+    linear-gradient(180deg,#ffffff 0%,#f6f9fc 55%,#ffffff 100%)}   /* white again at the foot, where it meets the cream band */
 [data-theme="light"] .hero,[data-theme="light"] .hero-track::before{background:var(--sky)}
-[data-theme="light"] .starter-row{background:#fff;box-shadow:inset 0 0 0 1px #aebccf}
+[data-theme="light"] .starter-row{background:#fff;box-shadow:inset 0 0 0 1px #738aa7}
 [data-theme="light"] .starter input::placeholder{color:rgba(30,41,59,.7)}
 [data-theme="light"] .starter-err{color:#a11d33}
 [data-theme="light"] .iso-call i{background:linear-gradient(180deg,rgba(20,48,82,0),rgba(20,48,82,.85))}
 [data-theme="light"] .iso-call[data-low] i{background:linear-gradient(0deg,rgba(20,48,82,0),rgba(20,48,82,.85))}
-[data-theme="light"] .iso-call p,[data-theme="light"] .iso-call[data-low] p{text-shadow:0 0 14px #fff,0 0 6px rgba(255,255,255,.95),0 0 2px rgba(255,255,255,.9)}
+[data-theme="light"] .iso-call p,[data-theme="light"] .iso-call[data-low] p{background:rgba(255,255,255,.95);box-shadow:0 0 0 1px rgba(30,41,59,.14);text-shadow:none}
+[data-theme="light"] .iso-call span{color:var(--text)}
 @media (max-width:1100px){[data-theme="light"] .iso::before{background:radial-gradient(closest-side,rgba(30,41,59,.14),rgba(30,41,59,0))}}
 
 /* figures: the first of the two cream bands */
 [data-theme="light"] .figures{--fig-accent:var(--c-blue);--line:rgba(84,84,84,.28);background:var(--c-cream);border-color:#e2d5b8}
 
 /* statement: unread paragraphs step back but stay readable */
-[data-theme="light"] .statement p{color:rgba(30,41,59,.56)}
+[data-theme="light"] .statement p{color:rgba(30,41,59,.7)}
 [data-theme="light"] .statement p.is-focus{color:var(--text)}
 
-/* practice cards: four tints of the logo's blue, each with a drawn edge, so a card never melts into the page */
-[data-theme="light"] .pcard{border-color:var(--c-edge);box-shadow:0 -18px 40px -28px rgba(20,48,82,.4)}
+/* practice cards: four tints of the logo's blue, each with a drawn edge, so a card never melts into the page.
+   The fill is the plain tint: the old wash of the accent colour over it turned the blues lavender and grey */
+[data-theme="light"] .pcard{background:var(--bg);border-color:var(--c-edge);box-shadow:0 -18px 40px -28px rgba(20,48,82,.4)}
 [data-theme="light"] .pcard:nth-child(1){--bg:#f5f8fc!important}
 [data-theme="light"] .pcard:nth-child(2){--bg:#ecf2f9!important}
 [data-theme="light"] .pcard:nth-child(3){--bg:#e2ebf6!important}
 [data-theme="light"] .pcard:nth-child(4){--bg:#d7e3f1!important}
 [data-theme="light"] .pcard-list li{border-top-color:rgba(30,41,59,.2)}
-[data-theme="light"] .pcard-geo{opacity:.5}
+[data-theme="light"] .pcard-geo{opacity:.4}
 
 /* formats: a pale blue band, white cards with edges, one deep blue card and one cream card */
 [data-theme="light"] .formats{background:var(--c-deep)}
@@ -1110,6 +1131,9 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
 [data-theme="light"] .bcard:hover{border-color:var(--steel)}
 [data-theme="light"] .b-b{background:linear-gradient(160deg,#21518c,#143052);border-color:transparent;--text:#fff;--muted:rgba(232,238,248,.86);--steel-2:#c6d2e2;color:var(--text)}
 [data-theme="light"] .b-c{background:#fff}
+[data-theme="light"] .b-d::before{opacity:1;background:linear-gradient(180deg,rgba(33,81,140,.16),rgba(33,81,140,.02) 80%)}
+[data-theme="light"] .b-d::after{opacity:1;background:linear-gradient(90deg,rgba(115,138,167,.04),rgba(115,138,167,.22))}
+html[dir=rtl][data-theme="light"] .b-d::after{background:linear-gradient(270deg,rgba(115,138,167,.04),rgba(115,138,167,.22))}
 [data-theme="light"] .tags li{box-shadow:inset 0 0 0 1px #aebccf}
 [data-theme="light"] .b-e{background:var(--c-cream);border-color:#e2d5b8}
 [data-theme="light"] .b-e::after{background:radial-gradient(circle,rgba(33,81,140,.4) 1.6px,transparent 2.1px) 0 0/15px 15px}
@@ -1120,9 +1144,10 @@ html[dir=rtl][data-theme="light"] .hero-track{--sky:
 
 /* clients wall */
 [data-theme="light"] .wall{--wall-face:#f4f7fb;--wall-lit:#ffffff;--wall-ink:var(--text);--wall-edge:rgba(33,81,140,.6);--wall-cap:rgba(30,41,59,.34);--wall-base:rgba(30,41,59,.26);--wall-line:rgba(30,41,59,.1)}
+[data-theme="light"] .wcell{box-shadow:inset 1px 0 0 var(--c-edge),inset -1px 0 0 var(--c-edge)}   /* each column of the wall has drawn sides against the white page */
 
 /* rates */
-[data-theme="light"] .seg{background:var(--c-deep)}
+[data-theme="light"] .seg{background:var(--c-deep);border-color:var(--steel)}
 [data-theme="light"] .seg-sm{background:#fff}
 [data-theme="light"] .seg button[aria-pressed="true"],[data-theme="light"] .seg.seg-sm button[aria-pressed="true"]{color:#fff}
 [data-theme="light"] .rate-feature{background:linear-gradient(160deg,#21518c,#143052 78%);color:#fff}
@@ -1160,9 +1185,12 @@ html[data-theme="light"] .nav::after{background:transparent}
 html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-color:var(--line)}
 /* the hero copy rises on its own, without waiting for the page script, so the headline is on screen with the first paint */
 .js .hero-copy>.rv{opacity:1;transform:none;transition:none;animation:heroIn .9s var(--spring) both}
+.js .hero-copy>h1.rv{animation-name:heroRise}   /* the headline rises but never starts invisible, so it counts as the page's largest paint from the first frame */
 .js .hero-copy>.lede.rv{animation-delay:.08s}
 .js .hero-copy>.starter.rv{animation-delay:.16s}
 @keyframes heroIn{from{opacity:0;transform:translate3d(0,28px,0)}}
+@keyframes heroRise{from{transform:translate3d(0,28px,0)}}
+#metric{min-height:34px}   /* the map's switch is filled in by a script: its room is kept, so nothing above it moves when it arrives */
 /* the map: the flat picture (.iso-poster) shows at once; the 3D canvas fades in over it when it is ready */
 .iso{transition:opacity .5s var(--ease)}
 .iso-gl{opacity:0;transition:opacity .7s var(--ease)}
@@ -1171,7 +1199,8 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
 .js .formats:not(.seen) .bimg{background-image:none!important}
 @media (prefers-reduced-motion:reduce){
   .js .hero-copy>.rv{animation:none}
-  .iso-gl{transition:none}
+  .iso,.iso-gl{transition:none}
+  .statement p,[data-theme="light"] .statement p{color:var(--text)}   /* nothing lights the paragraphs in turn, so all three read at full strength */
 }
 </style>
 </head>
@@ -1808,6 +1837,7 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
     "© 2026 Karam Shaar Advisory Ltd.": "© 2026 كرم شعار للاستشارات المحدودة.",
     "USD@cur": "دولار أمريكي",
     "Services | Karam Shaar Advisory": "الخدمات | كرم شعار للاستشارات",
+    "Karam Shaar Services (test)": "خدمات كرم شعار (نسخة تجريبية)",
     "Research, due diligence, briefs and training on Syria's economy, business environment and investment landscape.": "أبحاث وعناية واجبة وموجزات وتدريب حول اقتصاد سوريا وبيئة الأعمال والمشهد الاستثماري فيها.",
     "Switch to dark theme": "التبديل إلى الوضع الداكن",
     "Dark theme": "الوضع الداكن",
@@ -1902,8 +1932,9 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
 })();
 </script>
 
-<!-- async: the page script below does not wait for it (it reveals the hero text), smooth scrolling starts when it lands. The exact version saves the CDN a redirect -->
-<script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js" id="lenis-src" async></script>
+<!-- Test version: the smooth-scrolling library (Lenis) is no longer a tag here. The page script below fetches it after the page has
+     loaded, and only where there is a mouse or trackpad: on a touch screen the browser's own scrolling is already smooth, and the
+     library's frame loop would run on the phone for nothing. -->
 <script>
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1920,7 +1951,10 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
     requestAnimationFrame(raf);
   };
   smooth();
-  if (!lenis && !reduce) { const src = $('#lenis-src'); if (src) src.addEventListener('load', smooth); }   // the library is still on its way
+  if (!lenis && !reduce && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    const fetchLenis = () => { const s = document.createElement('script'); s.src = 'https://unpkg.com/lenis@1.3.26/dist/lenis.min.js'; s.async = true; s.onload = smooth; document.head.append(s); };   // the exact version saves the CDN a redirect
+    if (document.readyState === 'complete') fetchLenis(); else addEventListener('load', fetchLenis, { once: true });
+  }
   /* ---------- pull to refresh inside a frame ----------
      In a frame a pull at the top only bounces the frame (and shows its edge): the browser's
      pull-to-refresh belongs to the outer page. So in a frame on a touch screen the bounce is off
@@ -1971,6 +2005,10 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
     [btn, row].forEach(b => b && b.addEventListener('click', flip));
     document.addEventListener('langchange', paint);
     paint();
+    /* a host page (the artifact viewer) may set data-theme on this page itself: the labels, the lattices and the map follow that too */
+    let seen = root.dataset.theme;
+    document.addEventListener('themechange', () => { seen = root.dataset.theme; });
+    new MutationObserver(() => { if (root.dataset.theme !== seen) { paint(); document.dispatchEvent(new Event('themechange')); } }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
   }
 
   /* ---------- small-screen menu ---------- */
@@ -2250,8 +2288,8 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
      always had), so no ambient loop runs while the page is read. They redraw on resize, on a theme or language change,
      and the wall's still answers the pointer. To bring the drift back, set this to the media query alone. */
   const reduce = true || matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const TINTS = ['207,169,236', '134,179,245', '163,214,138', '230,197,126', '134,179,245', '244,236,220'];
-  const TINTS_DAY = ['125,85,168', '47,101,176', '63,138,58', '168,118,28', '47,101,176', '33,81,140'];   // the same four practice tints, deepened to read on white
+  const TINTS = ['157,177,203', '134,179,245', '211,182,118', '244,236,220', '134,179,245', '244,236,220'];   // steel, blue, gold, cream: the practice accents, all brand colours now
+  const TINTS_DAY = ['63,110,166', '33,81,140', '138,109,47', '20,48,82', '33,81,140', '33,81,140'];   // the same four, deepened to read on white (mid blue, strong blue, gold, navy)
   const day = () => document.documentElement.dataset.theme === 'light';
   const rtl = () => document.documentElement.dir === 'rtl';   // Arabic: the copy sits on the right, so both fields mirror
   const T30 = Math.tan(Math.PI / 6);
@@ -2340,10 +2378,11 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
     const kick = () => { if (!raf && visible) raf = requestAnimationFrame(draw); };
 
     size();
-    /* a still field: a few cells stay lit. None on a phone, where the field sits behind the copy and a lit cell would never move off a word */
-    const still = () => { cells = []; for (let n = 0, m = W < 700 ? 0 : Math.round(o.still * .5); n < m; n++) spawn(performance.now() - 2000); cells.forEach(c => { c.life = 1e12; }); };
+    /* a still field: a few cells stay lit. None below o.room (px wide), where the field sits behind the copy and a lit cell would never move off a word */
+    const tight = () => W < (o.room || 700);
+    const still = () => { cells = []; for (let n = 0, m = tight() ? 0 : Math.round(o.still * .5); n < m; n++) spawn(performance.now() - 2000); cells.forEach(c => { c.life = 1e12; }); };
     if (reduce) still();
-    new ResizeObserver(() => { size(); kick(); }).observe(host);
+    new ResizeObserver(() => { const was = tight(); size(); if (reduce && was !== tight()) still(); kick(); }).observe(host);   // re-seeded when the layout crosses that width
     new IntersectionObserver(([en]) => { visible = en.isIntersecting; kick(); }).observe(host);
     document.addEventListener('visibilitychange', () => { visible = !document.hidden; kick(); });
     if (matchMedia('(hover: hover)').matches) {
@@ -2358,8 +2397,8 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
   /* ---------- hero sky ---------- */
   const sky = document.querySelector('.hero-bg');
   field(sky, sky && sky.closest('.hero'), {
-    speed: 7, rate: .07, max: 40, still: 14,
-    reach: (x, y, W, H) => unit(((rtl() ? 1 - x / W : x / W) - .22) / .45) * unit(1 - (y / H - .32) / .6),   // full in the upper corner away from the copy, thin over the copy and near the bottom
+    speed: 7, rate: .07, max: 40, still: 14, room: 1100,   // room: below the wide layout the copy runs the full width, so no cell stays lit
+    reach: (x, y, W, H) => unit(((rtl() ? 1 - x / W : x / W) - .22) / .45) * unit(1 - (y / H - .32) / .6) * (reduce ? unit((y - 96) / 40) : 1),   // full in the upper corner away from the copy, thin over the copy and near the bottom; a still cell also keeps clear of the nav
     spot: (W, H) => { const u = .25 + Math.random() * .75; return [W * (rtl() ? 1 - u : u), H * Math.random() * Math.random() * .9]; },   // y squared: most cells land in the open sky near the top
     lines: (ctx, W, H) => {
       const g = rtl() ? ctx.createLinearGradient(W * .8, H, 0, 0) : ctx.createLinearGradient(W * .2, H, W, 0);   // the lines fade out toward the copy and the bottom corner under it
@@ -2385,7 +2424,7 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
       lit = p;
     },
     /* quiet behind the text column, full in the open margin beside it, and gathered around the lit paragraph */
-    reach: (x, y, W, H) => (.3 + .7 * unit(((rtl() ? edge - x : x - edge) + 50) / 100))
+    reach: (x, y, W, H) => ((reduce ? 0 : .3) + (reduce ? 1 : .7) * unit(((rtl() ? edge - x : x - edge) + 50) / 100))   // a still cell never sits behind the text column
       * (band == null ? 1 : .12 + .88 * Math.exp(-((y - band) ** 2) / (2 * SPAN * SPAN)))
       * unit((H - y) / FOOT),
     spot: (W, H) => { const u = Math.sqrt(Math.random()); return [W * (rtl() ? 1 - u : u), band == null ? H * Math.random() : band + (Math.random() - .5) * SPAN * 3]; },   // root: more cells toward the open margin
@@ -2444,7 +2483,7 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
     /* how much of the cell at x in the row at y sits behind any of these rectangles (0 to 1) */
     const under = (list, x, y) => list.reduce((a, f) => (y + rh / 2 > f.t && y + rh / 2 < f.b ? a + Math.max(0, Math.min(x + cw, f.r) - Math.max(x, f.l)) : a), 0) / cw;
     const seen = (x, y) => 1 - Math.min(1, under(faces, x, y) + under(shut, x, y));
-    const clear = (x, y) => x > 0 && x + cw < W && y > 30 && seen(x, y) > .98 && !(x + cw > hd.l - 16 && x < hd.r + 16 && y + rh > hd.t - 10 && y < hd.b + 10);   // in the open, and not behind the heading
+    const clear = (x, y) => x > 0 && x + cw < W && y > 30 && seen(x, y) > .98 && under(titles, x, y) < .02 && !(x + cw > hd.l - 16 && x < hd.r + 16 && y + rh > hd.t - 10 && y < hd.b + 10);   // in the open, not behind a column's title, and not behind the heading
     function spawn(now, forever) {
       for (let tries = 0; tries < 16; tries++) {
         const i = Math.floor((Math.random() * W - x0 - pos) / cw), j = Math.random() * (rowsN - 1) | 0;
@@ -2474,7 +2513,7 @@ html[data-theme="light"] .nav.is-scrolled::after{background:#fff;border-bottom-c
       if (Math.abs(glow - (hot ? 1 : 0)) > .004) settling = true;
       ctx.setTransform(D, 0, 0, D, 0, 0); ctx.clearRect(0, 0, W, H);
       const light = day(), ink = light ? '33,81,140' : '197,210,232', lit = light ? '33,81,140' : '241,234,215', a = light ? .1 : .042;
-      const pop = light ? .9 : .5, soft = light ? 1 : .55;   // how strongly the coloured cells and the pointer's glow show. The night field is held back so it stays behind the wall
+      const pop = light ? .55 : .5, soft = light ? 1 : .55;   // how strongly the coloured cells and the pointer's glow show. The night field is held back so it stays behind the wall
       const i0 = Math.floor((-x0 - pos) / cw) - 1, i1 = Math.ceil((W - x0 - pos) / cw) + 1;
 
       /* the lines: rows stand still on the wall's rows, columns travel with the field */
@@ -2737,12 +2776,28 @@ document.addEventListener('langchange', () => {   // registered first, so the st
    asked for. On a capable screen the WebGL scene then fades in over it and the poster is removed (poster.off).
    On phones, low-powered devices, data-saver connections and where WebGL is missing it stays as the map (poster.keep):
    a still picture whose Population / Density switch still works. */
+/* The map's colours, shared by the poster and the 3D scene. Night: blue stone that pales with height. Light: the logo's
+   blue made stronger, deepening with height, so the blocks stand clearly on the white field. The lit governorate is gold in both. */
+const PAL = {
+  dark: { lo: '#2459a6', hi: '#8fbaf5', brass: '#e2c47c', lamp: 0xf6e0b0, lampK: .6, cream: '#f4ecdc', sun: 0xf6f0e6, sunI: 3.7, fill: 0x738aa7, fillI: .4, sky: 0x8ea6d4, ground: 0x070f1c, hemiI: .9, floor: .08, haze: .82, glowK: .4 },
+  light: { lo: '#84aede', hi: '#4a86d6', brass: '#d9ad4c', lamp: 0xfff1da, lampK: .2, cream: '#ffffff', sun: 0xffffff, sunI: 2.3, fill: 0xdce8f8, fillI: 1, sky: 0xf4f8ff, ground: 0xc9d9ee, hemiI: 2.4, floor: .5, haze: .95, glowK: .22 }
+};
+const DIM = .36;   // how far every column but the lit governorate steps back
+const leader = () => Object.values(GOV).reduce((a, g) => METRIC[metric].v(g) > METRIC[metric].v(a) ? g : a);   // the governorate the map opens on: the largest by the measure showing
+
 const poster = (() => {
   const cv = document.createElement('canvas'); cv.className = 'iso-poster'; cv.setAttribute('aria-hidden', 'true'); $('.iso-gl').before(cv);
-  /* night: navy stone that pales with height. Light: pale steel that deepens to the logo's blue with height. Each side darkens toward its foot */
-  const TONE = {
-    dark: { top: (t, j) => `hsl(214 ${36 + t * 16}% ${(27 + t * 30) * j}%)`, left: ['#1d3760', '#0e1f36'], right: ['#14294a', '#0a1728'] },
-    light: { top: (t, j) => `hsl(216 ${42 + t * 20}% ${(81 - t * 30) * (2 - j)}%)`, left: ['#93a8cc', '#b3c4df'], right: ['#788db4', '#99acce'] }
+  /* The poster is shaded with the 3D scene's own lights and colours (PAL), worked out per face, so the two agree and the
+     hand-over changes almost nothing: only the cast shadows arrive with the 3D. Colours are mixed in linear light, as WebGL does. */
+  const toLin = v => { v /= 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; };
+  const rgb = c => typeof c === 'number' ? [c >> 16 & 255, c >> 8 & 255, c & 255].map(toLin) : [1, 3, 5].map(i => toLin(parseInt(c.slice(i, i + 2), 16)));
+  const css = c => 'rgb(' + c.map(v => Math.round(255 * (v <= .0031308 ? Math.max(0, v) * 12.92 : 1.055 * Math.min(1, v) ** (1 / 2.4) - .055))).join(',') + ')';
+  const label = (x, y, title, sub) => {   // the call-out on the lit governorate, placed as the 3D scene places it
+    $('b', call).textContent = title; $('span', call).textContent = sub;
+    call.dataset.side = x > host.clientWidth * (rtl() && wide.matches ? .42 : .66) ? 'l' : 'r';
+    call.toggleAttribute('data-low', y - 150 < $('#nav').getBoundingClientRect().bottom - host.getBoundingClientRect().top);
+    call.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;
+    call.classList.remove('away'); call.classList.add('on');
   };
   const paint = () => {
     const w = host.clientWidth, h = host.clientHeight, d = Math.min(devicePixelRatio || 1, 2), ctx = cv.getContext('2d');
@@ -2750,14 +2805,24 @@ const poster = (() => {
     cv.width = w * d; cv.height = h * d;
     const { s, cx, cy } = view(w, h), P = (x, y, z) => [(w / 2 + (x - cx) / s) * d, (h / 2 - (y * CE - z * SE - cy) / s) * d];
     const face = (pts, fill) => { ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath(); ctx.fillStyle = fill; ctx.fill(); };
-    const side = (pts, [hi, lo]) => { const g = ctx.createLinearGradient(0, pts[0][1], 0, pts[3][1]); g.addColorStop(0, hi); g.addColorStop(1, lo); face(pts, g); };
-    const tone = TONE[document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'];
+    const side = (pts, hi, lo) => { const g = ctx.createLinearGradient(0, pts[0][1], 0, pts[3][1]); g.addColorStop(0, hi); g.addColorStop(1, lo); face(pts, g); };
+    const p = PAL[document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'];
+    const [lo, hi, brass, sun, fill, sky, ground, lamp] = [p.lo, p.hi, p.brass, p.sun, p.fill, p.sky, p.ground, p.lamp].map(rgb);
+    /* the light a face receives: the sun (ns: how squarely it meets the face), the fill light (nf), and the sky and ground wash (up: 1 for a top, .5 for a side) */
+    const lit = (ns, nf, up) => [0, 1, 2].map(q => (sun[q] * p.sunI * ns + fill[q] * p.fillI * nf + (ground[q] + (sky[q] - ground[q]) * up) * p.hemiI) / Math.PI);
+    const LT = lit(.859, .288, 1), LL = lit(0, .204, .5), LR = lit(0, .936, .5);   // the sides stand in their neighbours' shade, so the sun reaches the tops only
+    const g0 = MODE === 'data' ? leader() : null, span = MODE === 'hover' ? RELIEF + SWELL : SPAN;
     for (const c of cols) {
-      const H = baseOf(c), t = Math.min(1, Math.max(0, (H - H0) / (MODE === 'hover' ? RELIEF : SPAN)));
-      side([P(c.x - HALF, H, c.z), P(c.x, H, c.z + HALF), P(c.x, 0, c.z + HALF), P(c.x - HALF, 0, c.z)], tone.left);
-      side([P(c.x + HALF, H, c.z), P(c.x, H, c.z + HALF), P(c.x, 0, c.z + HALF), P(c.x + HALF, 0, c.z)], tone.right);
-      face([P(c.x - HALF, H, c.z), P(c.x, H, c.z - HALF), P(c.x + HALF, H, c.z), P(c.x, H, c.z + HALF)], c.river && MODE === 'hover' ? '#d9b266' : tone.top(t, c.jit));
+      const pick = !!g0 && c.g === g0.code, H = baseOf(c) + (pick ? LIFT : 0), t = Math.min(1, Math.max(0, (H - H0) / span)) * (MODE === 'hover' ? .8 : 1);
+      const far = Math.min(1, Math.max(0, (c.z + 9) / 13)), haze = p.haze + (1 - p.haze) * far * far * (3 - 2 * far);   // columns further north sit back
+      const k = (pick ? 1 : 1 - DIM) * c.jit * haze, glow = pick ? .45 * p.glowK : 0, foot = p.floor + (1 - p.floor) * Math.exp(-H);
+      const a = pick || (c.river && MODE === 'hover') ? brass : [0, 1, 2].map(q => lo[q] + (hi[q] - lo[q]) * t);
+      const tone = (L, ao, warm = 0) => css(a.map((v, q) => v * k * ao * (L[q] + glow + lamp[q] * warm)));
+      side([P(c.x - HALF, H, c.z), P(c.x, H, c.z + HALF), P(c.x, 0, c.z + HALF), P(c.x - HALF, 0, c.z)], tone(LL, .85), tone(LL, .85 * foot));
+      side([P(c.x + HALF, H, c.z), P(c.x, H, c.z + HALF), P(c.x, 0, c.z + HALF), P(c.x + HALF, 0, c.z)], tone(LR, .85), tone(LR, .85 * foot));
+      face([P(c.x - HALF, H, c.z), P(c.x, H, c.z - HALF), P(c.x + HALF, H, c.z), P(c.x, H, c.z + HALF)], tone(LT, 1, pick ? 9 * p.lampK * .45 / Math.PI : 0));   // the lit governorate also stands under the scene's warm lamp
     }
+    if (g0) { const a = cols[g0.anchor], q = P(a.x, baseOf(a) + LIFT, a.z), m = METRIC[metric]; label(q[0] / d, q[1] / d, tr(g0.n), m.say(m.v(g0))); }
   };
   const ro = new ResizeObserver(paint); ro.observe(host);
   document.addEventListener('themechange', paint); document.addEventListener('langchange', paint);
@@ -2768,14 +2833,17 @@ const poster = (() => {
     /* the poster is the map from here on */
     keep() {
       $('.iso-gl').hidden = true; track.classList.remove('is-pinned');   // nothing to travel through without the camera
-      /* the painted map is a picture: no tab stop, and no promise of arrow-key stepping it cannot keep */
-      host.removeAttribute('tabindex'); host.setAttribute('role', 'img'); host.classList.add('is-flat');
+      /* the painted map is a picture: no tab stop, and no promise of arrow-key stepping it cannot keep.
+         If the reader had already tabbed to it, focus stays where it is rather than being thrown to the top of the page */
+      if (document.activeElement === host) host.tabIndex = -1; else host.removeAttribute('tabindex');
+      host.setAttribute('role', 'img'); host.classList.add('is-flat');
       hostLabel = MODE === 'hover' ? 'Block map of Syria with its terrain.' : 'Block map of Syria. Column height shows a figure for each governorate.'; setLabel();
       if (MODE === 'data') seg.addEventListener('click', e => {
         const b = e.target.closest('[data-metric]'); if (!b || b.dataset.metric === metric) return;
         metric = b.dataset.metric; seg.style.setProperty('--i', metricKeys.indexOf(metric));
         seg.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
         setNote(); paint();
+        const g = leader(), m = METRIC[metric]; live.textContent = `${tr(m.note)}. ${tr(g.n)}: ${m.say(m.v(g))}`;   // a screen reader hears what the switch changed
       });
     }
   };
@@ -2830,12 +2898,7 @@ const scene3d = T => {
   const M = mesh.instanceMatrix.array, C = mesh.instanceColor.array;
   cols.forEach((c, k) => M.set([R2, 0, -R2, 0, 0, .02, 0, 0, R2, 0, R2, 0, c.x, 0, c.z, 1], k * 16));
   const lin = hex => { const c = new T.Color(hex); return [c.r, c.g, c.b]; };
-  /* night: navy stone that pales with height. Light (test version): pale steel that deepens to the logo's blue
-     with height, so the tallest columns read strongest on the white field; the selection is the brand's gold in both */
-  const PAL = {
-    dark: { lo: '#274a84', hi: '#a9c4ee', brass: '#e2c47c', lamp: 0xf6e0b0, lampK: .6, cream: '#f4ecdc', sun: 0xf6f0e6, sunI: 3.7, fill: 0x738aa7, fillI: .4, sky: 0x8ea6d4, ground: 0x070f1c, hemiI: .9, floor: .08, haze: .72, glowK: .4 },
-    light: { lo: '#cfdef2', hi: '#2a61ad', brass: '#d9ad4c', lamp: 0xfff1da, lampK: .2, cream: '#ffffff', sun: 0xffffff, sunI: 2.3, fill: 0xdce8f8, fillI: 1, sky: 0xf4f8ff, ground: 0xc9d9ee, hemiI: 2.4, floor: .5, haze: .95, glowK: .22 }
-  };
+  /* the colours are PAL, above the poster, which paints with the same ones */
   let LO, HI, BRASS, CREAM, lampK = 1;
   const palette = () => {
     const p = PAL[document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'];
@@ -2920,7 +2983,7 @@ const scene3d = T => {
       M[k * 16 + 5] = Math.max(.02, h[k]);
       // colour: stone lightens with height, the selection turns brass, everything else steps back
       const t = Math.min(1, Math.max(0, (h[k] - H0) / span)) * (MODE === 'hover' ? .8 : 1), l = lit[k], brass = MODE === 'hover' ? (c.river ? 1 : 0) : l, cream = MODE === 'hover' && !c.river ? l * .45 : 0;
-      const dim = (1 - .36 * Math.max(focus, settle) * (1 - l)) * c.jit;
+      const dim = (1 - DIM * Math.max(focus, settle) * (1 - l)) * c.jit;
       for (let q = 0; q < 3; q++) { let v = LO[q] + (HI[q] - LO[q]) * t; v += (CREAM[q] - v) * cream; v += (BRASS[q] - v) * brass; C[k * 3 + q] = v * dim; }
       glow.array[k] = MODE === 'hover' ? (c.river ? .4 + l * .35 : l * .12) : l * .45;
     }
@@ -2955,7 +3018,7 @@ const scene3d = T => {
       }
     }
     last = now;
-    if (onScreen) raf = requestAnimationFrame(frame);
+    if (onScreen && (awake || travels())) raf = requestAnimationFrame(frame);   // test version: the loop rests when nothing is moving; wake() starts it again (pointer, selection, theme, language, resize)
   };
   const wake = () => { awake = true; if (!raf && onScreen) raf = requestAnimationFrame(frame); };
   const fit = () => {
@@ -2967,7 +3030,9 @@ const scene3d = T => {
   new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; if (onScreen) wake(); }).observe(track);
 
   const say = (title, sub) => {
-    $('b', call).textContent = title; $('span', call).textContent = sub;
+    const b = $('b', call), s = $('span', call);
+    if (call.classList.contains('on') && b.textContent === title && s.textContent === sub) return;   // the poster already put this very label up: leave it standing
+    b.textContent = title; s.textContent = sub;
     call.classList.remove('on'); void call.offsetWidth; call.classList.add('on');
   };
 
@@ -3046,15 +3111,19 @@ const scene3d = T => {
       const order = ranked(); select(order[(order.indexOf(cur) + d + order.length) % order.length]);
     });
 
+    /* Test version: the scene opens with the largest governorate already lit, raised and labelled, exactly as the poster
+       shows it, so the hand-over from the poster changes nothing. */
+    select(leader().code);
+    cols.forEach((c, k) => { if (c.g === cur) { sel[k] = selNext[k] = lit[k] = 1; selAt[k] = 0; h[k] = base[k] + LIFT; } });
+    focus = 1;
     /* not pinned: an idle walk through the governorates in view, largest first, so the map explains itself */
-    if (reduce) select(ranked()[0]);
-    else setTimeout(function tour() {
+    if (!reduce) setTimeout(function tour() {
       if (!pinned() && onScreen && !document.hidden && !hovering && performance.now() > quietUntil) {
         const order = ranked().filter(code => onStage(GOV[code].anchor));
         if (order.length) select(order[(order.indexOf(cur) + 1) % order.length]);
       }
       setTimeout(tour, 4200);
-    }, 2300);
+    }, 4200);
   } else {
     /* terrain view: the ground swells under the pointer and a press sends a ring across the country */
     const text = $('span', coord);
