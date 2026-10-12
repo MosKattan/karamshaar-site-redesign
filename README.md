@@ -3,6 +3,7 @@
 A redesign of the Services page of karamshaar.com.
 
 - **The site:** [`site/index.html`](site/index.html). One file, with English and Arabic and a dark and a light theme built in (`?lang=ar`, `?theme=light`, or the buttons in the nav).
+- **Live preview:** https://moskattan.github.io/karamshaar-site-redesign/ - published from `site/` by `.github/workflows/deploy.yml` on every push to `main`.
 - **Published preview:** https://claude.ai/artifact/TjipzwFKm2sFmF23NnfgR2
 - **The design system:** [`DESIGN.md`](DESIGN.md) in text, [`design-system/Karam-Shaar-Design-System.pdf`](design-system/Karam-Shaar-Design-System.pdf) as a book. Shared values are in `design-system/tokens.css`; `node design-system/build.mjs` applies them to the site and reprints the book.
 - **The testing ground:** `testing-ground/`. Ideas are tried as switches on top of the real site (`experiments/`), grouped into looks (`looks.json`), and compared before any is made real. `node tools/ground.mjs list | build | serve | compare | book | promote`.
