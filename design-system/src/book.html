@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Karam Shaar Advisory: Design System</title>
+<!-- The source of the design system PDF. It is printed by `node design-system/build.mjs`, which also serves it:
+     the book reads ../tokens.css and ../../site/index.html while it loads, so its swatches, tables and specimens
+     are the real values and the real components, not copies. Open it live with `node design-system/build.mjs --serve`.
+     Files: book.css (the book's own layout), book.js (the tools the pages are made with), pages.js (the pages). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..800&family=Fira+Mono:wght@400;500&family=Fira+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="book.css">
+</head>
+<body>
+<main id="book"></main>
+<script src="book.js"></script>
+<script src="pages.js"></script>
+<script>Book.make();</script>
+</body>
+</html>

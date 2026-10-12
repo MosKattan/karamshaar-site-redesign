@@ -15,3 +15,6 @@ desktop.ini
 
 # Single-file export (re-create with tools/export-single.mjs)
 tools/export/
+
+# Page pictures taken for the design system PDF (re-create with design-system/build.mjs)
+design-system/.cache/
