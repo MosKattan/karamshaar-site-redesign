@@ -7,69 +7,69 @@
    ========================================================= */
 
 :root{
-  /* ---- colour: navy ramp (night theme grounds, darkest to lightest) ---- */
-  --ink:#091224;                 /* page edge, footer */
-  --n950:#0d1930;                /* body ground; ink on cream surfaces */
-  --n900:#11203c;                /* raised band, menus, navy button */
-  --n850:#152848;                /* card */
-  --n800:#1a3156;                /* card, one step lifted */
-  --n700:#223e6b;                /* hover of the navy button, focus on cream */
-  --n600:#2c4d80;                /* inquiry band, brightest card */
-  --n500:#40639b;                /* reserved */
-  --n925:#0f1c36;                /* faces of the clients wall, between ground and band */
-  --n825:#17305a;                /* foot of the proof band */
-  --n750:#1d3764;                /* lit corner of the statement card */
+  /* ---- colour: charcoal ramp (night theme grounds, darkest to lightest) ---- */
+  --ink:#141516;                 /* page edge, footer */
+  --n950:#1b1c1e;                /* body ground; ink on cream surfaces */
+  --n900:#232527;                /* raised band, menus, dark button */
+  --n850:#2b2d30;                /* card */
+  --n800:#343639;                /* card, one step lifted */
+  --n700:#3f4144;                /* hover of the dark button, focus on cream */
+  --n600:#4a4d50;                /* inquiry band, brightest card */
+  --n500:#545759;                /* reserved */
+  --n925:#1f2022;                /* faces of the clients wall, between ground and band */
+  --n825:#2f3134;                /* foot of the proof band */
+  --n750:#3a3c3f;                /* lit corner of the statement card */
 
-  /* ---- colour: cool tints (secondary text, meta, rules) ---- */
-  --steel:#6f8fc1; --steel-2:#93acd4; --mist:#c5d2e8;
+  /* ---- colour: slate, the cool second accent (secondary text, meta, rules) ---- */
+  --steel:#738aa7; --steel-2:#8fa3bc; --mist:#b2c0d1;
 
-  /* ---- colour: pale inks, washes and shade on navy (the same in both themes) ---- */
-  --on-dark:#f3efe3;             /* type on navy, also inside the deep regions of the day theme */
-  --ice-1:#e2e9f6; --ice-2:#d6e0f2; --ice-3:#c5d2e8;   /* pale blue inks, strongest to softest */
-  --tint:#a0bae4;                /* washes under the pointer, hairlines */
-  --shade:#040918; --shade-2:#081022;   /* corner vignette; veil under the nav */
+  /* ---- colour: pale inks, washes and shade on the dark ground (the same in both themes) ---- */
+  --on-dark:#f4ecdc;             /* type on the dark ground, also inside the deep regions of the day theme */
+  --ice-1:#f0e8d8; --ice-2:#e5e0d4; --ice-3:#cfc8b8;   /* pale creams, strongest to softest */
+  --tint:#b89c5e;                /* washes under the pointer, hairlines */
+  --shade:#0e0f10; --shade-2:#161718;   /* corner vignette; veil under the nav */
 
-  /* ---- colour: cream, the single accent ---- */
-  --cream:#f1ead7;               /* primary action, selected state, cream cards */
-  --cream-hi:#fff9ea;            /* hover of the cream button */
-  --cream-2:#e6dcc0;             /* reserved */
-  --sand:#cdbd94;                /* brass: figure units, warm geometry */
-  --field:#fbf7ea;               /* text field on a cream card */
+  /* ---- colour: cream and gold, the two accents ---- */
+  --cream:#f4ecdc;               /* primary action, selected state, cream cards */
+  --cream-hi:#fbf6ea;            /* hover of the cream button */
+  --cream-2:#e5e0d4;             /* reserved */
+  --sand:#b89c5e;                /* gold: figure units, warm geometry, the second accent */
+  --field:#fbf6ea;               /* text field on a cream card */
 
-  /* ---- colour: brand underline and the four practice areas ---- */
-  --rose:#c8475a;                /* only as the underline beneath the headline's key words */
-  --lilac:#c9addb; --peri:#8eabea; --sage:#a5c790; --ochre:#d3c198;
-  --pcard-1:#16294a; --pcard-2:#1d355d; --pcard-3:#264472; --pcard-4:#325688;   /* practice cards, back to front */
+  /* ---- colour: brand underline (gold) and the four practice areas ---- */
+  --rose:#b89c5e;                /* only as the underline beneath the headline's key words */
+  --lilac:#8f6740; --peri:#b89c5e; --sage:#738aa7; --ochre:#4a5f7a;
+  --pcard-1:#232527; --pcard-2:#2b2d30; --pcard-3:#343639; --pcard-4:#3f4144;   /* practice cards, back to front */
 
-  /* ---- colour: type and rules on the navy field ---- */
-  --text:#f3efe3;
-  --lit:rgba(226,233,246,.9);    /* body copy that must read clearly */
-  --muted:rgba(214,224,242,.68); /* supporting copy */
-  --faint:rgba(214,224,242,.6);  /* legal, second half of a heading */
-  --line:rgba(160,186,228,.16);  /* every hairline */
+  /* ---- colour: type and rules on the dark field ---- */
+  --text:#f4ecdc;
+  --lit:rgba(244,236,220,.9);    /* body copy that must read clearly */
+  --muted:rgba(244,236,220,.7); /* supporting copy */
+  --faint:rgba(244,236,220,.6);  /* legal, second half of a heading */
+  --line:rgba(244,236,220,.14);  /* every hairline */
 
   /* ---- colour: on cream surfaces (same in both themes) ---- */
-  --on-cream:#0d1930;            /* ink on cream surfaces */
-  --ink-blue:#35507f;            /* meta, icons and notes on cream */
+  --on-cream:#342c2c;            /* ink on cream surfaces */
+  --ink-blue:#4a5f7a;            /* meta, icons and notes on cream */
   --err:#a52c3e; --err-ink:#8e2233;
 
   /* ---- colour: logo ---- */
-  --logo-bar:#7f9dd0; --logo-ink:#f1ead7; --logo-tag:#93acd4;
+  --logo-bar:#738aa7; --logo-ink:#f4ecdc; --logo-tag:#8fa3bc;
 
   /* ---- colour: hero sky, top to bottom, and its two hazes ---- */
-  --sky-1:#36487f; --sky-2:#26396d; --sky-3:#1b2d5c; --sky-4:#142548;
-  --haze-1:#a59aca; --haze-2:#1e50a2;
+  --sky-1:#4a4d50; --sky-2:#3a3d40; --sky-3:#2c2e31; --sky-4:#222426;
+  --haze-1:#b89c5e; --haze-2:#738aa7;
 
   /* ---- colour: block map and the lattice behind it ---- */
-  --map-lo:#2b4a84; --map-hi:#a9c2ec;   /* shortest and tallest columns */
-  --map-lit:#d8c8a2;             /* the governorate in focus */
-  --map-fill:#6f8fc1; --map-sky:#8ea6d4; --map-ground:#070d1c;   /* side light; light from above; light from below */
-  --lattice:#c5d2e8; --lattice-lit:#f1ead7;   /* grid lines; the cell under the pointer */
+  --map-lo:#44474a; --map-hi:#aebbc9;   /* shortest and tallest columns */
+  --map-lit:#d4bc8c;             /* the governorate in focus */
+  --map-fill:#7f858c; --map-sky:#9aa2aa; --map-ground:#0e0f10;   /* side light; light from above; light from below */
+  --lattice:#e5e0d4; --lattice-lit:#b89c5e;   /* grid lines; the cell under the pointer */
 
   /* ---- type: families ---- */
-  --serif:"Newsreader","Iowan Old Style","Times New Roman",serif;      /* headings, figures, statements */
-  --sans:"Fira Sans",system-ui,-apple-system,"Segoe UI",sans-serif;    /* everything else */
-  --arabic:"Cairo",system-ui,-apple-system,"Segoe UI",sans-serif;      /* replaces both in Arabic */
+  --serif:"Cairo","Segoe UI",Tahoma,Arial,sans-serif;  /* headings, figures, statements */
+  --sans:"Cairo","Segoe UI",Tahoma,Arial,sans-serif;    /* everything else */
+  --arabic:"Cairo","Segoe UI",Tahoma,Arial,sans-serif;      /* replaces both in Arabic */
 
   /* ---- type: sizes ---- */
   --fs-body:17px; --fs-body-sm:16px;            /* desktop; phones */
@@ -86,11 +86,11 @@
   --fs-sub:1.1rem;                              /* paragraph under a section heading */
 
   /* ---- shape ---- */
-  --r-card:20px;                 /* cards, panels, menus */
-  --r-in:12px;                   /* inputs, menu rows */
-  --r-btn:999px;                 /* everything you can press: buttons, nav links, toggles, chips */
-  --r-tag:999px;                 /* small labels that cannot be pressed */
-  --r-cover:6px;                 /* printed covers */
+  --r-card:6px;                 /* cards, panels, menus */
+  --r-in:4px;                   /* inputs, menu rows */
+  --r-btn:4px;                 /* everything you can press: buttons, nav links, toggles, chips */
+  --r-tag:4px;                 /* small labels that cannot be pressed */
+  --r-cover:4px;                 /* printed covers */
 
   /* ---- layout ---- */
   --wrap:1280px;                 /* widest the content column gets */
@@ -113,29 +113,29 @@
 /* ---------- day theme: the same world on cream. Only what differs from night ---------- */
 [data-theme="light"]{
   /* grounds */
-  --c-bg:#f4ecdc;                /* body ground */
-  --c-raise:#fbf6ec;             /* cards, bands, menus */
-  --c-tint:#f7f0e2;              /* a card one step off the raise */
-  --c-deep:#ece1cb;              /* page edge, footer, alternate band */
-  --c-sand:#e4d5b6;              /* reserved */
+  --c-bg:#fbf6ea;                /* body ground */
+  --c-raise:#ffffff;             /* cards, bands, menus */
+  --c-tint:#fcfaf5;              /* a card one step off the raise */
+  --c-deep:#f4ecdc;              /* page edge, footer, alternate band */
+  --c-sand:#e5e0d4;              /* reserved */
   /* deep blue: ink, action, and the two regions it owns */
-  --c-blue:#213a5f; --c-blue-2:#2d4a72; --c-blue-ink:#152a47;
-  --c-blue-deep:#182f50;         /* foot of the inquiry band */
+  --c-blue:#4a5f7a; --c-blue-2:#5c7592; --c-blue-ink:#3b4c62;
+  --c-blue-deep:#3b4c62;         /* foot of the inquiry band */
   /* type and rules */
-  --text:#16264b; --muted:rgba(22,38,75,.72); --faint:rgba(22,38,75,.68); --lit:rgba(22,38,75,.86);
-  --line:rgba(22,38,75,.13);
-  --steel-2:#4b6285; --mist:#475c7e;
+  --text:#342c2c; --muted:#64748b; --faint:rgba(100,116,139,.88); --lit:#475569;
+  --line:rgba(119,141,170,.2);
+  --steel-2:#5c7592; --mist:#64748b;
   /* accents, deepened to hold on cream */
-  --rose:#b5394d;
-  --lilac:#8a66a6; --peri:#587296; --sage:#5b8748; --ochre:#a6833f;
-  --pcard-1:#fbf6ec; --pcard-2:#f8f1e3; --pcard-3:#f5ecda; --pcard-4:#f1e6d1;
+  --rose:#a0854a;
+  --lilac:#8f6740; --peri:#a0854a; --sage:#5c7592; --ochre:#4a5f7a;
+  --pcard-1:#ffffff; --pcard-2:#fcfaf5; --pcard-3:#fbf6ea; --pcard-4:#f4ecdc;
   /* logo */
-  --logo-bar:#6e88ab; --logo-ink:#213a5f; --logo-tag:#5a6f98;
+  --logo-bar:#738aa7; --logo-ink:#545454; --logo-tag:#64748b;
   /* hero sky: a warm wash, three hazes */
-  --sky-1:#f8f1e3; --sky-2:#f5ecdb; --sky-3:#f1e6d1;
-  --haze-1:#9ca0d6; --haze-2:#7088a8; --haze-3:#d6be8c;
+  --sky-1:#ffffff; --sky-2:#fbf6ea; --sky-3:#f4ecdc;
+  --haze-1:#b89c5e; --haze-2:#738aa7; --haze-3:#e5e0d4;
   /* block map and lattice */
-  --map-lo:#f8f2e4; --map-hi:#e3d5b4; --map-lit:#5679ab;
-  --map-fill:#f4ead6; --map-sky:#fffaf2; --map-ground:#f0e6d0;
-  --lattice:#213a5f; --lattice-lit:#213a5f;
+  --map-lo:#fcfaf5; --map-hi:#b89c5e; --map-lit:#4a5f7a;
+  --map-fill:#f4ecdc; --map-sky:#ffffff; --map-ground:#e5e0d4;
+  --lattice:#4a5f7a; --lattice-lit:#a0854a;
 }

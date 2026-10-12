@@ -4,7 +4,7 @@
    when fonts, frames and pictures are in, which is what the build waits for before printing.
    ========================================================= */
 const Book = (() => {
-  const VERSION = '0.2', STATUS = 'Draft', DATE = 'October 2026';
+  const VERSION = '0.3', STATUS = 'Draft', DATE = 'October 2026';
   const GROUND = new URLSearchParams(location.search).get('ground') || '';   // printed for a look of the testing ground: the book says which on every sheet
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const S = { tokens: { night: [], day: [] }, map: { night: {}, day: {} }, siteCss: '', fontLink: '', logo: '', bars: [], icons: [], phosphor: [], AR: {}, frames: [], chapters: [] };

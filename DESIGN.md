@@ -22,7 +22,7 @@ Never edit the token block inside `site/index.html`: the next build overwrites i
 | Asked for | Change |
 | --- | --- |
 | Warmer or cooler cream | `--cream`; by day `--c-bg`, `--c-raise` |
-| Darker or lighter navy | `--n950` to `--n600` |
+| Darker or lighter charcoal | `--n950` to `--n600` |
 | A different heading or body face | `--serif` or `--sans`, **and** the Google Fonts `<link>` at the top of the page |
 | Larger or smaller headings | `--fs-h2`, `--fs-hero`, `--fs-h3`, `--fs-card-title` |
 | Larger body text | `--fs-body` (phones: `--fs-body-sm`) |
@@ -35,8 +35,8 @@ Never edit the token block inside `site/index.html`: the next build overwrites i
 ## 2. Principles
 
 1. **Evidence leads.** Data is the picture: the block map, the figures row, the firm's own covers. No stock photographs, no decorative illustration.
-2. **One field, one accent.** Navy carries the page. Cream is the only accent and means "can be pressed" or "is selected". Rose appears once, as the line under the headline's key words.
-3. **Editorial, not promotional.** Serif headings written as sentences that end in a full stop. No small label above a heading, no coloured stripe down a card's side, no card inside a card.
+2. **One field, two accents.** Cream carries the page by day, the logo's charcoal by night. Deep blue is the action and means "can be pressed" or "is selected"; gold is the warm second accent and appears as the line under the headline's key words. The logo's slate blue carries meta and the ambient field.
+3. **Editorial, not promotional.** Headings written as sentences that end in a full stop. No small label above a heading, no coloured stripe down a card's side, no card inside a card.
 4. **Motion that settles.** One spring with no bounce. Things arrive once and stay. Everything has a reduced-motion form.
 5. **Two scripts, two lights.** English and Arabic, night and day are four equal states. A change is finished when it is right in all four.
 6. **Only what is true.** Rates, clients, counts and registration numbers come from the live karamshaar.com. Nothing is invented.
@@ -47,18 +47,18 @@ Hierarchy, in order: headline (one per page) > figure > section heading (second 
 
 Values live in the file. This is the map of names and roles.
 
-- **Navy ramp** (night surfaces, dark to light): `--ink` page edge and footer, `--n950` page ground, `--n925` faces of the clients wall, `--n900` raised band and menus, `--n850` card, `--n825` foot of the proof band, `--n800` lifted card, `--n750` lit corner of the statement card, `--n700` hover and focus on cream, `--n600` inquiry band, `--n500` reserved.
-- **Pale inks, washes, shade** (the same in both themes): `--on-dark` type on navy, `--ice-1` to `--ice-3` pale blue inks, `--tint` washes and hairlines, `--shade` corner vignette, `--shade-2` veil under the nav.
-- **Cool tints**: `--steel-2` meta, `--mist` tags, `--steel` reserved.
-- **Cream, the accent**: `--cream` primary action and selected state, `--cream-hi` its hover, `--sand` brass for figure units, `--field` text field on a cream card, `--cream-2` reserved.
-- **Fixed small roles**: `--rose` the headline underline only. `--lilac` `--peri` `--sage` `--ochre` one tint per practice area. `--pcard-1` to `--pcard-4` the practice card grounds.
+- **Charcoal ramp** (night surfaces, dark to light, grown from the logo's own grey): `--ink` page edge and footer, `--n950` page ground, `--n925` faces of the clients wall, `--n900` raised band and menus, `--n850` card, `--n825` foot of the proof band, `--n800` lifted card, `--n750` lit corner of the statement card, `--n700` hover and focus on cream, `--n600` inquiry band, `--n500` reserved.
+- **Pale inks, washes, shade** (the same in both themes): `--on-dark` type on the dark ground, `--ice-1` to `--ice-3` pale creams, `--tint` washes and hairlines, `--shade` corner vignette, `--shade-2` veil under the nav.
+- **Slate, the cool accent** (the logo's blue): `--steel-2` meta, `--mist` tags, `--steel` the ambient field.
+- **Cream and gold, the accents**: `--cream` primary action and selected state, `--cream-hi` its hover, `--sand` gold for figure units and warm geometry, `--field` text field on a cream card, `--cream-2` reserved.
+- **Fixed small roles**: `--rose` the headline underline only (gold, not red). `--lilac` `--peri` `--sage` `--ochre` one tint per practice area. `--pcard-1` to `--pcard-4` the practice card grounds.
 - **Ink and rules**: `--text`, `--lit`, `--muted`, `--faint`, `--line` (every hairline).
 - **On cream surfaces** (same in both themes): `--on-cream` ink, `--ink-blue` meta and icons, `--err`, `--err-ink`.
 - **Hero sky, map, lattice** (each has night and day values): `--sky-1` to `--sky-4` top to bottom, `--haze-1` to `--haze-3`; `--map-lo`, `--map-hi` shortest and tallest columns, `--map-lit` the column in focus, `--map-fill`, `--map-sky`, `--map-ground` its coloured lights; `--lattice`, `--lattice-lit`.
 - **Logo**: `--logo-bar`, `--logo-ink`, `--logo-tag`.
 - **Day theme only**: `--c-raise` cards and bands, `--c-tint`, `--c-bg` page ground, `--c-deep` edge and alternate band, `--c-sand` reserved, `--c-blue` ink and action, `--c-blue-2`, `--c-blue-ink`, `--c-blue-deep` foot of the inquiry band. The day block also re-values `--text`, `--muted`, `--faint`, `--lit`, `--line`, `--steel-2`, `--mist`, `--rose`, the four tints, the four `--pcard`s and the logo.
-- **Type**: `--serif` Newsreader (headings, figures, the reading passage), `--sans` Fira Sans (everything else), `--arabic` Cairo (both roles in Arabic). Sizes: `--fs-h1`, `--fs-hero`, `--fs-h2`, `--fs-h3`, `--fs-card-title`, `--fs-statement`, `--fs-signoff`, `--fs-figure`, `--fs-price`, `--fs-lede`, `--fs-sub`, `--fs-body`, `--fs-body-sm`.
-- **Shape**: `--r-card` 20, `--r-in` 12, `--r-btn` everything pressable and `--r-tag` small labels (both a full pill today), `--r-cover` 6.
+- **Type**: one family, Cairo, under three names kept for their roles: `--serif` (headings, figures, the reading passage), `--sans` (everything else), `--arabic` (both roles in Arabic). Sizes: `--fs-h1`, `--fs-hero`, `--fs-h2`, `--fs-h3`, `--fs-card-title`, `--fs-statement`, `--fs-signoff`, `--fs-figure`, `--fs-price`, `--fs-lede`, `--fs-sub`, `--fs-body`, `--fs-body-sm`.
+- **Shape**: `--r-card` 6, `--r-in` 4, `--r-btn` everything pressable 4 and `--r-tag` small labels 4, `--r-cover` 4.
 - **Layout**: `--wrap` content column, `--gap` between cards, `--sec-y` section space, `--sec-head` space under a section heading, `--h-btn`, `--h-btn-sm`.
 - **Motion**: `--spring`, `--ease`, `--t-reveal`, `--t-ui`, `--rise`.
 
@@ -68,19 +68,19 @@ Values live in the file. This is the map of names and roles.
 
 ## 4. Rules
 
-**Colour.** Cream is the only accent. Rose is a line, never type or a button. A practice tint marks only its own area. Cream surfaces keep navy ink in both themes. By day, deep blue owns the featured rate and the inquiry band, and inside them type takes its night values back. Neighbouring bands never share a ground. Every new colour needs its day value in the same change.
+**Colour.** Deep blue is the action, gold the warm second accent. Gold is a line and a small mark, never body type or a button's ground. A practice tint marks only its own area. Cream surfaces keep the warm ink in both themes. By day, deep blue owns the featured rate and the inquiry band, and inside them type takes its night values back. Neighbouring bands never share a ground. Every new colour needs its day value in the same change.
 
-**Type.** Headings: Newsreader 400, sentence case, full stop. Emphasis inside a heading is italic 400 (the only italic weight loaded). Two-part headings put the second sentence in `.dim` on its own line. Body: Fira Sans 400, line height 1.6. Pressable things and meta: 500. Form labels and footer heads: 600. Headings wrap balanced, paragraphs wrap pretty, paragraphs stay within 26 to 34 em. Numbers in the serif use lining numerals, data readouts use tabular numerals.
+**Type.** One family, Cairo, for both scripts. Headings 600, sentence case, full stop. The family has no italic, so emphasis inside a heading is weight 700 with the gold line beneath it. Two-part headings put the second sentence in `.dim` on its own line. Body 400, line height 1.6. Pressable things and meta: 500. Form labels and footer heads: 600. Headings wrap balanced, paragraphs wrap pretty, paragraphs stay within 26 to 34 em. Figures use lining numerals, data readouts use tabular numerals.
 
-**Arabic.** Cairo for everything, tracking zero, no italic: emphasis is weight 600 (cream inside section headings). Headings 600 at line height 1.3 to 1.35, body 1.85. Digits stay Western, email fields stay left to right, the logo keeps its Latin wordmark. Layout, arrows, decoration and the hero sky mirror; the map does not. New English copy needs its entry in the `AR` table in the same change.
+**Arabic.** The same family, tracking zero: emphasis is weight 600 (cream inside section headings). Headings 600 at line height 1.3 to 1.35, body 1.85. Digits stay Western, email fields stay left to right, the logo keeps its Latin wordmark. Layout, arrows, decoration and the hero sky mirror; the map does not. New English copy needs its entry in the `AR` table in the same change.
 
-**Shape.** Anything pressable is a pill (`--r-btn`). Cards 20 px, inputs 12 px, covers 6 px. One hairline, 1 px `--line`. Pills are outlined with an inset 1 px ring, not a border. Three shadows only (stacked practice cards, phone menu, covers).
+**Shape.** Quiet corners throughout: cards 6 px (`--r-card`), everything else 4 px (`--r-btn`, `--r-tag`, `--r-in`, `--r-cover`). One hairline, 1 px `--line`. Buttons are outlined with an inset 1 px ring, not a border. Three shadows only (stacked practice cards, phone menu, covers).
 
 **Layout.** Content on one column, at most `--wrap` wide, 24 px side margins (16 on phones). Bands run edge to edge with `--sec-y` above and below. Breakpoints: 1100 px (nav becomes a menu, hero stacks) and 767 px (phones: body 16 px, single column, 44 px touch targets). The clients wall has its own steps at 1340, 1250 and 1179.
 
 **Motion.** `--spring` for movement, `--ease` for colour. Arrival: rise `--rise` and fade over `--t-reveal`, siblings 0.1 s apart, once. Only transform and opacity animate. Nothing loops for attention; ambient canvases stop off screen. Under reduced motion: fades only, no smooth scroll, no hover movement, figures and underline shown complete.
 
-**Access.** Focus ring 2 px, 3 px offset (cream at night, deep blue by day, navy on the cream form). Skip link first. Map operable by arrow keys with a live region. Toggles use `aria-pressed`, chips are a radio group, errors are tied to their field. Body and supporting type meet AA on every ground (ratios are printed in the PDF, chapter 02).
+**Access.** Focus ring 2 px, 3 px offset (cream at night, deep blue by day, the warm ink on the cream form). Skip link first. Map operable by arrow keys with a live region. Toggles use `aria-pressed`, chips are a radio group, errors are tied to their field. Body and supporting type meet AA on every ground (ratios are printed in the PDF, chapter 02).
 
 ## 5. The page, band by band
 
@@ -117,7 +117,7 @@ Scripts, in page order: language (the `AR` table), main (theme, menu, reveals, f
 
 ## 7. Other platforms
 
-Guidance only, not yet built: see chapter 10 of the PDF. The portable core is navy `--n950`, cream `--cream`, the two faces plus Cairo, the four radii and the one spring. Further pages of the site go in `site/`, carry the `DS:TOKENS` marks so the build fills them, and reuse the components above.
+Guidance only, not yet built: see chapter 10 of the PDF. The portable core is charcoal `--n950`, cream `--cream`, deep blue `--c-blue`, gold `--sand`, Cairo, the two radii and the one spring. Further pages of the site go in `site/`, carry the `DS:TOKENS` marks so the build fills them, and reuse the components above.
 
 ## 8. Files
 
@@ -136,8 +136,8 @@ The book reads `tokens.css` and `site/index.html` as it prints: swatches, size t
 
 ## 9. Status
 
-- **Settled** (owner, 6 October 2026): one site and one direction. Navy, cream accent, Newsreader with Fira Sans, block-map hero, four states in one page, real facts only.
+- **Settled** (owner, 6 October 2026, recoloured 12 October 2026): one site and one direction. Cream by day and the logo's charcoal by night, deep blue action with gold as the second accent, Cairo throughout, block-map hero, four states in one page, real facts only.
 - **Draft, recorded as built**: token names and groups, the small text scale, the day theme's grounds, the film grain, the platform guidance.
 - **Open**: the 9 October feedback round being tried in `site/test.html` (colours nearer the logo's, Georgia or Arial, a near-white day theme, less animation) is not part of this system until the owner decides. Two of the six figures are stand-ins. The Arabic copy awaits review. Fonts and scripts are to be self-hosted before launch. No print (CMYK) values are defined.
 
-Changes: 0.2, 12 October 2026: the hero sky, the map, the lattice, pale inks and shade became tokens, `--r-pill` became `--r-btn` and `--r-tag`, colours can be used at any strength through `--name-rgb`, all with no visual change, so that the testing ground can switch them. 0.1, 12 October 2026, first record. The page was wired to the token file with no visual change (every computed style compared before and after, in all four states at three screen widths).
+Changes: 0.3, 12 October 2026: the palette, the family and the corners were replaced from the owner's reference file. The page now opens in the cream theme; the night theme is a charcoal grown from the logo's own grey, with the logo's slate blue as the cool accent and gold as the warm one. Newsreader and Fira Sans gave way to Cairo alone, so emphasis in a heading is weight rather than italic. Corners went from a 20 px card and a full pill to 6 px and 4 px. 0.2, 12 October 2026: the hero sky, the map, the lattice, pale inks and shade became tokens, `--r-pill` became `--r-btn` and `--r-tag`, colours can be used at any strength through `--name-rgb`, all with no visual change, so that the testing ground can switch them. 0.1, 12 October 2026, first record. The page was wired to the token file with no visual change (every computed style compared before and after, in all four states at three screen widths).
