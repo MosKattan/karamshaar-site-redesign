@@ -1,0 +1,44 @@
+# Publishes site/ to GitHub Pages on every push to main, so there is always a
+# live link to show. The page is site/index.html exactly as it is in the repo;
+# nothing is built. site/backup/ is left out.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gather the page and its pictures
+        run: |
+          mkdir -p _site
+          cp -r site/. _site/
+          rm -rf _site/backup
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: pages
+        uses: actions/deploy-pages@v4
