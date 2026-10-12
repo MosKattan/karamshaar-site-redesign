@@ -8,11 +8,12 @@
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, extname, join, normalize, sep } from 'node:path';
+import { basename, dirname, extname, join, normalize, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..');
+const isGround = basename(root) === 'testing-ground', where = isGround ? 'testing-ground/' : '';   // the same script serves the testing ground's copy (see tools/ground.mjs): it works on whichever folder it sits in
 const flags = new Set(process.argv.slice(2));
 const PDF = join(here, 'Karam-Shaar-Design-System.pdf');
 const cache = join(here, '.cache');
@@ -28,10 +29,10 @@ for (const name of readdirSync(join(root, 'site')).filter(f => f.endsWith('.html
   if (a < 0 || b < a) { if (name !== 'test.html') console.log(`  ${name}: no token block, left alone`); continue; }
   const nl = raw.includes('\r\n') ? '\r\n' : '\n';
   const next = raw.slice(0, a) + (HEAD + '\n' + tokens + '\n').replace(/\n/g, nl) + raw.slice(b);
-  if (next === raw) { console.log(`  site/${name}: already matches tokens.css`); continue; }
+  if (next === raw) { console.log(`  ${where}site/${name}: already matches tokens.css`); continue; }
   stale++;
-  if (flags.has('--check')) console.log(`  site/${name}: OUT OF STEP with tokens.css`);
-  else { writeFileSync(file, next); console.log(`  site/${name}: tokens updated`); }
+  if (flags.has('--check')) console.log(`  ${where}site/${name}: OUT OF STEP with tokens.css`);
+  else { writeFileSync(file, next); console.log(`  ${where}site/${name}: tokens updated`); }
 }
 if (flags.has('--check')) process.exit(stale ? 1 : 0);
 if (flags.has('--no-pdf')) process.exit(0);
@@ -102,7 +103,7 @@ try {
 
   /* ---------- 5. the book, printed ---------- */
   await send('Emulation.setDeviceMetricsOverride', { width: 1123, height: 794, deviceScaleFactor: 1, mobile: false });
-  await send('Page.navigate', { url: `${base}/design-system/src/book.html` });
+  await send('Page.navigate', { url: `${base}/design-system/src/book.html${isGround ? '?ground=1' : ''}` });
   let ready = false;
   for (let i = 0; i < 240 && !ready; i++) { await sleep(500); ready = await ev('window.__bookReady === true').catch(() => false); }
   if (!ready) throw new Error('the book did not finish loading (fonts or specimens): ' + await ev('window.__bookStatus || "no status"').catch(() => '?'));
@@ -128,7 +129,7 @@ try {
   console.log(`  printed in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   try { writeFileSync(PDF, pdf); }
   catch (e) { if (e.code === 'EBUSY' || e.code === 'EPERM') throw new Error('the PDF is open in another program. Close it and run again.'); throw e; }
-  console.log(`  PDF: design-system/Karam-Shaar-Design-System.pdf, ${pages} pages, ${(statSync(PDF).size / 1048576).toFixed(1)} MB`);
+  console.log(`  PDF: ${where}design-system/Karam-Shaar-Design-System.pdf, ${pages} pages, ${(statSync(PDF).size / 1048576).toFixed(1)} MB`);
 } catch (e) { failed = true; console.error('  ' + e.message);
 } finally {
   try { ws && ws.close(); } catch {}

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#93acd4" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 200 120" preserveAspectRatio="xMinYMid meet"><path d="M22 12H82L98 28V108H22Z"/><path d="M82 12V28H98"/><path d="M34 42H84M34 54H88M34 66H76M34 78H86M34 90H64"/><circle cx="130" cy="70" r="26"/><path d="M149 89L174 114"/><circle stroke-dasharray="2 3" opacity=".75" cx="130" cy="70" r="33"/><path stroke-dasharray="2 3" opacity=".75" d="M130 26V114M88 70H172"/><path d="M119 70l8 8 14-17"/></svg>

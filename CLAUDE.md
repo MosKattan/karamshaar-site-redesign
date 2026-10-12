@@ -32,6 +32,20 @@ The design is written down, and its shared values live in one file. Start here f
 - The system is a draft. `DESIGN.md` section 9 lists what is settled and what is open. The owner does not need a separate artifact for it: the PDF is the deliverable.
 - `site/test.html` has no token marks and is not touched by the build.
 
+## Testing ground (since 2026-10-12)
+
+The owner asked for a mirror of the site and its design system where he can experiment without worrying about undoing things, and from which he sends changes to the real site when he chooses.
+
+- **Folder:** `testing-ground/`. An exact copy: `testing-ground/site/index.html` with its `assets/`, `testing-ground/design-system/` (its own `tokens.css`, `build.mjs`, book source and PDF) and `testing-ground/DESIGN.md`. Everything inside it works as in the real site, relative to that folder: `node testing-ground/design-system/build.mjs` applies the testing ground's tokens to the testing ground's page and prints the testing ground's PDF (every sheet says "Testing ground").
+- **Published copy:** https://claude.ai/artifact/RMfUvHkYMZkyXJ7t3WFVW7 ("Services (testing ground)", private). It carries a small red "Testing ground" tag in the corner so it is never mistaken for the real page. To republish: `node tools/ground.mjs publish-copy`, then publish `testing-ground/.publish/index.html` to that URL (images in `files` only if they changed). Republish it after every change to the testing ground, without being asked.
+- **Preview:** launch config `ground`, port 5181 (`PORT=5181 node tools/shoot.mjs ...` for screenshots).
+- **Which one to edit.** "The website", "the page", "the site", "the artifact", "main" and "the real site" still mean `site/` and its artifact. Work in `testing-ground/` when he says "testing ground", "the mirror", "the lab", "the sandbox", "try", "experiment" or "let me see how it would look". If a request could mean either, ask one plain question. Never change the real site as part of an experiment.
+- **`node tools/ground.mjs status`** lists what differs between the two.
+- **`node tools/ground.mjs promote`** copies the testing ground over the real site and rebuilds its PDF. Run it only when he says so ("push it to main", "make it real", "apply it to the site"). Afterwards treat it as any change to the site: check the four states, commit, republish the real artifact. It stops if the real site changed since the testing ground was last refreshed, because copying would undo that work: bring those changes into the testing ground first, then promote.
+- **`node tools/ground.mjs reset`** throws the experiments away and makes the testing ground an exact copy of the real site again. Run it when he asks to start over, and after any change made directly to the real site, so the two do not drift (it reports what it discards: if the testing ground holds experiments he has not decided on, ask before resetting, or carry the real-site change into the testing ground by hand instead).
+- The same care applies there (Arabic entry for new copy, day value for new colours, four states), since anything in it may be promoted. Its PDF is not synced to GitHub (it is large and reprinted often): rebuild it when he wants to see it.
+- **It is not the "test version" below.** `site/test.html` is the older, separate page made for the colleagues' feedback, with its own artifact. It is not mirrored and not touched by these commands.
+
 ## Test version (temporary, since 2026-10-09)
 
 On 2026-10-09 the owner asked for a test version, to try feedback from two colleagues: stronger colours taken from the logo, Georgia and Arial, a white light theme, faster loading. It is the one exception to rule 4, made at his request.
@@ -43,10 +57,10 @@ On 2026-10-09 the owner asked for a test version, to try feedback from two colle
 
 ## Rules
 
-1. **Edit only `site/` and `design-system/`** (plus `DESIGN.md`). Everything in `_archive/` is a retired direction, kept for the record. Do not read it for guidance, do not edit it, do not copy from it, and do not suggest going back to it unless the owner asks by name.
+1. **Edit only `site/`, `design-system/` and `testing-ground/`** (plus `DESIGN.md`). Everything in `_archive/` is a retired direction, kept for the record. Do not read it for guidance, do not edit it, do not copy from it, and do not suggest going back to it unless the owner asks by name.
 2. **New or changed English copy needs its Arabic entry** in the `AR` table, in the same change. Anything that depends on left or right needs an `html[dir=rtl]` rule or an `rtl()` branch.
 3. **New or changed colours need their light theme counterpart**: a token in `design-system/tokens.css` gets its day value in the `[data-theme="light"]` block there, a one-off colour in the page gets its rule under `html[data-theme="light"]`.
-4. **Work on `main` only.** No new branches, no new version folders, no "v2" copies. To try an idea, change `site/index.html`; git history is the undo.
+4. **Work on `main` only.** No new branches, no new version folders, no "v2" copies. To try an idea, use `testing-ground/` (the one mirror the owner asked for); git history is the undo for both.
 5. **Only real facts** about the firm (rates, clients, registration numbers come from the live karamshaar.com). Never invent figures.
 6. If more pages are added later (home, publications, about), they go inside `site/` as further files and reuse the same tokens and components: give the new page's stylesheet the two `DS:TOKENS` marks and the build fills them.
 

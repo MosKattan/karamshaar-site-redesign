@@ -1,0 +1,167 @@
+/* =========================================================
+   The design system book: its own layout. A4 landscape, one .pg per sheet.
+   The book uses the system it records: tokens.css gives every colour and
+   both type families; day pages carry data-theme="light", night pages are
+   the default. Fira Mono (the sibling of Fira Sans) is used only here, for
+   labels and token names.
+   Page plan, after the reference layout: a thin bar across the top, a very
+   large chapter word between two hairlines with its number in a pill, then
+   three columns: a list, a picture, a figure.
+   ========================================================= */
+@page{size:297mm 210mm;margin:0}
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0}
+html{background:#23262c;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:var(--sans);font-size:12px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+ul,ol{list-style:none;padding:0}
+img{display:block;max-width:100%}
+:root{--mono:"Fira Mono",ui-monospace,Consolas,monospace}
+
+/* ---------- the sheet ---------- */
+.pg{--rule:color-mix(in srgb,var(--text) 26%,transparent);--tint:rgba(160,186,228,.07);--panel:var(--n900);
+  position:relative;width:297mm;height:210mm;overflow:hidden;break-after:page;display:flex;flex-direction:column;padding:0 42px;background:var(--n950);color:var(--text)}
+.pg[data-theme="light"]{--tint:rgba(22,38,75,.045);--panel:var(--c-deep);background:var(--c-raise)}
+@media screen{.pg{margin:28px auto;box-shadow:0 12px 44px rgba(0,0,0,.45)}}
+.pg ::selection{background:var(--cream);color:var(--n950)}
+
+/* ---------- small type ---------- */
+.k{font-family:var(--mono);font-size:8.4px;line-height:1.35;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:400}
+code{font-family:var(--mono);font-size:.9em;letter-spacing:-.01em}
+.serif{font-family:var(--serif);font-weight:400;letter-spacing:-.015em}
+.mut{color:var(--muted)}
+.dim{color:var(--faint)}
+b,strong{font-weight:600}
+em{font-style:italic}
+
+/* ---------- bar and foot ---------- */
+.bar{flex:none;height:46px;display:grid;grid-template-columns:3fr 3fr 4fr 2fr;align-items:center;font-size:10.5px;color:var(--muted);border-bottom:1px solid var(--rule)}
+.bar .brand{display:flex;align-items:center;gap:11px;color:var(--text)}
+.bar .brand svg{width:43px;height:17px;flex:none}
+.bar .brand i{width:3px;height:3px;background:var(--faint);flex:none}
+.bar .no{justify-self:end;padding:3px 13px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--rule);font-family:var(--mono);font-size:9.5px;color:var(--text)}
+.ft{flex:none;height:36px;margin-top:auto;display:flex;align-items:center;justify-content:space-between}
+
+/* ---------- chapter opener ---------- */
+.op-title{flex:none;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--rule)}
+.op-title h1{font-family:var(--serif);font-weight:400;font-size:172px;line-height:1.02;letter-spacing:-.045em;margin:0 0 4px -9px;padding-top:12px;white-space:nowrap}
+.op-title .pill{margin-top:22px;padding:4px 16px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--rule);font-family:var(--mono);font-size:11px}
+.op-body{flex:1;min-height:0;display:grid;grid-template-columns:3fr 6fr 3fr}
+.op-list{align-self:center;padding-right:20px;font-family:var(--serif);font-size:23px;line-height:1.18;letter-spacing:-.015em;color:var(--faint)}
+.op-list li{padding:7px 0}
+.op-list li:first-child{color:var(--text);font-size:31px}
+.op-panel{position:relative;overflow:hidden;background:var(--panel);display:grid;place-items:center}
+.op-panel>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.op-stat{align-self:center;padding-left:30px}
+.op-stat b{display:block;font-family:var(--serif);font-weight:400;font-size:46px;line-height:1;letter-spacing:-.03em}
+.op-stat p{margin-top:14px;font-size:13.5px;line-height:1.5;color:var(--lit)}
+
+/* ---------- content page ---------- */
+.hd{flex:none;display:grid;grid-template-columns:5fr 7fr;gap:30px;align-items:end;padding:20px 0 15px;border-bottom:1px solid var(--rule)}
+.hd h2{font-family:var(--serif);font-weight:400;font-size:37px;line-height:1.04;letter-spacing:-.025em}
+.hd p{font-size:12.5px;line-height:1.5;color:var(--muted);text-wrap:pretty}
+.bd{flex:1;min-height:0;padding-top:18px;display:grid;gap:22px;align-content:start}
+.cols-2{grid-template-columns:1fr 1fr}.cols-3{grid-template-columns:repeat(3,1fr)}.cols-4{grid-template-columns:repeat(4,1fr)}
+.c57{grid-template-columns:5fr 7fr}.c75{grid-template-columns:7fr 5fr}.c48{grid-template-columns:4fr 8fr}.c84{grid-template-columns:8fr 4fr}.c39{grid-template-columns:3fr 9fr}
+.stack{display:grid;gap:14px;align-content:start;min-width:0}
+.stack.lg{gap:20px}
+h3.t{font-family:var(--serif);font-weight:400;font-size:19px;line-height:1.15;letter-spacing:-.015em}
+h4.t{font-size:12px;font-weight:600;line-height:1.3}
+p.s{font-size:11.2px;line-height:1.5;color:var(--muted);text-wrap:pretty}
+.rules li{position:relative;padding:5px 0 5px 15px;font-size:11.2px;line-height:1.45;color:var(--lit);border-top:1px solid var(--line)}
+.rules li::before{content:"";position:absolute;left:0;top:11px;width:5px;height:5px;background:var(--cream)}
+[data-theme="light"] .rules li::before{background:var(--c-blue)}
+.rules li b{color:var(--text)}
+.rules.no li::before{background:none;box-shadow:inset 0 0 0 1px var(--rose);transform:rotate(45deg)}
+
+/* ---------- spec cells, after the reference: a mono label over a large light value ---------- */
+.cells{display:grid;grid-template-columns:repeat(var(--n,3),1fr);border-top:1px solid var(--rule)}
+.cell{padding:9px 12px 11px;border-bottom:1px solid var(--line);border-left:1px solid var(--line);min-width:0}
+.cells[style*="--n:2"] .cell:nth-child(2n+1),.cells[style*="--n:3"] .cell:nth-child(3n+1),.cells[style*="--n:4"] .cell:nth-child(4n+1),.cells[style*="--n:5"] .cell:nth-child(5n+1),.cells[style*="--n:6"] .cell:nth-child(6n+1){border-left:0;padding-left:0}
+.cell .v{display:block;margin-top:5px;font-family:var(--serif);font-size:25px;line-height:1.05;letter-spacing:-.025em;white-space:nowrap}
+.cell .v small{font-family:var(--sans);font-size:10.5px;letter-spacing:0;color:var(--muted)}
+.cell .n{display:block;margin-top:4px;font-size:10.2px;line-height:1.4;color:var(--muted)}
+
+/* ---------- tables ---------- */
+table{width:100%;border-collapse:collapse;font-size:10.6px;line-height:1.4}
+th{font-family:var(--mono);font-size:8.2px;letter-spacing:.11em;text-transform:uppercase;font-weight:400;color:var(--muted);text-align:left;padding:0 10px 6px 0;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:5.5px 10px 5.5px 0;border-bottom:1px solid var(--line);vertical-align:top;color:var(--lit)}
+td:first-child{color:var(--text);font-weight:500}
+td code{color:var(--text);white-space:nowrap}
+table.tight td{padding-top:4px;padding-bottom:4px}
+table.tight{font-size:10px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:-1px;margin-right:6px;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* ---------- swatches ---------- */
+.sws{display:grid;grid-template-columns:repeat(var(--n,8),1fr);gap:0}
+.sw{min-width:0}
+.sw i{display:block;height:var(--h,74px);box-shadow:inset 0 0 0 1px var(--line)}
+.sw div{padding:8px 8px 0 0}
+.sw code{display:block;font-size:9.6px;color:var(--text)}
+.sw span{display:block;font-family:var(--mono);font-size:8.6px;color:var(--muted);margin-top:1px}
+.sw p{margin-top:4px;font-size:9.6px;line-height:1.35;color:var(--muted)}
+.grp{display:grid;gap:9px;align-content:start;min-width:0}
+
+/* ---------- specimens: the real component, drawn by the page's own stylesheet inside a frame ---------- */
+.fr{position:relative;overflow:hidden}
+.fr iframe{display:block;border:0;transform-origin:0 0}
+.fig{display:grid;gap:6px;align-content:start;min-width:0}
+.fig .k{display:flex;justify-content:space-between;gap:10px}
+.shot{position:relative;overflow:hidden;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line)}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:50% 0}
+
+/* ---------- cover ---------- */
+.cover{padding:0 42px;background:
+  radial-gradient(75% 62% at 100% 100%,rgba(4,9,24,.82),rgba(4,9,24,.4) 45%,rgba(4,9,24,0) 78%),
+  radial-gradient(90% 55% at 78% -6%,rgba(165,154,202,.30),rgba(165,154,202,0) 70%),
+  radial-gradient(70% 45% at 8% 0%,rgba(30,80,162,.30),rgba(30,80,162,0) 72%),
+  linear-gradient(180deg,#36487f 0%,#26396d 20%,#1b2d5c 44%,#142548 72%,var(--n900) 100%)}
+.cover .bar{border-bottom-color:rgba(226,233,246,.2)}
+.cover-bars{position:absolute;right:42px;top:108px;width:430px;height:auto;opacity:.4}
+.cover h1{margin:auto 0 0 -8px;font-family:var(--serif);font-weight:400;font-size:178px;line-height:.93;letter-spacing:-.045em}
+.cover h1 em{position:relative;display:inline-block;padding-bottom:.08em}
+.cover h1 em::after{content:"";position:absolute;left:0;right:.1em;bottom:.07em;height:.05em;background:var(--rose);border-radius:2px}
+.cover-foot{display:grid;grid-template-columns:5fr 7fr;gap:30px;align-items:end;margin:30px 0 34px}
+.cover-foot p{font-size:15px;line-height:1.5;color:var(--lit);max-width:30em}
+.cover .cells{border-top-color:rgba(226,233,246,.24)}
+.cover .cell .v{font-size:19px}
+
+/* ---------- one-off pieces ---------- */
+.toc li{display:grid;grid-template-columns:34px 1fr auto;align-items:baseline;gap:8px;padding:6.5px 0;border-top:1px solid var(--line)}
+.toc li b{font-family:var(--serif);font-weight:400;font-size:19px;letter-spacing:-.015em}
+.toc li span{font-size:10.6px;color:var(--muted)}
+.card{padding:16px 18px;background:var(--tint);min-width:0}
+.card h3{margin-bottom:6px}
+.num{font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+.prin{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule)}
+.prin>div{padding:16px 20px 16px 0;border-bottom:1px solid var(--line);min-width:0}
+.prin>div:not(:nth-child(3n+1)){padding-left:20px;border-left:1px solid var(--line)}
+.prin h3{margin:26px 0 8px;font-family:var(--serif);font-weight:400;font-size:25px;line-height:1.08;letter-spacing:-.02em}
+.prin p{font-size:11.6px;line-height:1.5;color:var(--lit)}
+.prin p+p{margin-top:8px;color:var(--muted);font-size:10.6px}
+.ladder li{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:baseline;padding:7px 0;border-top:1px solid var(--line)}
+.ladder .x{font-family:var(--serif);line-height:1.05;letter-spacing:-.02em;white-space:nowrap;overflow:hidden}
+.ladder small{display:block;font-family:var(--sans);font-size:9.6px;letter-spacing:0;color:var(--muted);margin-top:3px}
+.bars{display:flex;align-items:flex-end;height:100%;width:100%}
+.bars i{flex:1;display:block}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--rule)}
+.steps>div{padding:14px 18px 16px 0;border-bottom:1px solid var(--line)}
+.steps>div+div{padding-left:18px;border-left:1px solid var(--line)}
+.steps b{display:block;margin:20px 0 6px;font-family:var(--serif);font-weight:400;font-size:21px;line-height:1.1;letter-spacing:-.02em}
+.steps p{font-size:10.8px;line-height:1.45;color:var(--muted)}
+.gridmap{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.gridmap>i{display:grid;place-items:center;min-height:34px;background:var(--tint);box-shadow:inset 0 0 0 1px var(--line);font-family:var(--mono);font-size:8.4px;font-style:normal;color:var(--muted)}
+.radii{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.radii i{display:block;height:92px;background:var(--tint);box-shadow:inset 0 0 0 1px var(--rule)}
+.strip{display:grid;gap:6px;height:100%;justify-content:center}
+.strip>div{background-repeat:no-repeat;background-size:100% auto}
+.icons{display:grid;grid-template-columns:repeat(var(--n,5),1fr);border-top:1px solid var(--rule)}
+.icons>div{padding:14px 12px 10px 0;min-width:0;border-bottom:1px solid var(--line);display:grid;gap:8px;justify-items:start}
+.icons svg,.icons i.g{width:26px;height:26px;display:block}
+.icons i.g{background:currentColor;-webkit-mask:var(--ph) center/100% 100% no-repeat;mask:var(--ph) center/100% 100% no-repeat}
+.logo-plate{display:grid;place-items:center;height:150px}
+.logo-plate svg{width:230px;height:90px}
+.curve{width:100%;height:auto;overflow:visible}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--rule);font-family:var(--mono);font-size:8.4px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.tag.ok{background:var(--cream);color:var(--n950);box-shadow:none}
+[data-theme="light"] .tag.ok{background:var(--c-blue);color:var(--c-raise)}
+.ar{font-family:var(--arabic);direction:rtl;text-align:right;letter-spacing:0}

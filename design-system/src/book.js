@@ -5,6 +5,7 @@
    ========================================================= */
 const Book = (() => {
   const VERSION = '0.1', STATUS = 'Draft', DATE = 'October 2026';
+  const GROUND = new URLSearchParams(location.search).has('ground');   // printed from testing-ground/: the book says so on every sheet
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const S = { tokens: { night: [], day: [] }, map: { night: {}, day: {} }, siteCss: '', fontLink: '', logo: '', bars: [], icons: [], phosphor: [], AR: {}, frames: [], chapters: [] };
 
@@ -103,7 +104,7 @@ const Book = (() => {
   };
 
   /* ---------- sheets ---------- */
-  const bar = ch => `<header class="bar"><span class="brand">${logo()}<i></i><span>Design system</span></span><span>${ch || ''}</span><span>${STATUS} ${VERSION}, ${DATE}</span><span class="no"></span></header>`;
+  const bar = ch => `<header class="bar"><span class="brand">${logo()}<i></i><span>Design system</span></span><span>${ch || ''}</span><span>${GROUND ? 'Testing ground: experiments, not the live system' : `${STATUS} ${VERSION}, ${DATE}`}</span><span class="no"></span></header>`;
   const foot = (l, r) => `<footer class="ft">${k('[ ' + l + ' ]')}${k('[ ' + r + ' ]')}</footer>`;
   let chapter = { n: '', name: '' };
   const opener = o => {
@@ -143,6 +144,6 @@ const Book = (() => {
     window.__bookStatus = 'ready'; window.__bookReady = true;
   };
 
-  const api = { S, VERSION, STATUS, DATE, esc, k, tok, table, cells, rules, sw, sws, dot, logo, shot, frame, take, opener, page, bar, foot, tv, note, px, rgba, hex, contrast, late: fn => (S.late ||= []).push(fn) };
+  const api = { S, VERSION, STATUS, DATE, GROUND, esc, k, tok, table, cells, rules, sw, sws, dot, logo, shot, frame, take, opener, page, bar, foot, tv, note, px, rgba, hex, contrast, late: fn => (S.late ||= []).push(fn) };
   return { make, ...api };
 })();

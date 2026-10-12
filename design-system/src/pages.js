@@ -57,7 +57,7 @@ const PAGES = B => {
   <svg class="cover-bars" viewBox="0 0 462 526" aria-hidden="true">${S.bars.map(b => `<path d="${b.d}" fill="${b.ink ? N('--logo-ink') : N('--logo-bar')}"/>`).join('')}</svg>
   <h1>Design<br><em>system.</em></h1>
   <div class="cover-foot"><p>The visual language of Karam Shaar Advisory, recorded from the redesigned Services page so that it can be kept, changed in one place, and carried to other pages and platforms.</p>
-  ${cells([['Version', B.VERSION + ' <small>draft</small>'], ['Printed', today.replace(/ \d{4}$/, '') + ' <small>' + today.slice(-4) + '</small>'], ['Themes', 'Night, day'], ['Languages', 'English, Arabic']], 4)}</div>
+  ${cells([['Version', B.GROUND ? 'Testing <small>ground</small>' : B.VERSION + ' <small>draft</small>'], ['Printed', today.replace(/ \d{4}$/, '') + ' <small>' + today.slice(-4) + '</small>'], ['Themes', 'Night, day'], ['Languages', 'English, Arabic']], 4)}</div>
 </section>`,
 
 /* ============ contents ============ */
