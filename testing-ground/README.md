@@ -8,7 +8,7 @@ Ideas are tried here as switches on top of the real site, compared, and only the
 
 | File | What it is |
 | --- | --- |
-| `experiments/<id>.css` | One experiment: token values and, where needed, extra rules. The format is at the top of `tools/ground.mjs`. |
+| `experiments/<id>.css` | One experiment: token values and, where needed, extra rules, plus a `fonts:` line when it brings its own typefaces. The format is at the top of `tools/ground.mjs`. |
 | `looks.json` | Named mixes of experiments. |
 | `panel.html` | The panel added to the testing-ground page. |
 | `build/` | Generated: the switchable page, comparison sheets, books. Not synced. |

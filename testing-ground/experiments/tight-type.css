@@ -1,0 +1,28 @@
+/* name: Tighter spacing
+   about: Letters sit closer together and lines closer to each other, most of all in headings and figures. English only: Arabic joins its letters and needs its taller lines. */
+
+/* running text: a touch closer, and lines a step tighter */
+&:not([dir=rtl]) body { letter-spacing:-.01em; line-height:1.5 }
+&:not([dir=rtl]) .lede { line-height:1.48 }
+&:not([dir=rtl]) .legal { line-height:1.5 }
+&:not([dir=rtl]) .stat-label { line-height:1.32 }
+
+/* headings: the larger the type, the tighter it is set */
+&:not([dir=rtl]) h1 { letter-spacing:-.03em; line-height:1 }
+&:not([dir=rtl]) h2 { letter-spacing:-.026em; line-height:1.03 }
+&:not([dir=rtl]) h3 { letter-spacing:-.016em; line-height:1.1 }
+&:not([dir=rtl]) .pcard h3 { letter-spacing:-.026em; line-height:1.02 }
+&:not([dir=rtl]) .b-b h3 { letter-spacing:-.028em; line-height:1.02 }
+&:not([dir=rtl]) .statement p { letter-spacing:-.019em; line-height:1.16 }
+&:not([dir=rtl]) .signoff { letter-spacing:-.033em; line-height:1 }
+
+/* figures */
+&:not([dir=rtl]) .stat-num { letter-spacing:-.04em }
+&:not([dir=rtl]) .amt { letter-spacing:-.05em }
+&:not([dir=rtl]) .rate-row .fig b { letter-spacing:-.033em }
+
+/* small labels were set wide; they come in to about half of that */
+&:not([dir=rtl]) :is(.lang, .mnav a[lang]) { letter-spacing:.03em }
+&:not([dir=rtl]) :is(.cur, .rate-row .fig) { letter-spacing:.02em }
+&:not([dir=rtl]) :is(.wcol h3, legend, label, .starter label) { letter-spacing:0 }
+&:not([dir=rtl]) :is(.iso-call span, .map-readout) { letter-spacing:.015em }

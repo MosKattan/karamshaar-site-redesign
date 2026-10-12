@@ -1,0 +1,15 @@
+/* name: Season-style fonts
+   fonts: https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Instrument+Sans:ital,wght@0,400..600;1,400..600&display=swap
+   about: After the Season Mix and Season Sans pairing. Those two are paid fonts, so this uses free look-alikes: Hedvig Letters Serif (from the same foundry) for headings and figures, Instrument Sans for everything else. */
+
+& {
+  --serif:"Hedvig Letters Serif","Iowan Old Style","Times New Roman",serif;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+
+/* the stand-in serif is drawn wider than Newsreader and has one weight and no italic:
+   headings are set a little closer, and the italic words borrow Newsreader's italic */
+&:not([dir=rtl]) :is(h1, h2, .signoff) { letter-spacing:-.03em }
+&:not([dir=rtl]) :is(h3, .statement p) { letter-spacing:-.02em }
+&:not([dir=rtl]) .wcol h3 { letter-spacing:.02em }
+&:not([dir=rtl]) :is(h1, h2, .signoff) em { font-family:"Newsreader","Iowan Old Style","Times New Roman",serif; letter-spacing:-.02em }
