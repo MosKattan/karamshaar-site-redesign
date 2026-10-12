@@ -7,18 +7,18 @@
    ========================================================= */
 
 :root{
-  /* ---- colour: navy ramp (night theme grounds, darkest to lightest) ---- */
-  --ink:#091224;                 /* page edge, footer */
-  --n950:#0d1930;                /* body ground; ink on cream surfaces */
-  --n900:#11203c;                /* raised band, menus, navy button */
-  --n850:#152848;                /* card */
-  --n800:#1a3156;                /* card, one step lifted */
-  --n700:#223e6b;                /* hover of the navy button, focus on cream */
-  --n600:#2c4d80;                /* inquiry band, brightest card */
-  --n500:#40639b;                /* reserved */
+  /* ---- colour: navy ramp (night theme grounds: the logo charcoal #545454 is the page ground) ---- */
+  --ink:#2e2e2e;                 /* page edge, footer */
+  --n950:#545454;                /* body ground; ink on cream surfaces */
+  --n900:#595959;                /* raised band, menus, navy button */
+  --n850:#5e5e5e;                /* card */
+  --n800:#636363;                /* card, one step lifted */
+  --n700:#6b6b6b;                /* hover of the navy button, focus on cream */
+  --n600:#737373;                /* inquiry band, brightest card */
+  --n500:#7c7c7c;                /* reserved */
 
   /* ---- colour: cool tints (secondary text, meta, rules) ---- */
-  --steel:#6f8fc1; --steel-2:#93acd4; --mist:#c5d2e8;
+  --steel:#738aa7; --steel-2:#cfd9e6; --mist:#e2e8ef;
 
   /* ---- colour: cream, the single accent ---- */
   --cream:#f1ead7;               /* primary action, selected state, cream cards */
@@ -30,21 +30,21 @@
   /* ---- colour: brand underline and the four practice areas ---- */
   --rose:#c8475a;                /* only as the underline beneath the headline's key words */
   --lilac:#c9addb; --peri:#8eabea; --sage:#a5c790; --ochre:#d3c198;
-  --pcard-1:#16294a; --pcard-2:#1d355d; --pcard-3:#264472; --pcard-4:#325688;   /* practice cards, back to front */
+  --pcard-1:#5a5a5a; --pcard-2:#606060; --pcard-3:#666666; --pcard-4:#6d6d6d;   /* practice cards, back to front */
 
   /* ---- colour: type and rules on the navy field ---- */
   --text:#f3efe3;
-  --lit:rgba(226,233,246,.9);    /* body copy that must read clearly */
-  --muted:rgba(214,224,242,.68); /* supporting copy */
-  --faint:rgba(214,224,242,.6);  /* legal, second half of a heading */
-  --line:rgba(160,186,228,.16);  /* every hairline */
+  --lit:rgba(250,246,238,.92);    /* body copy that must read clearly */
+  --muted:rgba(245,240,230,.74); /* supporting copy */
+  --faint:rgba(245,240,230,.66);  /* legal, second half of a heading */
+  --line:rgba(245,240,230,.18);  /* every hairline */
 
   /* ---- colour: on cream surfaces (same in both themes) ---- */
-  --ink-blue:#35507f;            /* meta, icons and notes on cream */
+  --ink-blue:#4a4a4a;            /* meta, icons and notes on cream */
   --err:#a52c3e; --err-ink:#8e2233;
 
   /* ---- colour: logo ---- */
-  --logo-bar:#7f9dd0; --logo-ink:#f1ead7; --logo-tag:#93acd4;
+  --logo-bar:#8fa6c3; --logo-ink:#f1ead7; --logo-tag:#c3d0e0;
 
   /* ---- type: families ---- */
   --serif:"Newsreader","Iowan Old Style","Times New Roman",serif;      /* headings, figures, statements */
@@ -66,9 +66,10 @@
   --fs-sub:1.1rem;                              /* paragraph under a section heading */
 
   /* ---- shape ---- */
-  --r-card:20px;                 /* cards, panels, menus */
-  --r-in:12px;                   /* inputs, menu rows */
-  --r-pill:999px;                /* everything you can press */
+  --r-card:12px;                 /* cards, panels, menus */
+  --r-in:8px;                   /* inputs, menu rows */
+  --r-btn:8px;                   /* everything you can press: buttons, nav links, toggles, chips */
+  --r-tag:6px;                   /* small labels that cannot be pressed */
   --r-cover:6px;                 /* printed covers */
 
   /* ---- layout ---- */
@@ -98,15 +99,15 @@
   --c-deep:#ece1cb;              /* page edge, footer, alternate band */
   --c-sand:#e4d5b6;              /* reserved */
   /* deep blue: ink, action, and the two regions it owns */
-  --c-blue:#213a5f; --c-blue-2:#2d4a72; --c-blue-ink:#152a47;
+  --c-blue:#545454; --c-blue-2:#6a6a6a; --c-blue-ink:#3a3a3a;
   /* type and rules */
-  --text:#16264b; --muted:rgba(22,38,75,.72); --faint:rgba(22,38,75,.68); --lit:rgba(22,38,75,.86);
-  --line:rgba(22,38,75,.13);
+  --text:#2a2a2a; --muted:rgba(42,42,42,.74); --faint:rgba(42,42,42,.7); --lit:rgba(42,42,42,.88);
+  --line:rgba(42,42,42,.14);
   --steel-2:#4b6285; --mist:#475c7e;
   /* accents, deepened to hold on cream */
   --rose:#b5394d;
   --lilac:#8a66a6; --peri:#587296; --sage:#5b8748; --ochre:#a6833f;
   --pcard-1:#fbf6ec; --pcard-2:#f8f1e3; --pcard-3:#f5ecda; --pcard-4:#f1e6d1;
   /* logo */
-  --logo-bar:#6e88ab; --logo-ink:#213a5f; --logo-tag:#5a6f98;
+  --logo-bar:#738aa7; --logo-ink:#545454; --logo-tag:#738aa7;
 }
