@@ -9,6 +9,7 @@ Ideas are tried here as switches on top of the real site, compared, and only the
 | File | What it is |
 | --- | --- |
 | `experiments/<id>.css` | One experiment: token values and, where needed, extra rules, plus a `fonts:` line when it brings its own typefaces. The format is at the top of `tools/ground.mjs`. |
+| `assets/fonts/` | Font files of our own that an experiment uses. `ks-hybrid.woff2` is built by `tools/make-hybrid-font.py` from two open-licensed fonts (`OFL.txt` is their licence). |
 | `looks.json` | Named mixes of experiments. |
 | `panel.html` | The panel added to the testing-ground page. |
 | `build/` | Generated: the switchable page, comparison sheets, books. Not synced. |

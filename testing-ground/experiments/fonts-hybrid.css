@@ -1,0 +1,24 @@
+/* name: Hybrid sans and serif
+   fonts: https://fonts.googleapis.com/css2?family=Inter:wght@400..600&display=swap
+   about: After the Dessign Maison specimen: headings in a clean sans with serif italic letters woven in. The font is our own, KS Hybrid, built from two free fonts (Inter Tight and Playfair Display Italic), not a copy of the paid one. Words ending in y or ing get italic letters on their own; emphasised words turn fully italic. Body text in Inter. */
+
+/* built by tools/make-hybrid-font.py */
+@font-face { font-family:"KS Hybrid"; src:url(assets/fonts/ks-hybrid.woff2) format("woff2"); font-weight:400; font-style:normal; font-display:swap }
+
+& {
+  --serif:"KS Hybrid","Inter Tight","Inter",system-ui,sans-serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+
+/* one weight, and its italics are letters inside the font, so the browser must not fake either */
+&:not([dir=rtl]) :is(h1, h2, h3, .statement p, .signoff, .stat-num, .amt, .rate-row .fig b) { font-weight:400; font-synthesis:none }
+&:not([dir=rtl]) .wcol h3 { font-weight:500 }
+
+/* a display sans is set close */
+&:not([dir=rtl]) :is(h1, h2, .signoff) { letter-spacing:-.02em }
+&:not([dir=rtl]) :is(h3, .statement p) { letter-spacing:-.014em }
+&:not([dir=rtl]) .wcol h3 { letter-spacing:.01em }
+&:not([dir=rtl]) body { letter-spacing:-.008em }
+
+/* an emphasised word: every letter from the italic set */
+&:not([dir=rtl]) :is(h1, h2, .signoff) em { font-style:normal; font-feature-settings:"ss01"; letter-spacing:-.01em }
