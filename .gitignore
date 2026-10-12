@@ -22,4 +22,5 @@ design-system/.cache/
 # Testing ground: the copy made for its artifact, and its PDF (large, and reprinted on every experiment: re-create with
 # node testing-ground/design-system/build.mjs)
 testing-ground/.publish/
+testing-ground/design-system/.cache/
 testing-ground/design-system/*.pdf
