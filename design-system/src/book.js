@@ -4,8 +4,8 @@
    when fonts, frames and pictures are in, which is what the build waits for before printing.
    ========================================================= */
 const Book = (() => {
-  const VERSION = '0.1', STATUS = 'Draft', DATE = 'October 2026';
-  const GROUND = new URLSearchParams(location.search).has('ground');   // printed from testing-ground/: the book says so on every sheet
+  const VERSION = '0.2', STATUS = 'Draft', DATE = 'October 2026';
+  const GROUND = new URLSearchParams(location.search).get('ground') || '';   // printed for a look of the testing ground: the book says which on every sheet
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const S = { tokens: { night: [], day: [] }, map: { night: {}, day: {} }, siteCss: '', fontLink: '', logo: '', bars: [], icons: [], phosphor: [], AR: {}, frames: [], chapters: [] };
 
@@ -104,7 +104,7 @@ const Book = (() => {
   };
 
   /* ---------- sheets ---------- */
-  const bar = ch => `<header class="bar"><span class="brand">${logo()}<i></i><span>Design system</span></span><span>${ch || ''}</span><span>${GROUND ? 'Testing ground: experiments, not the live system' : `${STATUS} ${VERSION}, ${DATE}`}</span><span class="no"></span></header>`;
+  const bar = ch => `<header class="bar"><span class="brand">${logo()}<i></i><span>Design system</span></span><span>${ch || ''}</span><span>${GROUND ? 'Testing ground: ' + esc(GROUND) : `${STATUS} ${VERSION}, ${DATE}`}</span><span class="no"></span></header>`;
   const foot = (l, r) => `<footer class="ft">${k('[ ' + l + ' ]')}${k('[ ' + r + ' ]')}</footer>`;
   let chapter = { n: '', name: '' };
   const opener = o => {

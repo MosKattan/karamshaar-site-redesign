@@ -19,8 +19,5 @@ tools/export/
 # Page pictures taken for the design system PDF (re-create with design-system/build.mjs)
 design-system/.cache/
 
-# Testing ground: the copy made for its artifact, and its PDF (large, and reprinted on every experiment: re-create with
-# node testing-ground/design-system/build.mjs)
-testing-ground/.publish/
-testing-ground/design-system/.cache/
-testing-ground/design-system/*.pdf
+# Testing ground: everything it generates (the switchable page, comparison sheets, books). Re-create with tools/ground.mjs
+testing-ground/build/

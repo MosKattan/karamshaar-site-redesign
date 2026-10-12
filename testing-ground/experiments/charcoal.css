@@ -1,0 +1,40 @@
+/* name: Logo charcoal
+   about: The logo's charcoal #545454 as the dark-mode ground and as the action colour in light mode. Steel blue from the logo stays as the second colour. */
+
+& {
+  /* grounds: the page is the logo charcoal, surfaces step lighter, the edge is deeper */
+  --ink:#2e2e2e;
+  --n950:#545454; --n925:#585858; --n900:#595959; --n850:#5e5e5e; --n825:#4f4f4f; --n800:#636363;
+  --n750:#666666; --n700:#6b6b6b; --n600:#737373; --n500:#7c7c7c;
+  --pcard-1:#5a5a5a; --pcard-2:#606060; --pcard-3:#666666; --pcard-4:#6d6d6d;
+
+  /* inks and washes lose their blue */
+  --lit:rgba(250,246,238,.92); --muted:rgba(245,240,230,.74); --faint:rgba(245,240,230,.66); --line:rgba(245,240,230,.18);
+  --ice-1:#ececec; --ice-2:#e4e4e4; --ice-3:#dcdcdc; --tint:#c2c2c2;
+  --shade:#0e0e0e; --shade-2:#151515;
+  --on-cream:#2a2a2a; --ink-blue:#4a4a4a;
+
+  /* the logo's steel blue, lightened to read on charcoal */
+  --steel:#738aa7; --steel-2:#cfd9e6; --mist:#e2e8ef;
+  --logo-bar:#8fa6c3; --logo-tag:#c3d0e0;
+
+  /* hero sky, map and lattice */
+  --sky-1:#707070; --sky-2:#686868; --sky-3:#626262; --sky-4:#5c5c5c;
+  --haze-1:#8fa6c2; --haze-2:#738aa7;
+  --map-lo:#6e747c; --map-hi:#d9dee4; --map-fill:#738aa7; --map-sky:#aeb8c6; --map-ground:#1c1c1c;
+  --lattice:#ece6dc;
+}
+
+&[data-theme="light"] {
+  --c-blue:#545454; --c-blue-2:#6a6a6a; --c-blue-ink:#3a3a3a; --c-blue-deep:#3d3d3d;
+  --text:#2a2a2a; --lit:rgba(42,42,42,.88); --muted:rgba(42,42,42,.74); --faint:rgba(42,42,42,.7); --line:rgba(42,42,42,.14);
+  --logo-bar:#738aa7; --logo-ink:#545454; --logo-tag:#738aa7;
+  --haze-1:#738aa7;
+  --lattice:#2a2a2a; --lattice-lit:#2a2a2a;
+}
+
+/* the inquiry band stays a deep charcoal in both themes: cream copy needs the contrast */
+.inquiry { background:linear-gradient(150deg,#4d4d4d,#3d3d3d 62%) }
+&[data-theme="light"] .inquiry { background:linear-gradient(150deg,#4d4d4d,#3d3d3d 62%); --muted:rgba(245,240,230,.84); --line:rgba(245,240,230,.2) }
+&[data-theme="light"] .nav.on-deep { --muted:rgba(245,240,230,.74); --logo-bar:#8fa6c3; --logo-tag:#c3d0e0 }
+.chip { color:#3a3a3a }

@@ -9,6 +9,7 @@
 | `Karam-Shaar-Design-System.pdf` | The book: principles, colour, type, layout, shape, components, motion, assets, languages, other platforms, upkeep. Rebuilt by the build, never edited by hand. |
 | `tokens.css` | Every shared value (colours for night and day, type sizes, radii, spacing, timing). The source of truth. |
 | `build.mjs` | Copies `tokens.css` into each page in `site/` and prints the PDF with the Chrome on this machine. |
+| `lib.mjs` | The part of that shared with the testing ground: reading tokens, writing a page's token block. |
 | `src/` | The book's own pages. `pages.js` holds the wording. |
 | `.cache/` | Pictures of the page taken for the book. Re-made on each build, not synced. |
 

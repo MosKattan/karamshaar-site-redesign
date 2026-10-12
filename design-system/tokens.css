@@ -16,9 +16,18 @@
   --n700:#223e6b;                /* hover of the navy button, focus on cream */
   --n600:#2c4d80;                /* inquiry band, brightest card */
   --n500:#40639b;                /* reserved */
+  --n925:#0f1c36;                /* faces of the clients wall, between ground and band */
+  --n825:#17305a;                /* foot of the proof band */
+  --n750:#1d3764;                /* lit corner of the statement card */
 
   /* ---- colour: cool tints (secondary text, meta, rules) ---- */
   --steel:#6f8fc1; --steel-2:#93acd4; --mist:#c5d2e8;
+
+  /* ---- colour: pale inks, washes and shade on navy (the same in both themes) ---- */
+  --on-dark:#f3efe3;             /* type on navy, also inside the deep regions of the day theme */
+  --ice-1:#e2e9f6; --ice-2:#d6e0f2; --ice-3:#c5d2e8;   /* pale blue inks, strongest to softest */
+  --tint:#a0bae4;                /* washes under the pointer, hairlines */
+  --shade:#040918; --shade-2:#081022;   /* corner vignette; veil under the nav */
 
   /* ---- colour: cream, the single accent ---- */
   --cream:#f1ead7;               /* primary action, selected state, cream cards */
@@ -40,11 +49,22 @@
   --line:rgba(160,186,228,.16);  /* every hairline */
 
   /* ---- colour: on cream surfaces (same in both themes) ---- */
+  --on-cream:#0d1930;            /* ink on cream surfaces */
   --ink-blue:#35507f;            /* meta, icons and notes on cream */
   --err:#a52c3e; --err-ink:#8e2233;
 
   /* ---- colour: logo ---- */
   --logo-bar:#7f9dd0; --logo-ink:#f1ead7; --logo-tag:#93acd4;
+
+  /* ---- colour: hero sky, top to bottom, and its two hazes ---- */
+  --sky-1:#36487f; --sky-2:#26396d; --sky-3:#1b2d5c; --sky-4:#142548;
+  --haze-1:#a59aca; --haze-2:#1e50a2;
+
+  /* ---- colour: block map and the lattice behind it ---- */
+  --map-lo:#2b4a84; --map-hi:#a9c2ec;   /* shortest and tallest columns */
+  --map-lit:#d8c8a2;             /* the governorate in focus */
+  --map-fill:#6f8fc1; --map-sky:#8ea6d4; --map-ground:#070d1c;   /* side light; light from above; light from below */
+  --lattice:#c5d2e8; --lattice-lit:#f1ead7;   /* grid lines; the cell under the pointer */
 
   /* ---- type: families ---- */
   --serif:"Newsreader","Iowan Old Style","Times New Roman",serif;      /* headings, figures, statements */
@@ -68,7 +88,8 @@
   /* ---- shape ---- */
   --r-card:20px;                 /* cards, panels, menus */
   --r-in:12px;                   /* inputs, menu rows */
-  --r-pill:999px;                /* everything you can press */
+  --r-btn:999px;                 /* everything you can press: buttons, nav links, toggles, chips */
+  --r-tag:999px;                 /* small labels that cannot be pressed */
   --r-cover:6px;                 /* printed covers */
 
   /* ---- layout ---- */
@@ -99,6 +120,7 @@
   --c-sand:#e4d5b6;              /* reserved */
   /* deep blue: ink, action, and the two regions it owns */
   --c-blue:#213a5f; --c-blue-2:#2d4a72; --c-blue-ink:#152a47;
+  --c-blue-deep:#182f50;         /* foot of the inquiry band */
   /* type and rules */
   --text:#16264b; --muted:rgba(22,38,75,.72); --faint:rgba(22,38,75,.68); --lit:rgba(22,38,75,.86);
   --line:rgba(22,38,75,.13);
@@ -109,4 +131,11 @@
   --pcard-1:#fbf6ec; --pcard-2:#f8f1e3; --pcard-3:#f5ecda; --pcard-4:#f1e6d1;
   /* logo */
   --logo-bar:#6e88ab; --logo-ink:#213a5f; --logo-tag:#5a6f98;
+  /* hero sky: a warm wash, three hazes */
+  --sky-1:#f8f1e3; --sky-2:#f5ecdb; --sky-3:#f1e6d1;
+  --haze-1:#9ca0d6; --haze-2:#7088a8; --haze-3:#d6be8c;
+  /* block map and lattice */
+  --map-lo:#f8f2e4; --map-hi:#e3d5b4; --map-lit:#5679ab;
+  --map-fill:#f4ead6; --map-sky:#fffaf2; --map-ground:#f0e6d0;
+  --lattice:#213a5f; --lattice-lit:#213a5f;
 }

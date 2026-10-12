@@ -1,6 +1,6 @@
 # Karam Shaar Advisory design system
 
-Draft 0.1, 12 October 2026. Recorded from the Services page (`site/index.html`). Not final: section 9 lists what is open.
+Draft 0.2, 12 October 2026. Recorded from the Services page (`site/index.html`). Not final: section 9 lists what is open.
 
 This file is the design system in text, for people and for AI assistants. The same content, with swatches and live specimens, is in `design-system/Karam-Shaar-Design-System.pdf`.
 
@@ -14,6 +14,8 @@ Most small changes are one value in one short file.
 4. Check the page in its four states (English and Arabic, night and day), then republish, as `CLAUDE.md` says.
 
 Never edit the token block inside `site/index.html`: the next build overwrites it. `node design-system/build.mjs --check` says whether a page and the token file have drifted apart.
+
+**To try a change before it is real**, make it a switch in the testing ground instead (`testing-ground/experiments/`, see `CLAUDE.md`): the owner compares looks there and says which to make real.
 
 **You do not need to read all of `site/index.html` to make a design change.** For a token, read `tokens.css`. For a component, search the page for its section comment (section 6) and read only that part.
 
@@ -45,20 +47,24 @@ Hierarchy, in order: headline (one per page) > figure > section heading (second 
 
 Values live in the file. This is the map of names and roles.
 
-- **Navy ramp** (night surfaces, dark to light): `--ink` page edge and footer, `--n950` page ground, `--n900` raised band and menus, `--n850` card, `--n800` lifted card, `--n700` hover and focus on cream, `--n600` inquiry band, `--n500` reserved.
+- **Navy ramp** (night surfaces, dark to light): `--ink` page edge and footer, `--n950` page ground, `--n925` faces of the clients wall, `--n900` raised band and menus, `--n850` card, `--n825` foot of the proof band, `--n800` lifted card, `--n750` lit corner of the statement card, `--n700` hover and focus on cream, `--n600` inquiry band, `--n500` reserved.
+- **Pale inks, washes, shade** (the same in both themes): `--on-dark` type on navy, `--ice-1` to `--ice-3` pale blue inks, `--tint` washes and hairlines, `--shade` corner vignette, `--shade-2` veil under the nav.
 - **Cool tints**: `--steel-2` meta, `--mist` tags, `--steel` reserved.
 - **Cream, the accent**: `--cream` primary action and selected state, `--cream-hi` its hover, `--sand` brass for figure units, `--field` text field on a cream card, `--cream-2` reserved.
 - **Fixed small roles**: `--rose` the headline underline only. `--lilac` `--peri` `--sage` `--ochre` one tint per practice area. `--pcard-1` to `--pcard-4` the practice card grounds.
 - **Ink and rules**: `--text`, `--lit`, `--muted`, `--faint`, `--line` (every hairline).
-- **On cream surfaces** (same in both themes): `--ink-blue` meta and icons, `--err`, `--err-ink`.
+- **On cream surfaces** (same in both themes): `--on-cream` ink, `--ink-blue` meta and icons, `--err`, `--err-ink`.
+- **Hero sky, map, lattice** (each has night and day values): `--sky-1` to `--sky-4` top to bottom, `--haze-1` to `--haze-3`; `--map-lo`, `--map-hi` shortest and tallest columns, `--map-lit` the column in focus, `--map-fill`, `--map-sky`, `--map-ground` its coloured lights; `--lattice`, `--lattice-lit`.
 - **Logo**: `--logo-bar`, `--logo-ink`, `--logo-tag`.
-- **Day theme only**: `--c-raise` cards and bands, `--c-tint`, `--c-bg` page ground, `--c-deep` edge and alternate band, `--c-sand` reserved, `--c-blue` ink and action, `--c-blue-2`, `--c-blue-ink`. The day block also re-values `--text`, `--muted`, `--faint`, `--lit`, `--line`, `--steel-2`, `--mist`, `--rose`, the four tints, the four `--pcard`s and the logo.
+- **Day theme only**: `--c-raise` cards and bands, `--c-tint`, `--c-bg` page ground, `--c-deep` edge and alternate band, `--c-sand` reserved, `--c-blue` ink and action, `--c-blue-2`, `--c-blue-ink`, `--c-blue-deep` foot of the inquiry band. The day block also re-values `--text`, `--muted`, `--faint`, `--lit`, `--line`, `--steel-2`, `--mist`, `--rose`, the four tints, the four `--pcard`s and the logo.
 - **Type**: `--serif` Newsreader (headings, figures, the reading passage), `--sans` Fira Sans (everything else), `--arabic` Cairo (both roles in Arabic). Sizes: `--fs-h1`, `--fs-hero`, `--fs-h2`, `--fs-h3`, `--fs-card-title`, `--fs-statement`, `--fs-signoff`, `--fs-figure`, `--fs-price`, `--fs-lede`, `--fs-sub`, `--fs-body`, `--fs-body-sm`.
-- **Shape**: `--r-card` 20, `--r-in` 12, `--r-pill`, `--r-cover` 6.
+- **Shape**: `--r-card` 20, `--r-in` 12, `--r-btn` everything pressable and `--r-tag` small labels (both a full pill today), `--r-cover` 6.
 - **Layout**: `--wrap` content column, `--gap` between cards, `--sec-y` section space, `--sec-head` space under a section heading, `--h-btn`, `--h-btn-sm`.
 - **Motion**: `--spring`, `--ease`, `--t-reveal`, `--t-ui`, `--rise`.
 
-**Not in the token file yet** (change these in the page's stylesheet): the small text sizes (eleven sizes from 11.5 to 15.2 px), paddings inside components, each band's gradient, the clients wall colours (`--wall-*` on `.wall`), and the map's colours (the `dark` and `light` palettes in the map script, search `brass:`). The page's `<meta name="theme-color">` repeats `--n950` by hand.
+**One colour at several strengths.** The page writes `rgba(var(--cream-rgb),.3)`. Every `--name-rgb` is worked out by the build from the token of that name: never type one, and any colour token can be used this way.
+
+**Not in the token file yet** (change these in the page's stylesheet): the small text sizes (eleven sizes from 11.5 to 15.2 px), paddings inside components, the shape of each band's gradient, a few one-off tints (warm shadows in the day theme, two hairlines, the practice-tint geometry), and the flat map drawn when WebGL is missing. The map script still holds the strength of its lights. The page's `<meta name="theme-color">` repeats `--n950` by hand.
 
 ## 4. Rules
 
@@ -68,7 +74,7 @@ Values live in the file. This is the map of names and roles.
 
 **Arabic.** Cairo for everything, tracking zero, no italic: emphasis is weight 600 (cream inside section headings). Headings 600 at line height 1.3 to 1.35, body 1.85. Digits stay Western, email fields stay left to right, the logo keeps its Latin wordmark. Layout, arrows, decoration and the hero sky mirror; the map does not. New English copy needs its entry in the `AR` table in the same change.
 
-**Shape.** Anything pressable is a pill. Cards 20 px, inputs 12 px, covers 6 px. One hairline, 1 px `--line`. Pills are outlined with an inset 1 px ring, not a border. Three shadows only (stacked practice cards, phone menu, covers).
+**Shape.** Anything pressable is a pill (`--r-btn`). Cards 20 px, inputs 12 px, covers 6 px. One hairline, 1 px `--line`. Pills are outlined with an inset 1 px ring, not a border. Three shadows only (stacked practice cards, phone menu, covers).
 
 **Layout.** Content on one column, at most `--wrap` wide, 24 px side margins (16 on phones). Bands run edge to edge with `--sec-y` above and below. Breakpoints: 1100 px (nav becomes a menu, hero stacks) and 767 px (phones: body 16 px, single column, 44 px touch targets). The clients wall has its own steps at 1340, 1250 and 1179.
 
@@ -120,6 +126,8 @@ Guidance only, not yet built: see chapter 10 of the PDF. The portable core is na
 | `DESIGN.md` | This file. |
 | `design-system/tokens.css` | Every shared value. The source of truth. |
 | `design-system/build.mjs` | Copies tokens into `site/*.html` and prints the PDF. Flags: `--no-pdf`, `--check`, `--no-shots`, `--serve`. |
+| `design-system/lib.mjs` | Reads the token file and writes a page's token block, including the `--name-rgb` companions. |
+| `testing-ground/` and `tools/ground.mjs` | Experiments as switches on top of the real site, saved looks, a comparison sheet, and the step that makes chosen experiments real. |
 | `design-system/Karam-Shaar-Design-System.pdf` | The book. Rebuilt by the build, never edited by hand. |
 | `design-system/src/` | The book's source: `book.html`, `book.css`, `book.js` (tools), `pages.js` (the pages and their wording). |
 | `design-system/.cache/` | Page pictures taken for the book. Not synced. |
@@ -132,4 +140,4 @@ The book reads `tokens.css` and `site/index.html` as it prints: swatches, size t
 - **Draft, recorded as built**: token names and groups, the small text scale, the day theme's grounds, the film grain, the platform guidance.
 - **Open**: the 9 October feedback round being tried in `site/test.html` (colours nearer the logo's, Georgia or Arial, a near-white day theme, less animation) is not part of this system until the owner decides. Two of the six figures are stand-ins. The Arabic copy awaits review. Fonts and scripts are to be self-hosted before launch. No print (CMYK) values are defined.
 
-Changes: 0.1, 12 October 2026, first record. The page was wired to the token file with no visual change (every computed style compared before and after, in all four states at three screen widths).
+Changes: 0.2, 12 October 2026: the hero sky, the map, the lattice, pale inks and shade became tokens, `--r-pill` became `--r-btn` and `--r-tag`, colours can be used at any strength through `--name-rgb`, all with no visual change, so that the testing ground can switch them. 0.1, 12 October 2026, first record. The page was wired to the token file with no visual change (every computed style compared before and after, in all four states at three screen widths).

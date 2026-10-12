@@ -1,0 +1,5 @@
+[
+  { "name": "A · Default colours, 8px corners", "on": ["corners-8px"] },
+  { "name": "B · Default colours, 8px corners, bar nav", "on": ["corners-8px", "nav-bar"] },
+  { "name": "C · Logo charcoal, 8px corners, bar nav", "on": ["charcoal", "corners-8px", "nav-bar"] }
+]

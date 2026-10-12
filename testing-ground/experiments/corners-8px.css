@@ -1,0 +1,19 @@
+/* name: 8px corners
+   about: Buttons, nav links, toggles and chips become small rounded rectangles, after awwwards.com. Cards 12px, inputs 8px. */
+
+& {
+  --r-btn:8px;
+  --r-tag:6px;
+  --r-card:12px;
+  --r-in:8px;
+}
+
+/* a toggle's track is one step rounder than the thumb inside it */
+.seg { border-radius:var(--r-card) }
+.seg-sm { border-radius:var(--r-btn) }
+.seg-sm button, .seg-sm .seg-thumb { border-radius:var(--r-tag) }
+
+/* the hero email field: the row holds a button, so it is one step rounder than the button */
+.starter-row { border-radius:var(--r-card) }
+.starter input { border-radius:var(--r-in) }
+@media (max-width:767px) { .starter-row { border-radius:16px } }

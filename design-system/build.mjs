@@ -8,31 +8,29 @@
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { basename, dirname, extname, join, normalize, sep } from 'node:path';
+import { dirname, extname, join, normalize, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { inject } from './lib.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = join(here, '..');
-const isGround = basename(root) === 'testing-ground', where = isGround ? 'testing-ground/' : '';   // the same script serves the testing ground's copy (see tools/ground.mjs): it works on whichever folder it sits in
+const home = join(here, '..');
+// tools/ground.mjs prints the book for a look of the testing ground by pointing DS_ROOT at a folder that holds that look's
+// tokens.css and page. Everything that folder lacks (book source, images) is taken from the project itself.
+const root = process.env.DS_ROOT || home, label = process.env.DS_LABEL || '';
 const flags = new Set(process.argv.slice(2));
-const PDF = join(here, 'Karam-Shaar-Design-System.pdf');
-const cache = join(here, '.cache');
-const START = '/* DS:TOKENS:START', END = '/* DS:TOKENS:END */';
-const HEAD = START + ' - generated from design-system/tokens.css by `node design-system/build.mjs`. Edit that file, not this copy. */';
+const PDF = process.env.DS_OUT || join(here, 'Karam-Shaar-Design-System.pdf');
+const cache = join(root, 'design-system', '.cache');
 
 /* ---------- 1. tokens into the pages ---------- */
-const tokens = readFileSync(join(here, 'tokens.css'), 'utf8').replace(/\r\n/g, '\n').trim();
+const tokens = readFileSync(join(root, 'design-system', 'tokens.css'), 'utf8');
 let stale = 0;
 for (const name of readdirSync(join(root, 'site')).filter(f => f.endsWith('.html'))) {
-  const file = join(root, 'site', name), raw = readFileSync(file, 'utf8');
-  const a = raw.indexOf(START), b = raw.indexOf(END);
-  if (a < 0 || b < a) { if (name !== 'test.html') console.log(`  ${name}: no token block, left alone`); continue; }
-  const nl = raw.includes('\r\n') ? '\r\n' : '\n';
-  const next = raw.slice(0, a) + (HEAD + '\n' + tokens + '\n').replace(/\n/g, nl) + raw.slice(b);
-  if (next === raw) { console.log(`  ${where}site/${name}: already matches tokens.css`); continue; }
+  const file = join(root, 'site', name), raw = readFileSync(file, 'utf8'), next = inject(raw, tokens);
+  if (next === null) { if (name !== 'test.html') console.log(`  ${name}: no token block, left alone`); continue; }
+  if (next === raw) { console.log(`  site/${name}: already matches tokens.css`); continue; }
   stale++;
-  if (flags.has('--check')) console.log(`  ${where}site/${name}: OUT OF STEP with tokens.css`);
-  else { writeFileSync(file, next); console.log(`  ${where}site/${name}: tokens updated`); }
+  if (flags.has('--check')) console.log(`  site/${name}: OUT OF STEP with tokens.css`);
+  else { writeFileSync(file, next); console.log(`  site/${name}: tokens updated`); }
 }
 if (flags.has('--check')) process.exit(stale ? 1 : 0);
 if (flags.has('--no-pdf')) process.exit(0);
@@ -41,10 +39,10 @@ if (flags.has('--no-pdf')) process.exit(0);
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.json': 'application/json',
   '.svg': 'image/svg+xml', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.png': 'image/png', '.pdf': 'application/pdf', '.woff2': 'font/woff2' };
 const server = createServer((req, res) => {
-  let p = normalize(join(root, decodeURIComponent(new URL(req.url, 'http://x').pathname)));
-  if (!p.startsWith(normalize(root) + sep) || p.includes(sep + '.git' + sep)) { res.writeHead(403).end(); return; }
-  if (existsSync(p) && statSync(p).isDirectory()) p = join(p, 'index.html');
-  if (!existsSync(p)) { res.writeHead(404).end('not found'); return; }
+  const rel = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  if (rel.includes('..') || rel.includes('/.git/')) { res.writeHead(403).end(); return; }
+  let p = [root, home].map(r => normalize(join(r, rel))).find(f => existsSync(f) && !statSync(f).isDirectory());
+  if (!p) { res.writeHead(404).end('not found'); return; }
   res.writeHead(200, { 'content-type': MIME[extname(p)] || 'application/octet-stream', 'cache-control': 'no-store' }).end(readFileSync(p));
 });
 const port = await new Promise(r => server.listen(flags.has('--serve') ? 5180 : 0, '127.0.0.1', () => r(server.address().port)));
@@ -103,7 +101,7 @@ try {
 
   /* ---------- 5. the book, printed ---------- */
   await send('Emulation.setDeviceMetricsOverride', { width: 1123, height: 794, deviceScaleFactor: 1, mobile: false });
-  await send('Page.navigate', { url: `${base}/design-system/src/book.html${isGround ? '?ground=1' : ''}` });
+  await send('Page.navigate', { url: `${base}/design-system/src/book.html${label ? '?ground=' + encodeURIComponent(label) : ''}` });
   let ready = false;
   for (let i = 0; i < 240 && !ready; i++) { await sleep(500); ready = await ev('window.__bookReady === true').catch(() => false); }
   if (!ready) throw new Error('the book did not finish loading (fonts or specimens): ' + await ev('window.__bookStatus || "no status"').catch(() => '?'));
@@ -129,7 +127,7 @@ try {
   console.log(`  printed in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   try { writeFileSync(PDF, pdf); }
   catch (e) { if (e.code === 'EBUSY' || e.code === 'EPERM') throw new Error('the PDF is open in another program. Close it and run again.'); throw e; }
-  console.log(`  PDF: ${where}design-system/Karam-Shaar-Design-System.pdf, ${pages} pages, ${(statSync(PDF).size / 1048576).toFixed(1)} MB`);
+  console.log(`  PDF: ${relative(home, PDF).replace(/\\/g, '/')}, ${pages} pages, ${(statSync(PDF).size / 1048576).toFixed(1)} MB`);
 } catch (e) { failed = true; console.error('  ' + e.message);
 } finally {
   try { ws && ws.close(); } catch {}

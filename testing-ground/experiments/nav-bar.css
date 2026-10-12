@@ -1,0 +1,20 @@
+/* name: Bar nav
+   about: The nav becomes a floating bar inset from the screen edges, as on awwwards.com, instead of type on a soft veil. */
+
+& { --bar-bg:rgba(var(--n950-rgb),.88) }
+&[data-theme="light"] { --bar-bg:rgba(var(--c-raise-rgb),.88) }
+/* over the deep inquiry band the day page gives the bar its night colours */
+&[data-theme="light"] #nav.on-deep { --bar-bg:rgba(var(--n950-rgb),.92) }
+
+#nav, #nav.is-scrolled {
+  top:12px; height:56px; padding-block:0; padding-inline:18px 8px;
+  width:min(var(--wrap),100% - 24px); max-width:none;
+  border:1px solid var(--line); border-radius:var(--r-in);
+  background:var(--bar-bg); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); box-shadow:none;
+}
+#nav::before, #nav::after { display:none }
+#nav .nav-end { margin:0 }
+.mnav { top:76px; width:min(var(--wrap),100% - 24px) }
+
+@media (max-width:1100px) { #nav, #nav.is-scrolled { top:8px; height:56px; width:calc(100% - 16px); padding-inline:14px 6px } }
+@media (max-width:767px) { .mnav { top:72px; width:calc(100% - 16px) } }

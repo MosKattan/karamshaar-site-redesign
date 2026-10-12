@@ -15,13 +15,11 @@
     },
     {
       "name": "ground",
-      "runtimeExecutable": "python",
+      "runtimeExecutable": "node",
       "runtimeArgs": [
-        "-m",
-        "http.server",
-        "5181",
-        "--directory",
-        "testing-ground/site"
+        "tools/ground.mjs",
+        "serve",
+        "5181"
       ],
       "port": 5181
     }

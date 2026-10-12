@@ -1,0 +1,61 @@
+<!-- TESTING GROUND panel. Added to the built page by tools/ground.mjs, never to the real site.
+     It lives in its own shadow root, so the page's styles and the experiments cannot reach it, and it cannot reach them.
+     What it does: sets html[data-x] to the switches that are on, remembers them, and lets the canvases know. -->
+<div id="ks-ground" data-lenis-prevent style="position:fixed;z-index:90;left:12px;bottom:12px"></div>
+<script>
+(() => {
+  const DATA = __DATA__;   // { experiments: [{ id, name, about }], looks: [{ name, on: [ids] }] }
+  const root = document.documentElement, host = document.getElementById('ks-ground'), sh = host.attachShadow({ mode: 'open' });
+  const known = id => DATA.experiments.some(e => e.id === id);
+  const get = k => { try { return localStorage.getItem(k); } catch { return null; } }, put = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+  let on = (root.dataset.x || '').split(' ').filter(known), open = get('ks-ground-open') === '1', peeking = false;
+  const same = (a, b) => a.length === b.length && a.every(x => b.includes(x));
+  const current = () => !on.length ? 'Real site' : (DATA.looks.find(l => same(l.on, on)) || { name: 'Your own mix' }).name;
+  // the canvases and the map repaint on "themechange", and the page's token cache empties on it
+  const show = list => { root.dataset.x = list.join(' '); document.dispatchEvent(new Event('themechange')); };
+  const set = list => { on = DATA.experiments.map(e => e.id).filter(id => list.includes(id)); put('ks-ground-x', on.join(',')); show(on); draw(); };
+  const peek = yes => { if (yes === peeking) return; peeking = yes; show(yes ? [] : on); sh.querySelector('.peek')?.classList.toggle('held', yes); };
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  const css = `:host{all:initial}*{box-sizing:border-box;margin:0}
+    .w{font:13px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;color:#f4f2ee;direction:ltr;text-align:left}
+    button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;text-align:left}
+    .tab{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:#c8475a;color:#fff;font-weight:600;box-shadow:0 8px 22px -8px rgba(0,0,0,.55)}
+    .tab span{font-weight:400;opacity:.9;max-width:46vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .card{width:min(318px,calc(100vw - 24px));max-height:min(74vh,640px);overflow:auto;margin-bottom:8px;padding:14px;border-radius:12px;background:rgba(24,24,26,.96);box-shadow:0 18px 50px -14px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.1)}
+    h2{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#a8a6a1;margin:14px 0 6px}h2:first-child{margin-top:0}
+    .row{display:flex;gap:10px;width:100%;padding:8px 10px;border-radius:8px;align-items:flex-start}.row:hover{background:rgba(255,255,255,.07)}
+    .row.on{background:rgba(255,255,255,.12)}.row b{display:block;font-weight:600}.row small{display:block;font-size:11.5px;color:#b9b6b0;margin-top:2px}
+    .dot,.box{flex:none;width:16px;height:16px;margin-top:1px;box-shadow:inset 0 0 0 1.5px #8e8c88}.dot{border-radius:50%}.box{border-radius:4px}
+    .on .dot{box-shadow:inset 0 0 0 5px #f1ead7}.on .box{background:#f1ead7;box-shadow:none}
+    .key{flex:none;margin-left:auto;font-size:10.5px;color:#8e8c88;padding:1px 6px;border-radius:4px;box-shadow:inset 0 0 0 1px #55534f}
+    .peek{width:100%;margin-top:12px;padding:10px 12px;border-radius:8px;text-align:center;font-weight:600;background:#f1ead7;color:#1b1b1d;user-select:none;-webkit-user-select:none;touch-action:none}
+    .peek.held{background:#c8475a;color:#fff}.hint{margin-top:8px;font-size:11px;color:#8e8c88}
+    :focus-visible{outline:2px solid #f1ead7;outline-offset:2px}`;
+  const draw = () => {
+    const looks = [{ name: 'Real site', on: [] }, ...DATA.looks];
+    sh.innerHTML = `<style>${css}</style><div class="w">${open ? `<div class="card" role="dialog" aria-label="Testing ground">
+      <h2>Looks</h2>${looks.map((l, i) => `<button class="row ${same(l.on, on) ? 'on' : ''}" data-look="${i}"><i class="dot"></i><span><b>${esc(l.name)}</b></span>${i < 10 ? `<i class="key">${i}</i>` : ''}</button>`).join('')}
+      <h2>Switches</h2>${DATA.experiments.map(e => `<button class="row ${on.includes(e.id) ? 'on' : ''}" data-x="${e.id}" role="switch" aria-checked="${on.includes(e.id)}"><i class="box"></i><span><b>${esc(e.name)}</b><small>${esc(e.about)}</small></span></button>`).join('')}
+      <button class="peek">Hold to see the real site</button>
+      <p class="hint">Keys: 0 real site, 1 to ${Math.min(9, DATA.looks.length)} looks, hold C to compare. Nothing here is on the real site.</p></div>` : ''}
+      <button class="tab" aria-expanded="${open}">Testing ground <span>${esc(current())}</span></button></div>`;
+  };
+  sh.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return;
+    if (b.classList.contains('tab')) { open = !open; put('ks-ground-open', open ? '1' : '0'); draw(); }
+    else if (b.dataset.look) set([{ on: [] }, ...DATA.looks][+b.dataset.look].on);
+    else if (b.dataset.x) set(on.includes(b.dataset.x) ? on.filter(id => id !== b.dataset.x) : [...on, b.dataset.x]); });
+  sh.addEventListener('pointerdown', e => { if (e.target.closest('.peek')) { e.target.closest('.peek').setPointerCapture(e.pointerId); peek(true); } });
+  for (const t of ['pointerup', 'pointercancel', 'lostpointercapture']) sh.addEventListener(t, () => peek(false));
+  const typing = e => e.target.closest && e.target.closest('input,textarea,[contenteditable]');
+  addEventListener('keydown', e => { if (typing(e) || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === 'c' || e.key === 'C') peek(true);
+    else if (/^[0-9]$/.test(e.key)) { const l = [{ on: [] }, ...DATA.looks][+e.key]; if (l) set(l.on); } });
+  addEventListener('keyup', e => { if (e.key === 'c' || e.key === 'C') peek(false); });
+  addEventListener('blur', () => peek(false));
+  // the tab keeps to the corner the page leaves free: the map's key sits bottom right in English, bottom left in Arabic
+  const side = () => { const r = root.dir === 'rtl'; host.style.left = r ? 'auto' : '12px'; host.style.right = r ? '12px' : 'auto'; };
+  document.addEventListener('langchange', side); side();
+  root.dataset.x = on.join(' '); draw();
+})();
+</script>
